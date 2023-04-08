@@ -7,7 +7,7 @@
             #define BSP_CFG_STACK_UND_BYTES (0x1000)
             #define BSP_CFG_STACK_SYS_BYTES (0x1000)
             #define BSP_CFG_STACK_SVC_BYTES (0x1000)
-            #define BSP_CFG_HEAP_BYTES (0x8000)
+            #define BSP_CFG_HEAP_BYTES (0x1000)
 
             #define BSP_CFG_C_RUNTIME_INIT (1)
             #define BSP_CFG_USE_TFU_MATHLIB ((1))

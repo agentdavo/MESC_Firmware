@@ -521,7 +521,7 @@ const mtu3_phase_count_instance_t g_mtu_phase_count_ch2 =
     .p_api         = &g_mtu3_phase_count_on_mtu3_phase_count
 };
 mtu3_instance_ctrl_t g_timer8_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer8_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -597,7 +597,7 @@ const mtu3_extended_cfg_t g_timer8_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer8_uvw_extend,
     .p_pwm_cfg                   = &g_timer8_pwm_extend,
 #else
@@ -627,7 +627,7 @@ const timer_instance_t g_timer8 =
     .p_api         = &g_timer_on_mtu3
 };
 mtu3_instance_ctrl_t g_timer7_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer7_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -703,7 +703,7 @@ const mtu3_extended_cfg_t g_timer7_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer7_uvw_extend,
     .p_pwm_cfg                   = &g_timer7_pwm_extend,
 #else
@@ -771,7 +771,7 @@ const adc_cfg_t g_adc1_cfg =
     .resolution          = ADC_RESOLUTION_12_BIT,
     .alignment           = (adc_alignment_t)ADC_ALIGNMENT_RIGHT,
     .trigger             = ADC_TRIGGER_SOFTWARE,
-    .p_callback          = NULL,
+    .p_callback          = adc1_sample_callback,
     .p_context           = NULL,
     .p_extend            = &g_adc1_cfg_extend,
 #if defined(VECTOR_NUMBER_ADC1_ADI)
@@ -779,7 +779,7 @@ const adc_cfg_t g_adc1_cfg =
 #else
     .scan_end_irq        = FSP_INVALID_VECTOR,
 #endif
-    .scan_end_ipl        = (BSP_IRQ_DISABLED),
+    .scan_end_ipl        = (7),
 #if defined(VECTOR_NUMBER_ADC1_GBADI)
     .scan_end_b_irq      = VECTOR_NUMBER_ADC1_GBADI,
 #else
@@ -795,7 +795,7 @@ const adc_cfg_t g_adc1_cfg =
 };
 const adc_channel_cfg_t g_adc1_channel_cfg =
 {
-    .scan_mask           =  0,
+    .scan_mask           = ADC_MASK_CHANNEL_0 | ADC_MASK_CHANNEL_1 | ADC_MASK_CHANNEL_2 | ADC_MASK_CHANNEL_3 | ADC_MASK_CHANNEL_4 | ADC_MASK_CHANNEL_5 | ADC_MASK_CHANNEL_6 | ADC_MASK_CHANNEL_7 |  0,
     .scan_mask_group_b   =  0,
     .priority_group_a    = ADC_GROUP_A_PRIORITY_OFF,
     .add_mask            =  0,
@@ -831,7 +831,7 @@ const adc_cfg_t g_adc0_cfg =
     .resolution          = ADC_RESOLUTION_12_BIT,
     .alignment           = (adc_alignment_t)ADC_ALIGNMENT_RIGHT,
     .trigger             = ADC_TRIGGER_SOFTWARE,
-    .p_callback          = NULL,
+    .p_callback          = adc0_sample_callback,
     .p_context           = NULL,
     .p_extend            = &g_adc0_cfg_extend,
 #if defined(VECTOR_NUMBER_ADC0_ADI)
@@ -839,7 +839,7 @@ const adc_cfg_t g_adc0_cfg =
 #else
     .scan_end_irq        = FSP_INVALID_VECTOR,
 #endif
-    .scan_end_ipl        = (BSP_IRQ_DISABLED),
+    .scan_end_ipl        = (7),
 #if defined(VECTOR_NUMBER_ADC0_GBADI)
     .scan_end_b_irq      = VECTOR_NUMBER_ADC0_GBADI,
 #else
@@ -855,7 +855,7 @@ const adc_cfg_t g_adc0_cfg =
 };
 const adc_channel_cfg_t g_adc0_channel_cfg =
 {
-    .scan_mask           =  0,
+    .scan_mask           = ADC_MASK_CHANNEL_0 | ADC_MASK_CHANNEL_1 | ADC_MASK_CHANNEL_2 | ADC_MASK_CHANNEL_3 | ADC_MASK_CHANNEL_4 | ADC_MASK_CHANNEL_5 | ADC_MASK_CHANNEL_6 | ADC_MASK_CHANNEL_7 |  0,
     .scan_mask_group_b   =  0,
     .priority_group_a    = ADC_GROUP_A_PRIORITY_OFF,
     .add_mask            =  0,
@@ -881,23 +881,23 @@ const poe3_cfg_t g_mtu3_three_phase_poe_ctrl_cfg =
                                  .mtioc3b_mtioc3d       = {
                                                               .mtioc3b_pin_select   = POE3_MTIOC3B_PIN_SELECT_P17_6,
                                                               .mtioc3d_pin_select   = POE3_MTIOC3D_PIN_SELECT_P18_1,
-                                                              .mtioc3b_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .mtioc3d_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .mtioc3b_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .mtioc3d_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           },
                                  .mtioc4b_mtioc4d       = {
                                                               .mtioc4b_pin_select   = POE3_MTIOC4B_PIN_SELECT_P18_2,
                                                               .mtioc4d_pin_select   = POE3_MTIOC4D_PIN_SELECT_P18_3,
-                                                              .mtioc4b_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .mtioc4d_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .mtioc4b_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .mtioc4d_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           },
                                  .mtioc4a_mtioc4c       = {
                                                               .mtioc4a_pin_select   = POE3_MTIOC4A_PIN_SELECT_P17_7,
                                                               .mtioc4c_pin_select   = POE3_MTIOC4C_PIN_SELECT_P18_0,
-                                                              .mtioc4a_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .mtioc4c_active_level = POE3_ACTIVE_LEVEL_HIGH,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .mtioc4a_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .mtioc4c_active_level = POE3_ACTIVE_LEVEL_LOW,
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           }
                              },
     .poe4                  = {
@@ -906,17 +906,17 @@ const poe3_cfg_t g_mtu3_three_phase_poe_ctrl_cfg =
                                  .mtioc6b_mtioc6d       = {
                                                               .mtioc6b_pin_select   = POE3_MTIOC6B_PIN_SELECT_P19_3,
                                                               .mtioc6d_pin_select   = POE3_MTIOC6D_PIN_SELECT_P19_6,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           },
                                  .mtioc7b_mtioc7d       = {
                                                               .mtioc7b_pin_select   = POE3_MTIOC7B_PIN_SELECT_P19_7,
                                                               .mtioc7d_pin_select   = POE3_MTIOC7D_PIN_SELECT_P20_0,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           },
                                  .mtioc7a_mtioc7c       = {
                                                               .mtioc7a_pin_select   = POE3_MTIOC7A_PIN_SELECT_P19_4,
                                                               .mtioc7c_pin_select   = POE3_MTIOC7C_PIN_SELECT_P19_5,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
+                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
                                                           }
                              },
     .poe8                  = {
@@ -962,7 +962,7 @@ const poe3_instance_t g_mtu3_three_phase_poe_ctrl =
     .p_api                 = &g_poe30_on_poe3
 };
 mtu3_instance_ctrl_t g_timer6_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer6_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1016,7 +1016,7 @@ const mtu3_extended_cfg_t g_timer6_extend =
     .tgrb_val            = 0,
     .tgrc_val            = 0,
     .tgrd_val            = 0,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
+    .mtu3_clk_div        = MTU3_DIV_PCLKH_4,
     .clk_edge            = MTU3_CLOCK_EDGE_RISING,
     .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
     .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
@@ -1038,7 +1038,7 @@ const mtu3_extended_cfg_t g_timer6_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer6_uvw_extend,
     .p_pwm_cfg                   = &g_timer6_pwm_extend,
 #else
@@ -1068,7 +1068,7 @@ const timer_instance_t g_timer6 =
     .p_api         = &g_timer_on_mtu3
 };
 mtu3_instance_ctrl_t g_timer5_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer5_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1118,11 +1118,11 @@ const mtu3_extended_pwm_cfg_t g_timer5_pwm_extend =
 #endif
 const mtu3_extended_cfg_t g_timer5_extend =
 {
-    .tgra_val            = 0x5,
+    .tgra_val            = 0xa28,
     .tgrb_val            = 0,
-    .tgrc_val            = 0x5,
+    .tgrc_val            = 0xa28,
     .tgrd_val            = 0,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
+    .mtu3_clk_div        = MTU3_DIV_PCLKH_4,
     .clk_edge            = MTU3_CLOCK_EDGE_RISING,
     .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
     .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
@@ -1144,7 +1144,7 @@ const mtu3_extended_cfg_t g_timer5_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer5_uvw_extend,
     .p_pwm_cfg                   = &g_timer5_pwm_extend,
 #else
@@ -1177,16 +1177,16 @@ mtu3_three_phase_instance_ctrl_t g_mtu3_m1_3ph_drv_ctrl_ctrl;
 const mtu3_three_phase_extended_cfg_t g_mtu3_m1_3ph_drv_ctrl_extend =
 {
     .pwm_mode    = MTU3_THREE_PHASE_PWM_MODE_1,
-    .period_half = 0 / 2,
-    .dead_time   = 5,
+    .period_half = 0x1388 / 2,
+    .dead_time   = 0x64,
     .duty_val    =
     {
         0,
         0,
         0
     },
-    .period_out  = MTU3_THREE_PHASE_PSYE_NO_SIGNAL,
-    .level       = MTU3_THREE_PHASE_OUTPUT_LEVEL_ACTIVE_LOW,
+    .period_out  = MTU3_THREE_PHASE_PSYE_TOGGLE,
+    .level       = MTU3_THREE_PHASE_OUTPUT_LEVEL_ACTIVE_HIGH,
     .duty_double =
     {
         0,
@@ -1215,7 +1215,7 @@ const three_phase_instance_t g_mtu3_m1_3ph_drv_ctrl =
     .p_api         = &g_three_phase_on_mtu3_three_phase
 };
 mtu3_instance_ctrl_t g_timer4_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer4_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1269,7 +1269,7 @@ const mtu3_extended_cfg_t g_timer4_extend =
     .tgrb_val            = 0,
     .tgrc_val            = 0,
     .tgrd_val            = 0,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
+    .mtu3_clk_div        = MTU3_DIV_PCLKH_4,
     .clk_edge            = MTU3_CLOCK_EDGE_RISING,
     .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
     .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
@@ -1291,7 +1291,7 @@ const mtu3_extended_cfg_t g_timer4_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer4_uvw_extend,
     .p_pwm_cfg                   = &g_timer4_pwm_extend,
 #else
@@ -1321,7 +1321,7 @@ const timer_instance_t g_timer4 =
     .p_api         = &g_timer_on_mtu3
 };
 mtu3_instance_ctrl_t g_timer3_ctrl;
-#if 0
+#if 1
 const mtu3_extended_uvw_cfg_t g_timer3_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1371,11 +1371,11 @@ const mtu3_extended_pwm_cfg_t g_timer3_pwm_extend =
 #endif
 const mtu3_extended_cfg_t g_timer3_extend =
 {
-    .tgra_val            = 0x5,
+    .tgra_val            = 0xa28,
     .tgrb_val            = 0,
-    .tgrc_val            = 0x5,
+    .tgrc_val            = 0xa28,
     .tgrd_val            = 0,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
+    .mtu3_clk_div        = MTU3_DIV_PCLKH_4,
     .clk_edge            = MTU3_CLOCK_EDGE_RISING,
     .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
     .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
@@ -1397,7 +1397,7 @@ const mtu3_extended_cfg_t g_timer3_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
+#if 1
     .p_uvw_cfg                   = &g_timer3_uvw_extend,
     .p_pwm_cfg                   = &g_timer3_pwm_extend,
 #else
@@ -1430,16 +1430,16 @@ mtu3_three_phase_instance_ctrl_t g_mtu3_m0_3ph_drv_ctrl_ctrl;
 const mtu3_three_phase_extended_cfg_t g_mtu3_m0_3ph_drv_ctrl_extend =
 {
     .pwm_mode    = MTU3_THREE_PHASE_PWM_MODE_1,
-    .period_half = 0 / 2,
-    .dead_time   = 5,
+    .period_half = 0x1388 / 2,
+    .dead_time   = 0x64,
     .duty_val    =
     {
         0,
         0,
         0
     },
-    .period_out  = MTU3_THREE_PHASE_PSYE_NO_SIGNAL,
-    .level       = MTU3_THREE_PHASE_OUTPUT_LEVEL_ACTIVE_LOW,
+    .period_out  = MTU3_THREE_PHASE_PSYE_TOGGLE,
+    .level       = MTU3_THREE_PHASE_OUTPUT_LEVEL_ACTIVE_HIGH,
     .duty_double =
     {
         0,

@@ -43,7 +43,7 @@ const ether_selector_cfg_t g_ether_selector2_cfg =
 	.port                      = 2,
     .phylink                   = ETHER_SELECTOR_PHYLINK_POLARITY_LOW,
     .interface                 = ETHER_SELECTOR_INTERFACE_RGMII,
-    .speed                     = ETHER_SELECTOR_SPEED_1000MBPS,
+    .speed                     = ETHER_SELECTOR_SPEED_100MBPS,
     .duplex                    = ETHER_SELECTOR_DUPLEX_FULL,
     .ref_clock                 = ETHER_SELECTOR_REF_CLOCK_INPUT,
     .p_extend                  = NULL,
@@ -62,10 +62,10 @@ ether_phy_instance_ctrl_t g_ether_phy2_ctrl;
 const ether_phy_extend_cfg_t g_ether_phy2_extend =
 {
     .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) BOARD_PHY_TYPE,
+    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
     .mdio_type          = ETHER_PHY_MDIO_GMAC,
 
-    .bps                = ETHER_PHY_SPEED_10_1000,
+    .bps                = ETHER_PHY_SPEED_10_100,
     .duplex             = ETHER_PHY_DUPLEX_FULL,
     .auto_negotiation   = ETHER_PHY_AUTO_NEGOTIATION_ON,
 
@@ -102,7 +102,7 @@ const ether_selector_cfg_t g_ether_selector1_cfg =
 	.port                      = 1,
     .phylink                   = ETHER_SELECTOR_PHYLINK_POLARITY_LOW,
     .interface                 = ETHER_SELECTOR_INTERFACE_RGMII,
-    .speed                     = ETHER_SELECTOR_SPEED_1000MBPS,
+    .speed                     = ETHER_SELECTOR_SPEED_100MBPS,
     .duplex                    = ETHER_SELECTOR_DUPLEX_FULL,
     .ref_clock                 = ETHER_SELECTOR_REF_CLOCK_INPUT,
     .p_extend                  = NULL,
@@ -121,10 +121,10 @@ ether_phy_instance_ctrl_t g_ether_phy1_ctrl;
 const ether_phy_extend_cfg_t g_ether_phy1_extend =
 {
     .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) BOARD_PHY_TYPE,
+    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
     .mdio_type          = ETHER_PHY_MDIO_GMAC,
 
-    .bps                = ETHER_PHY_SPEED_10_1000,
+    .bps                = ETHER_PHY_SPEED_10_100,
     .duplex             = ETHER_PHY_DUPLEX_FULL,
     .auto_negotiation   = ETHER_PHY_AUTO_NEGOTIATION_ON,
 
@@ -180,7 +180,7 @@ ether_phy_instance_ctrl_t g_ether_phy0_ctrl;
 const ether_phy_extend_cfg_t g_ether_phy0_extend =
 {
     .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) BOARD_PHY_TYPE,
+    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
     .mdio_type          = ETHER_PHY_MDIO_GMAC,
 
     .bps                = ETHER_PHY_SPEED_10_100,

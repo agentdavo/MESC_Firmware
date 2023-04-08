@@ -69,7 +69,7 @@
             #define configUSE_TASK_NOTIFICATIONS (1)
             #endif
             #ifndef configUSE_MUTEXES
-            #define configUSE_MUTEXES (0)
+            #define configUSE_MUTEXES (1)
             #endif
             #ifndef configUSE_RECURSIVE_MUTEXES
             #define configUSE_RECURSIVE_MUTEXES (0)
@@ -114,7 +114,7 @@
             #define configSUPPORT_DYNAMIC_ALLOCATION (1)
             #endif
             #ifndef configTOTAL_HEAP_SIZE
-            #define configTOTAL_HEAP_SIZE (512)
+            #define configTOTAL_HEAP_SIZE (0x30000)
             #endif
             #ifndef configAPPLICATION_ALLOCATED_HEAP
             #define configAPPLICATION_ALLOCATED_HEAP (0)
@@ -195,7 +195,7 @@
             #define INCLUDE_xTimerPendFunctionCall (0)
             #endif
             #ifndef INCLUDE_xTaskAbortDelay
-            #define INCLUDE_xTaskAbortDelay (0)
+            #define INCLUDE_xTaskAbortDelay (1)
             #endif
             #ifndef INCLUDE_xTaskGetHandle
             #define INCLUDE_xTaskGetHandle (0)

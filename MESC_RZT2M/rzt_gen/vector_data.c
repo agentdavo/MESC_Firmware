@@ -25,6 +25,8 @@
             [330] = spi_txi_isr, /* SPI1_SPTI (SPI1 Transmit buffer empty) */
             [332] = spi_eri_isr, /* SPI1_SPEI (SPI1 errors) */
             [333] = spi_tei_isr, /* SPI1_SPCEND (SPI1 Communication complete) */
+            [345] = adc_scan_end_isr, /* ADC0_ADI (ADC0 A/D scan end interrupt) */
+            [350] = adc_scan_end_isr, /* ADC1_ADI (ADC1 A/D scan end interrupt) */
             [443] = spi_rxi_isr, /* SPI3_SPRI (SPI3 Reception buffer full) */
             [444] = spi_txi_isr, /* SPI3_SPTI (SPI3 Transmit buffer empty) */
             [446] = spi_eri_isr, /* SPI3_SPEI (SPI3 errors) */

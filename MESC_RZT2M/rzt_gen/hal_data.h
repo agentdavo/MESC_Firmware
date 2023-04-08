@@ -93,8 +93,8 @@ extern adc_instance_ctrl_t g_adc1_ctrl;
 extern const adc_cfg_t g_adc1_cfg;
 extern const adc_channel_cfg_t g_adc1_channel_cfg;
 
-#ifndef NULL
-void NULL(adc_callback_args_t * p_args);
+#ifndef adc1_sample_callback
+void adc1_sample_callback(adc_callback_args_t * p_args);
 #endif
 /** ADC on ADC Instance. */
 extern const adc_instance_t g_adc0;
@@ -104,8 +104,8 @@ extern adc_instance_ctrl_t g_adc0_ctrl;
 extern const adc_cfg_t g_adc0_cfg;
 extern const adc_channel_cfg_t g_adc0_channel_cfg;
 
-#ifndef NULL
-void NULL(adc_callback_args_t * p_args);
+#ifndef adc0_sample_callback
+void adc0_sample_callback(adc_callback_args_t * p_args);
 #endif
 /** POE3 Instance. */
 extern const poe3_instance_t g_mtu3_three_phase_poe_ctrl;

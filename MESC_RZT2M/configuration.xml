@@ -224,7 +224,7 @@
       <property id="config.bsp.common.und" value="0x1000"/>
       <property id="config.bsp.common.sys" value="0x1000"/>
       <property id="config.bsp.common.svc" value="0x1000"/>
-      <property id="config.bsp.common.heap" value="0x8000"/>
+      <property id="config.bsp.common.heap" value="0x1000"/>
       <property id="config.bsp.common.c_runtime_init" value="config.bsp.common.c_runtime_init.enabled"/>
       <property id="config.bsp.common.tfu_mathlib" value="config.bsp.common.tfu_mathlib.enabled"/>
     </config>
@@ -237,8 +237,8 @@
     <config id="config.bsp.rz">
       <property id="config.bsp.common.vcc" value="3300"/>
       <property id="config.bsp.common.checking" value="config.bsp.common.checking.enabled"/>
-      <property id="config.bsp.common.assert" value="config.bsp.common.assert.fsp_error_log"/>
-      <property id="config.bsp.common.error_log" value="config.bsp.common.error_log.fsp_error_log"/>
+      <property id="config.bsp.common.assert" value="config.bsp.common.assert.none"/>
+      <property id="config.bsp.common.error_log" value="config.bsp.common.error_log.none"/>
       <property id="config.bsp.common.soft_reset" value="config.bsp.common.soft_reset.disabled"/>
       <property id="config.bsp.common.port_protect" value="config.bsp.common.port_protect.enabled"/>
       <property id="config.bsp.common.early_init" value="config.bsp.common.early_init.disabled"/>
@@ -627,16 +627,16 @@
       <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m0_3ph_drv_ctrl"/>
       <property id="module.driver.mtu3_three_phase.channel" value="module.driver.mtu3_three_phase.channel.3"/>
       <property id="module.driver.mtu3_three_phase.mode" value="module.driver.mtu3_three_phase.mode.1"/>
-      <property id="module.driver.mtu3_three_phase.compare.limit" value="0"/>
+      <property id="module.driver.mtu3_three_phase.compare.limit" value="0x1388"/>
       <property id="module.driver.mtu3_three_phase.compare.output1" value="0"/>
       <property id="module.driver.mtu3_three_phase.compare.output2" value="0"/>
       <property id="module.driver.mtu3_three_phase.compare.output3" value="0"/>
-      <property id="module.driver.mtu3_three_phase.dead_time" value="5"/>
+      <property id="module.driver.mtu3_three_phase.dead_time" value="0x64"/>
       <property id="module.driver.mtu3_three_phase.buffer_mode" value="module.driver.mtu3_three_phase.buffer_mode.single"/>
-      <property id="module.driver.mtu3_three_phase.mtu3_clk_div" value="module.driver.mtu3_three_phase.mtu3_clk_div.div1"/>
+      <property id="module.driver.mtu3_three_phase.mtu3_clk_div" value="module.driver.mtu3_three_phase.mtu3_clk_div.div4"/>
       <property id="module.driver.mtu3_three_phase.clk_edge" value="module.driver.mtu3_three_phase.clk_edge.rising"/>
-      <property id="module.driver.mtu3_three_phase.output.active" value="module.driver.mtu3_three_phase.output.active.low"/>
-      <property id="module.driver.mtu3_three_phase.output.toggle" value="module.driver.mtu3_three_phase.output.toggle.disabled"/>
+      <property id="module.driver.mtu3_three_phase.output.active" value="module.driver.mtu3_three_phase.output.active.high"/>
+      <property id="module.driver.mtu3_three_phase.output.toggle" value="module.driver.mtu3_three_phase.output.toggle.enabled"/>
       <property id="module.driver.mtu3_three_phase.synchronous_clear" value="module.driver.mtu3_three_phase.synchronous_clear.disabled"/>
     </module>
     <module id="module.driver.timer_on_mtu3.34893755">
@@ -658,7 +658,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -703,7 +703,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -733,16 +733,16 @@
       <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m1_3ph_drv_ctrl"/>
       <property id="module.driver.mtu3_three_phase.channel" value="module.driver.mtu3_three_phase.channel.6"/>
       <property id="module.driver.mtu3_three_phase.mode" value="module.driver.mtu3_three_phase.mode.1"/>
-      <property id="module.driver.mtu3_three_phase.compare.limit" value="0"/>
+      <property id="module.driver.mtu3_three_phase.compare.limit" value="0x1388"/>
       <property id="module.driver.mtu3_three_phase.compare.output1" value="0"/>
       <property id="module.driver.mtu3_three_phase.compare.output2" value="0"/>
       <property id="module.driver.mtu3_three_phase.compare.output3" value="0"/>
-      <property id="module.driver.mtu3_three_phase.dead_time" value="5"/>
+      <property id="module.driver.mtu3_three_phase.dead_time" value="0x64"/>
       <property id="module.driver.mtu3_three_phase.buffer_mode" value="module.driver.mtu3_three_phase.buffer_mode.single"/>
-      <property id="module.driver.mtu3_three_phase.mtu3_clk_div" value="module.driver.mtu3_three_phase.mtu3_clk_div.div1"/>
+      <property id="module.driver.mtu3_three_phase.mtu3_clk_div" value="module.driver.mtu3_three_phase.mtu3_clk_div.div4"/>
       <property id="module.driver.mtu3_three_phase.clk_edge" value="module.driver.mtu3_three_phase.clk_edge.rising"/>
-      <property id="module.driver.mtu3_three_phase.output.active" value="module.driver.mtu3_three_phase.output.active.low"/>
-      <property id="module.driver.mtu3_three_phase.output.toggle" value="module.driver.mtu3_three_phase.output.toggle.disabled"/>
+      <property id="module.driver.mtu3_three_phase.output.active" value="module.driver.mtu3_three_phase.output.active.high"/>
+      <property id="module.driver.mtu3_three_phase.output.toggle" value="module.driver.mtu3_three_phase.output.toggle.enabled"/>
       <property id="module.driver.mtu3_three_phase.synchronous_clear" value="module.driver.mtu3_three_phase.synchronous_clear.disabled"/>
     </module>
     <module id="module.driver.timer_on_mtu3.914374789">
@@ -764,7 +764,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -809,7 +809,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -850,30 +850,30 @@
       <property id="module.driver.poe3.poe0_int" value="module.driver.poe3.poe0_int.disabled"/>
       <property id="module.driver.poe3.mtioc3b_pin" value=""/>
       <property id="module.driver.poe3.mtioc3d_pin" value=""/>
-      <property id="module.driver.poe3.mtioc3b_active" value="module.driver.poe3.mtioc3b_active.high"/>
-      <property id="module.driver.poe3.mtioc3d_active" value="module.driver.poe3.mtioc3d_active.high"/>
-      <property id="module.driver.poe3.mtu3_bd_hiz" value="module.driver.poe3.mtu3_bd_hiz.disabled"/>
+      <property id="module.driver.poe3.mtioc3b_active" value="module.driver.poe3.mtioc3b_active.low"/>
+      <property id="module.driver.poe3.mtioc3d_active" value="module.driver.poe3.mtioc3d_active.low"/>
+      <property id="module.driver.poe3.mtu3_bd_hiz" value="module.driver.poe3.mtu3_bd_hiz.enabled"/>
       <property id="module.driver.poe3.mtioc4b_pin" value=""/>
       <property id="module.driver.poe3.mtioc4d_pin" value=""/>
-      <property id="module.driver.poe3.mtioc4b_active" value="module.driver.poe3.mtioc4b_active.high"/>
-      <property id="module.driver.poe3.mtioc4d_active" value="module.driver.poe3.mtioc4d_active.high"/>
-      <property id="module.driver.poe3.mtu4_bd_hiz" value="module.driver.poe3.mtu4_bd_hiz.disabled"/>
+      <property id="module.driver.poe3.mtioc4b_active" value="module.driver.poe3.mtioc4b_active.low"/>
+      <property id="module.driver.poe3.mtioc4d_active" value="module.driver.poe3.mtioc4d_active.low"/>
+      <property id="module.driver.poe3.mtu4_bd_hiz" value="module.driver.poe3.mtu4_bd_hiz.enabled"/>
       <property id="module.driver.poe3.mtioc4a_pin" value=""/>
       <property id="module.driver.poe3.mtioc4c_pin" value=""/>
-      <property id="module.driver.poe3.mtioc4a_active" value="module.driver.poe3.mtioc4a_active.high"/>
-      <property id="module.driver.poe3.mtioc4c_active" value="module.driver.poe3.mtioc4c_active.high"/>
-      <property id="module.driver.poe3.mtu4_ac_hiz" value="module.driver.poe3.mtu4_ac_hiz.disabled"/>
+      <property id="module.driver.poe3.mtioc4a_active" value="module.driver.poe3.mtioc4a_active.low"/>
+      <property id="module.driver.poe3.mtioc4c_active" value="module.driver.poe3.mtioc4c_active.low"/>
+      <property id="module.driver.poe3.mtu4_ac_hiz" value="module.driver.poe3.mtu4_ac_hiz.enabled"/>
       <property id="module.driver.poe3.poe4_mode" value="module.driver.poe3.poe4_mode.falling"/>
       <property id="module.driver.poe3.poe4_int" value="module.driver.poe3.poe4_int.disabled"/>
       <property id="module.driver.poe3.mtioc6b_pin" value=""/>
       <property id="module.driver.poe3.mtioc6d_pin" value=""/>
-      <property id="module.driver.poe3.mtu6_bd_hiz" value="module.driver.poe3.mtu6_bd_hiz.disabled"/>
+      <property id="module.driver.poe3.mtu6_bd_hiz" value="module.driver.poe3.mtu6_bd_hiz.enabled"/>
       <property id="module.driver.poe3.mtioc7b_pin" value=""/>
       <property id="module.driver.poe3.mtioc7d_pin" value=""/>
-      <property id="module.driver.poe3.mtu7_bd_hiz" value="module.driver.poe3.mtu7_bd_hiz.disabled"/>
+      <property id="module.driver.poe3.mtu7_bd_hiz" value="module.driver.poe3.mtu7_bd_hiz.enabled"/>
       <property id="module.driver.poe3.mtioc7a_pin" value=""/>
       <property id="module.driver.poe3.mtioc7c_pin" value=""/>
-      <property id="module.driver.poe3.mtu7_ac_hiz" value="module.driver.poe3.mtu7_ac_hiz.disabled"/>
+      <property id="module.driver.poe3.mtu7_ac_hiz" value="module.driver.poe3.mtu7_ac_hiz.enabled"/>
       <property id="module.driver.poe3.poe8_mode" value="module.driver.poe3.poe8_mode.falling"/>
       <property id="module.driver.poe3.poe8_int" value="module.driver.poe3.poe8_int.disabled"/>
       <property id="module.driver.poe3.mtioc0a_pin" value=""/>
@@ -891,7 +891,7 @@
       <property id="module.driver.adc.clearing" value="module.driver.adc.clearing.clear_after_read_on"/>
       <property id="module.driver.adc.mode" value="module.driver.adc.mode.mode_single_scan"/>
       <property id="module.driver.adc.mode.dt" value="module.driver.adc.mode.dt.disabled"/>
-      <property id="module.driver.adc.scan_mask" value=""/>
+      <property id="module.driver.adc.scan_mask" value="module.driver.adc.scan_mask.channel_0,module.driver.adc.scan_mask.channel_1,module.driver.adc.scan_mask.channel_2,module.driver.adc.scan_mask.channel_3,module.driver.adc.scan_mask.channel_4,module.driver.adc.scan_mask.channel_5,module.driver.adc.scan_mask.channel_6,module.driver.adc.scan_mask.channel_7"/>
       <property id="module.driver.adc.scan_mask_group_b" value=""/>
       <property id="module.driver.adc.trigger" value="enum.driver.adc.trigger.trigger_software"/>
       <property id="module.driver.adc.trigger_group_b" value="_disabled"/>
@@ -900,8 +900,8 @@
       <property id="module.driver.adc.add_mask" value=""/>
       <property id="module.driver.adc.sample_hold_mask" value=""/>
       <property id="module.driver.adc.sample_hold_states" value="24"/>
-      <property id="module.driver.adc.p_callback" value="NULL"/>
-      <property id="module.driver.adc.scan_end_ipl" value="_disabled"/>
+      <property id="module.driver.adc.p_callback" value="adc0_sample_callback"/>
+      <property id="module.driver.adc.scan_end_ipl" value="board.icu.common.irq.priority7"/>
       <property id="module.driver.adc.scan_end_b_ipl" value="_disabled"/>
       <property id="module.driver.adc.scan_end_c_ipl" value="_disabled"/>
       <property id="module.driver.adc.scan_mask_group_c" value=""/>
@@ -917,7 +917,7 @@
       <property id="module.driver.adc.clearing" value="module.driver.adc.clearing.clear_after_read_on"/>
       <property id="module.driver.adc.mode" value="module.driver.adc.mode.mode_single_scan"/>
       <property id="module.driver.adc.mode.dt" value="module.driver.adc.mode.dt.disabled"/>
-      <property id="module.driver.adc.scan_mask" value=""/>
+      <property id="module.driver.adc.scan_mask" value="module.driver.adc.scan_mask.channel_0,module.driver.adc.scan_mask.channel_1,module.driver.adc.scan_mask.channel_2,module.driver.adc.scan_mask.channel_3,module.driver.adc.scan_mask.channel_4,module.driver.adc.scan_mask.channel_5,module.driver.adc.scan_mask.channel_6,module.driver.adc.scan_mask.channel_7"/>
       <property id="module.driver.adc.scan_mask_group_b" value=""/>
       <property id="module.driver.adc.trigger" value="enum.driver.adc.trigger.trigger_software"/>
       <property id="module.driver.adc.trigger_group_b" value="_disabled"/>
@@ -926,8 +926,8 @@
       <property id="module.driver.adc.add_mask" value=""/>
       <property id="module.driver.adc.sample_hold_mask" value=""/>
       <property id="module.driver.adc.sample_hold_states" value="24"/>
-      <property id="module.driver.adc.p_callback" value="NULL"/>
-      <property id="module.driver.adc.scan_end_ipl" value="_disabled"/>
+      <property id="module.driver.adc.p_callback" value="adc1_sample_callback"/>
+      <property id="module.driver.adc.scan_end_ipl" value="board.icu.common.irq.priority7"/>
       <property id="module.driver.adc.scan_end_b_ipl" value="_disabled"/>
       <property id="module.driver.adc.scan_end_c_ipl" value="_disabled"/>
       <property id="module.driver.adc.scan_mask_group_c" value=""/>
@@ -968,7 +968,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -1013,7 +1013,7 @@
       <property id="module.driver.timer.ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_a_ipl" value="_disabled"/>
       <property id="module.driver.timer.capture_b_ipl" value="_disabled"/>
-      <property id="module.driver.timer.extra" value="module.driver.timer.extra.disabled"/>
+      <property id="module.driver.timer.extra" value="module.driver.timer.extra.enabled"/>
       <property id="module.driver.timer.tgru_val" value="0x0000"/>
       <property id="module.driver.timer.tgrv_val" value="0x0000"/>
       <property id="module.driver.timer.tgrw_val" value="0x0000"/>
@@ -1365,7 +1365,7 @@
       <property id="module.driver.uart.rx_edge_start" value="module.driver.uart.rx_edge_start.falling_edge"/>
       <property id="module.driver.uart.noisecancel_en" value="module.driver.uart.noisecancel_en.disabled"/>
       <property id="module.driver.uart.rx_fifo_trigger" value="module.driver.uart.rx_fifo_trigger.max"/>
-      <property id="module.driver.uart.callback" value="user_uart_callback"/>
+      <property id="module.driver.uart.callback" value="uart0_callback"/>
       <property id="module.driver.uart.rxi_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.uart.txi_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.uart.tei_ipl" value="board.icu.common.irq.priority12"/>
@@ -1441,7 +1441,7 @@
       <property id="module.driver.spi.clk_polarity" value="module.driver.spi.clk_polarity.clk_polarity_low"/>
       <property id="module.driver.spi.mode_fault" value="module.driver.spi.mode_fault.mode_fault_error_disable"/>
       <property id="module.driver.spi.bit_order" value="module.driver.spi.bit_order.bit_order_msb_first"/>
-      <property id="module.driver.spi.p_callback" value="spi_callback"/>
+      <property id="module.driver.spi.p_callback" value="spi0_callback"/>
       <property id="module.driver.spi.spi_clksyn" value="module.driver.spi.spi_clksyn.spi_clksyn"/>
       <property id="module.driver.spi.spi_comm" value="module.driver.spi.spi_comm.full_duplex"/>
       <property id="module.driver.spi.ssl_polarity" value="module.driver.spi.ssl_polarity.low"/>
@@ -1470,7 +1470,7 @@
       <property id="module.driver.spi.clk_polarity" value="module.driver.spi.clk_polarity.clk_polarity_low"/>
       <property id="module.driver.spi.mode_fault" value="module.driver.spi.mode_fault.mode_fault_error_disable"/>
       <property id="module.driver.spi.bit_order" value="module.driver.spi.bit_order.bit_order_msb_first"/>
-      <property id="module.driver.spi.p_callback" value="spi_callback"/>
+      <property id="module.driver.spi.p_callback" value="spi1_callback"/>
       <property id="module.driver.spi.spi_clksyn" value="module.driver.spi.spi_clksyn.spi_clksyn"/>
       <property id="module.driver.spi.spi_comm" value="module.driver.spi.spi_comm.full_duplex"/>
       <property id="module.driver.spi.ssl_polarity" value="module.driver.spi.ssl_polarity.low"/>
@@ -1499,7 +1499,7 @@
       <property id="module.driver.spi.clk_polarity" value="module.driver.spi.clk_polarity.clk_polarity_low"/>
       <property id="module.driver.spi.mode_fault" value="module.driver.spi.mode_fault.mode_fault_error_disable"/>
       <property id="module.driver.spi.bit_order" value="module.driver.spi.bit_order.bit_order_msb_first"/>
-      <property id="module.driver.spi.p_callback" value="spi_callback"/>
+      <property id="module.driver.spi.p_callback" value="spi3_callback"/>
       <property id="module.driver.spi.spi_clksyn" value="module.driver.spi.spi_clksyn.spi_clksyn"/>
       <property id="module.driver.spi.spi_comm" value="module.driver.spi.spi_comm.full_duplex"/>
       <property id="module.driver.spi.ssl_polarity" value="module.driver.spi.ssl_polarity.low"/>
@@ -1540,7 +1540,7 @@
       <property id="module.driver.ether_phy.phy_reset_wait_time" value="0x00020000"/>
       <property id="module.driver.ether_phy.flow_control" value="module.driver.ether_phy.flow_control.disable"/>
       <property id="module.driver.ether_phy.port_type" value="module.driver.ether_phy.port_type.0"/>
-      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.default"/>
+      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.0"/>
       <property id="module.driver.ether_phy.mdio_type" value="module.driver.ether_phy.mdio_type.0"/>
       <property id="module.driver.ether_phy.auto_negotiation" value="module.driver.ether_phy.auto_negotiation.1"/>
       <property id="module.driver.ether_phy.bps" value="module.driver.ether_phy.bps.0"/>
@@ -1576,10 +1576,10 @@
       <property id="module.driver.ether_phy.phy_reset_wait_time" value="0x00020000"/>
       <property id="module.driver.ether_phy.flow_control" value="module.driver.ether_phy.flow_control.disable"/>
       <property id="module.driver.ether_phy.port_type" value="module.driver.ether_phy.port_type.0"/>
-      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.default"/>
+      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.0"/>
       <property id="module.driver.ether_phy.mdio_type" value="module.driver.ether_phy.mdio_type.0"/>
       <property id="module.driver.ether_phy.auto_negotiation" value="module.driver.ether_phy.auto_negotiation.1"/>
-      <property id="module.driver.ether_phy.bps" value="module.driver.ether_phy.bps.1"/>
+      <property id="module.driver.ether_phy.bps" value="module.driver.ether_phy.bps.0"/>
       <property id="module.driver.ether_phy.duplex" value="module.driver.ether_phy.duplex.1"/>
       <property id="module.driver.ether_phy.reset_port" value="module.driver.ether_phy.reset_port.PORT_20"/>
       <property id="module.driver.ether_phy.reset_pin" value="module.driver.ether_phy.reset_pin.PIN_07"/>
@@ -1601,10 +1601,10 @@
       <property id="module.driver.ether_phy.phy_reset_wait_time" value="0x00020000"/>
       <property id="module.driver.ether_phy.flow_control" value="module.driver.ether_phy.flow_control.disable"/>
       <property id="module.driver.ether_phy.port_type" value="module.driver.ether_phy.port_type.0"/>
-      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.default"/>
+      <property id="module.driver.ether_phy.phy_chip" value="module.driver.ether_phy.phy_chip.0"/>
       <property id="module.driver.ether_phy.mdio_type" value="module.driver.ether_phy.mdio_type.0"/>
       <property id="module.driver.ether_phy.auto_negotiation" value="module.driver.ether_phy.auto_negotiation.1"/>
-      <property id="module.driver.ether_phy.bps" value="module.driver.ether_phy.bps.1"/>
+      <property id="module.driver.ether_phy.bps" value="module.driver.ether_phy.bps.0"/>
       <property id="module.driver.ether_phy.duplex" value="module.driver.ether_phy.duplex.1"/>
       <property id="module.driver.ether_phy.reset_port" value="module.driver.ether_phy.reset_port.PORT_20"/>
       <property id="module.driver.ether_phy.reset_pin" value="module.driver.ether_phy.reset_pin.PIN_07"/>
@@ -1659,10 +1659,10 @@
     <context id="rtos.awsfreertos.thread.1148694635">
       <property id="_symbol" value="comms_thread"/>
       <property id="rtos.awsfreertos.thread.name" value="Comms Thread"/>
-      <property id="rtos.awsfreertos.thread.stack" value="512"/>
-      <property id="rtos.awsfreertos.thread.priority" value="1"/>
+      <property id="rtos.awsfreertos.thread.stack" value="1024"/>
+      <property id="rtos.awsfreertos.thread.priority" value="5"/>
       <property id="rtos.awsfreertos.thread.context" value="NULL"/>
-      <property id="rtos.awsfreertos.thread.allocation" value="rtos.awsfreertos.thread.allocation.static"/>
+      <property id="rtos.awsfreertos.thread.allocation" value="rtos.awsfreertos.thread.allocation.dynamic"/>
       <stack module="module.driver.canfd_on_canfd.1461175025"/>
       <stack module="module.driver.canfd_on_canfd.1726313619"/>
       <stack module="module.driver.uart_on_sci_uart.32493031">
@@ -1697,7 +1697,7 @@
       <property id="rtos.awsfreertos.thread.stack" value="1024"/>
       <property id="rtos.awsfreertos.thread.priority" value="1"/>
       <property id="rtos.awsfreertos.thread.context" value="NULL"/>
-      <property id="rtos.awsfreertos.thread.allocation" value="rtos.awsfreertos.thread.allocation.static"/>
+      <property id="rtos.awsfreertos.thread.allocation" value="rtos.awsfreertos.thread.allocation.dynamic"/>
     </context>
     <config id="config.driver.ether_selector">
       <property id="config.driver.ether_selector.param_checking_enable" value="config.driver.ether_selector.param_checking_enable.bsp"/>
@@ -1819,7 +1819,7 @@
       <property id="config.awsfreertos.thread.configuse_16_bit_ticks" value="config.awsfreertos.thread.configuse_16_bit_ticks.disabled"/>
       <property id="config.awsfreertos.thread.configidle_should_yield" value="config.awsfreertos.thread.configidle_should_yield.enabled"/>
       <property id="config.awsfreertos.thread.configuse_task_notifications" value="config.awsfreertos.thread.configuse_task_notifications.enabled"/>
-      <property id="config.awsfreertos.thread.configuse_mutexes" value="config.awsfreertos.thread.configuse_mutexes.disabled"/>
+      <property id="config.awsfreertos.thread.configuse_mutexes" value="config.awsfreertos.thread.configuse_mutexes.enabled"/>
       <property id="config.awsfreertos.thread.configuse_recursive_mutexes" value="config.awsfreertos.thread.configuse_recursive_mutexes.disabled"/>
       <property id="config.awsfreertos.thread.configuse_counting_semaphores" value="config.awsfreertos.thread.configuse_counting_semaphores.enabled"/>
       <property id="config.awsfreertos.thread.configcheck_for_stack_overflow" value="config.awsfreertos.thread.configcheck_for_stack_overflow.disabled"/>
@@ -1833,7 +1833,7 @@
       <property id="config.awsfreertos.thread.configmessage_buffer_length_type" value="size_t"/>
       <property id="config.awsfreertos.thread.configsupport_static_allocation" value="config.awsfreertos.thread.configsupport_static_allocation.enabled"/>
       <property id="config.awsfreertos.thread.configsupport_dynamic_allocation" value="config.awsfreertos.thread.configsupport_dynamic_allocation.enabled"/>
-      <property id="config.awsfreertos.thread.configtotal_heap_size" value="512"/>
+      <property id="config.awsfreertos.thread.configtotal_heap_size" value="0x30000"/>
       <property id="config.awsfreertos.thread.configapplication_allocated_heap" value="config.awsfreertos.thread.configapplication_allocated_heap.disabled"/>
       <property id="config.awsfreertos.thread.configgenerate_run_time_stats" value="config.awsfreertos.thread.configgenerate_run_time_stats.disabled"/>
       <property id="config.awsfreertos.thread.configuse_timers" value="config.awsfreertos.thread.configuse_timers.enabled"/>
@@ -1856,7 +1856,7 @@
       <property id="config.awsfreertos.thread.include_etaskgetstate" value="config.awsfreertos.thread.include_etaskgetstate.disabled"/>
       <property id="config.awsfreertos.thread.include_xeventgroupsetbitfromisr" value="config.awsfreertos.thread.include_xeventgroupsetbitfromisr.enabled"/>
       <property id="config.awsfreertos.thread.include_xtimerpendfunctioncall" value="config.awsfreertos.thread.include_xtimerpendfunctioncall.disabled"/>
-      <property id="config.awsfreertos.thread.include_xtaskabortdelay" value="config.awsfreertos.thread.include_xtaskabortdelay.disabled"/>
+      <property id="config.awsfreertos.thread.include_xtaskabortdelay" value="config.awsfreertos.thread.include_xtaskabortdelay.enabled"/>
       <property id="config.awsfreertos.thread.include_xtaskgethandle" value="config.awsfreertos.thread.include_xtaskgethandle.disabled"/>
       <property id="config.awsfreertos.thread.include_xtaskresumefromisr" value="config.awsfreertos.thread.include_xtaskresumefromisr.enabled"/>
       <property id="config.awsfreertos.thread.print_function" value="printf(x)"/>

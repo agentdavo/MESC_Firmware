@@ -18,8 +18,8 @@
             #define BSP_CFG_MCU_VCC_MV (3300)
 
             #define BSP_CFG_PARAM_CHECKING_ENABLE (1)
-            #define BSP_CFG_ASSERT (1)
-            #define BSP_CFG_ERROR_LOG (1)
+            #define BSP_CFG_ASSERT (0)
+            #define BSP_CFG_ERROR_LOG (0)
 
             #define BSP_CFG_PORT_PROTECT (1)
 

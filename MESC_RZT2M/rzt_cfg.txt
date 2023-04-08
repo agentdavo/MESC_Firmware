@@ -209,7 +209,7 @@ FSP Configuration
     stack size (bytes): UND stack size: 0x1000
     stack size (bytes): SYS stack size: 0x1000
     stack size (bytes): SVC stack size: 0x1000
-    Heap size (bytes): 0x8000
+    Heap size (bytes): 0x1000
     C Runtime Initialization : Enabled
     TFU Mathlib: Enabled
     
@@ -218,8 +218,8 @@ FSP Configuration
   RZT Common
     MCU Vcc (mV): 3300
     Parameter checking: Enabled
-    Assert Failures: Call fsp_error_log then Return FSP_ERR_ASSERTION
-    Error Log: Errors Logged via fsp_error_log
+    Assert Failures: Return FSP_ERR_ASSERTION
+    Error Log: No Error Log
     Soft Reset: Disabled
     Port Protect: Enabled
     Early BSP Initialization : Disabled
@@ -1416,7 +1416,7 @@ FSP Configuration
     General: Use 16-bit Ticks: Disabled
     General: Idle Should Yield: Enabled
     General: Use Task Notifications: Enabled
-    General: Use Mutexes: Disabled
+    General: Use Mutexes: Enabled
     General: Use Recursive Mutexes: Disabled
     General: Use Counting Semaphores: Enabled
     Hooks: Check For Stack Overflow: Disabled
@@ -1430,7 +1430,7 @@ FSP Configuration
     General: Message Buffer Length Type: size_t
     Memory Allocation: Support Static Allocation: Enabled
     Memory Allocation: Support Dynamic Allocation: Enabled
-    Memory Allocation: Total Heap Size: 512
+    Memory Allocation: Total Heap Size: 0x30000
     Memory Allocation: Application Allocated Heap: Disabled
     Stats: Generate Run Time Stats: Disabled
     Timers: Use Timers: Enabled
@@ -1453,7 +1453,7 @@ FSP Configuration
     Optional Functions: eTaskGetState() Function: Disabled
     Optional Functions: xEventGroupSetBitFromISR() Function: Enabled
     Optional Functions: xTimerPendFunctionCall() Function: Disabled
-    Optional Functions: xTaskAbortDelay() Function: Disabled
+    Optional Functions: xTaskAbortDelay() Function: Enabled
     Optional Functions: xTaskGetHandle() Function: Disabled
     Optional Functions: xTaskResumeFromISR() Function: Enabled
     Logging: Print String Function: printf(x)
@@ -1671,25 +1671,25 @@ FSP Configuration
       General: Name: g_mtu3_m0_3ph_drv_ctrl
       General: Channel: MTU3 and MTU4
       General: Mode: Complementary PWM mode 1 (transfer at crest)
-      General: Compare match value: Count upper limit: 0
+      General: Compare match value: Count upper limit: 0x1388
       General: Compare match value: PWM output (1 for MTU3, 4 for MTU6) compare: 0
       General: Compare match value: PWM output (2 for MTU4, 5 for MTU7) compare: 0
       General: Compare match value: PWM output (3 for MTU4, 6 for MTU7) compare: 0
-      General: Dead Time: 5
+      General: Dead Time: 0x64
       General: Buffer Mode: Single Buffer
-      General: Time Prescaler: PCLKH divided by 1  (common ch)
+      General: Time Prescaler: PCLKH divided by 4  (common ch)
       General: Clock Edge: Rising
-      Output: Active level Select P: Low level
-      Output: PWM Synchronous Output Enable: Disabled
+      Output: Active level Select P: High level
+      Output: PWM Synchronous Output Enable: Enabled
       Synchronous Clear Channel: Disabled
       
       Instance "g_timer3 Timer Driver on r_mtu3"
         General: Name: g_timer3
         General: Channel: 3
         General: Mode: Periodic
-        General: TGRA(Output Compare or Input Capture Value): 0x5
+        General: TGRA(Output Compare or Input Capture Value): 0xa28
         General: TGRB(Output Compare or Input Capture Value): 0
-        General: Time Prescaler: PCLKH divided by 1  (common ch)
+        General: Time Prescaler: PCLKH divided by 4  (common ch)
         General: Clock Edge: Rising
         General: Counter Clear Source: Disabled
         Noise Filter: Extarnal Clock: Enable: 
@@ -1702,7 +1702,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -1734,7 +1734,7 @@ FSP Configuration
         General: Mode: Periodic
         General: TGRA(Output Compare or Input Capture Value): 0
         General: TGRB(Output Compare or Input Capture Value): 0
-        General: Time Prescaler: PCLKH divided by 1  (common ch)
+        General: Time Prescaler: PCLKH divided by 4  (common ch)
         General: Clock Edge: Rising
         General: Counter Clear Source: Disabled
         Noise Filter: Extarnal Clock: Enable: 
@@ -1747,7 +1747,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -1777,25 +1777,25 @@ FSP Configuration
       General: Name: g_mtu3_m1_3ph_drv_ctrl
       General: Channel: MTU6 and MTU7
       General: Mode: Complementary PWM mode 1 (transfer at crest)
-      General: Compare match value: Count upper limit: 0
+      General: Compare match value: Count upper limit: 0x1388
       General: Compare match value: PWM output (1 for MTU3, 4 for MTU6) compare: 0
       General: Compare match value: PWM output (2 for MTU4, 5 for MTU7) compare: 0
       General: Compare match value: PWM output (3 for MTU4, 6 for MTU7) compare: 0
-      General: Dead Time: 5
+      General: Dead Time: 0x64
       General: Buffer Mode: Single Buffer
-      General: Time Prescaler: PCLKH divided by 1  (common ch)
+      General: Time Prescaler: PCLKH divided by 4  (common ch)
       General: Clock Edge: Rising
-      Output: Active level Select P: Low level
-      Output: PWM Synchronous Output Enable: Disabled
+      Output: Active level Select P: High level
+      Output: PWM Synchronous Output Enable: Enabled
       Synchronous Clear Channel: Disabled
       
       Instance "g_timer5 Timer Driver on r_mtu3"
         General: Name: g_timer5
         General: Channel: 6
         General: Mode: Periodic
-        General: TGRA(Output Compare or Input Capture Value): 0x5
+        General: TGRA(Output Compare or Input Capture Value): 0xa28
         General: TGRB(Output Compare or Input Capture Value): 0
-        General: Time Prescaler: PCLKH divided by 1  (common ch)
+        General: Time Prescaler: PCLKH divided by 4  (common ch)
         General: Clock Edge: Rising
         General: Counter Clear Source: Disabled
         Noise Filter: Extarnal Clock: Enable: 
@@ -1808,7 +1808,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -1840,7 +1840,7 @@ FSP Configuration
         General: Mode: Periodic
         General: TGRA(Output Compare or Input Capture Value): 0
         General: TGRB(Output Compare or Input Capture Value): 0
-        General: Time Prescaler: PCLKH divided by 1  (common ch)
+        General: Time Prescaler: PCLKH divided by 4  (common ch)
         General: Clock Edge: Rising
         General: Counter Clear Source: Disabled
         Noise Filter: Extarnal Clock: Enable: 
@@ -1853,7 +1853,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -1894,30 +1894,30 @@ FSP Configuration
       General: POE0#: Interrupts: Disabled
       General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3B Pin Select: P17_6
       General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3D Pin Select: P18_1
-      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3B Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3D Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): High-Impedance Enable: Disabled
+      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3B Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): MTIOC3D Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU3-B (MTIOC3B) and MTU3-D (MTIOC3D): High-Impedance Enable: Enabled
       General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4B Pin Select: P18_2
       General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4D Pin Select: P18_3
-      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4B Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4D Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): High-Impedance Enable: Disabled
+      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4B Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): MTIOC4D Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU4-B (MTIOC4B) and MTU4-D (MTIOC4D): High-Impedance Enable: Enabled
       General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4A Pin Select: P17_7
       General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4C Pin Select: P18_0
-      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4A Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4C Active Level: Active High
-      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): High-Impedance Enable: Disabled
+      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4A Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): MTIOC4C Active Level: Active Low
+      General: POE0#: MTU3 and MTU4: MTU4-A (MTIOC4A) and MTU4-C (MTIOC4C): High-Impedance Enable: Enabled
       General: POE4#: Mode Select(Trigger): Falling edge
       General: POE4#: Interrupts: Disabled
       General: POE4#: MTU6 and MTU7: MTU6-B (MTIOC6B) and MTU6-D (MTIOC6D): MTIOC6B Pin Select: P19_3
       General: POE4#: MTU6 and MTU7: MTU6-B (MTIOC6B) and MTU6-D (MTIOC6D): MTIOC6D Pin Select: P19_6
-      General: POE4#: MTU6 and MTU7: MTU6-B (MTIOC6B) and MTU6-D (MTIOC6D): High-Impedance Enable: Disabled
+      General: POE4#: MTU6 and MTU7: MTU6-B (MTIOC6B) and MTU6-D (MTIOC6D): High-Impedance Enable: Enabled
       General: POE4#: MTU6 and MTU7: MTU7-B (MTIOC7B) and MTU7-D (MTIOC7D): MTIOC7B Pin Select: P19_7
       General: POE4#: MTU6 and MTU7: MTU7-B (MTIOC7B) and MTU7-D (MTIOC7D): MTIOC7D Pin Select: P20_0
-      General: POE4#: MTU6 and MTU7: MTU7-B (MTIOC7B) and MTU7-D (MTIOC7D): High-Impedance Enable: Disabled
+      General: POE4#: MTU6 and MTU7: MTU7-B (MTIOC7B) and MTU7-D (MTIOC7D): High-Impedance Enable: Enabled
       General: POE4#: MTU6 and MTU7: MTU7-A (MTIOC7A) and MTU7-C (MTIOC7C): MTIOC7A Pin Select: P19_4
       General: POE4#: MTU6 and MTU7: MTU7-A (MTIOC7A) and MTU7-C (MTIOC7C): MTIOC7C Pin Select: P19_5
-      General: POE4#: MTU6 and MTU7: MTU7-A (MTIOC7A) and MTU7-C (MTIOC7C): High-Impedance Enable: Disabled
+      General: POE4#: MTU6 and MTU7: MTU7-A (MTIOC7A) and MTU7-C (MTIOC7C): High-Impedance Enable: Enabled
       General: POE8#: Mode Select(Trigger): Falling edge
       General: POE8#: Interrupts: Disabled
       General: POE8#: MTU0: MTU0-A (MTIOC0A): Pin Select: P13_2
@@ -1935,7 +1935,7 @@ FSP Configuration
       General: Clear after read: On
       General: Mode: Single Scan
       General: Double-trigger: Disabled
-      Input: Channel Scan Mask (channel availability varies by MCU): 
+      Input: Channel Scan Mask (channel availability varies by MCU): Channel 0, Channel 1, Channel 2, Channel 3, Channel 4, Channel 5, Channel 6, Channel 7
       Input: Group B Scan Mask (channel availability varies by MCU): 
       Interrupts: Normal/Group A Trigger: Software
       Interrupts: Group B Trigger: Disabled
@@ -1944,8 +1944,8 @@ FSP Configuration
       Input: Addition/Averaging Mask (channel availability varies by MCU and unit): 
       Input: Sample and Hold: Sample and Hold Channels (Available only on selected MCUs): 
       Input: Sample and Hold: Sample Hold States (Applies only to channels 0, 1, 2): 24
-      Interrupts: Callback: NULL
-      Interrupts: Scan End Interrupt Priority: Disabled
+      Interrupts: Callback: adc0_sample_callback
+      Interrupts: Scan End Interrupt Priority: Priority 7
       Interrupts: Scan End Group B Interrupt Priority: Disabled
       Interrupts: Scan End Group C Interrupt Priority: Disabled
       Input: Group C Scan Mask (channel availability varies by MCU): 
@@ -1961,7 +1961,7 @@ FSP Configuration
       General: Clear after read: On
       General: Mode: Single Scan
       General: Double-trigger: Disabled
-      Input: Channel Scan Mask (channel availability varies by MCU): 
+      Input: Channel Scan Mask (channel availability varies by MCU): Channel 0, Channel 1, Channel 2, Channel 3, Channel 4, Channel 5, Channel 6, Channel 7
       Input: Group B Scan Mask (channel availability varies by MCU): 
       Interrupts: Normal/Group A Trigger: Software
       Interrupts: Group B Trigger: Disabled
@@ -1970,8 +1970,8 @@ FSP Configuration
       Input: Addition/Averaging Mask (channel availability varies by MCU and unit): 
       Input: Sample and Hold: Sample and Hold Channels (Available only on selected MCUs): 
       Input: Sample and Hold: Sample Hold States (Applies only to channels 0, 1, 2): 24
-      Interrupts: Callback: NULL
-      Interrupts: Scan End Interrupt Priority: Disabled
+      Interrupts: Callback: adc1_sample_callback
+      Interrupts: Scan End Interrupt Priority: Priority 7
       Interrupts: Scan End Group B Interrupt Priority: Disabled
       Interrupts: Scan End Group C Interrupt Priority: Disabled
       Input: Group C Scan Mask (channel availability varies by MCU): 
@@ -2012,7 +2012,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -2057,7 +2057,7 @@ FSP Configuration
         Interrupts: Overflow/Crest Interrupt Priority: Disabled
         Interrupts: Capture A Interrupt Priority: Disabled
         Interrupts: Capture B Interrupt Priority: Disabled
-        Extra Features: Extra Features: Disabled
+        Extra Features: Extra Features: Enabled
         Extra Features: MTU5: U Count: 0x0000
         Extra Features: MTU5: V Count: 0x0000
         Extra Features: MTU5: W Count: 0x0000
@@ -2349,10 +2349,10 @@ FSP Configuration
   Thread "Comms Thread"
     Symbol: comms_thread
     Name: Comms Thread
-    Stack size (bytes): 512
-    Priority: 1
+    Stack size (bytes): 1024
+    Priority: 5
     Thread Context: NULL
-    Memory Allocation: Static
+    Memory Allocation: Dynamic
     
     Instance "g_canfd0 CANFD Driver on r_canfd"
       General: Name: g_canfd0
@@ -2417,7 +2417,7 @@ FSP Configuration
       Extra: Start bit detection: Falling Edge
       Extra: Noise Filter: Disable
       Extra: Receive FIFO Trigger Level: Max
-      Interrupts: Callback: user_uart_callback
+      Interrupts: Callback: uart0_callback
       Interrupts: Receive Interrupt Priority: Priority 12
       Interrupts: Transmit Data Empty Interrupt Priority: Priority 12
       Interrupts: Transmit End Interrupt Priority: Priority 12
@@ -2493,7 +2493,7 @@ FSP Configuration
       Clock Polarity: Low when idle
       Mode Fault Error: Disable
       Bit Order: MSB First
-      Callback: spi_callback
+      Callback: spi0_callback
       SPI Mode: Clock Synchronous Operation
       Full or Transmit Only Mode: Full Duplex
       Slave Select Polarity: Active Low
@@ -2522,7 +2522,7 @@ FSP Configuration
       Clock Polarity: Low when idle
       Mode Fault Error: Disable
       Bit Order: MSB First
-      Callback: spi_callback
+      Callback: spi1_callback
       SPI Mode: Clock Synchronous Operation
       Full or Transmit Only Mode: Full Duplex
       Slave Select Polarity: Active Low
@@ -2551,7 +2551,7 @@ FSP Configuration
       Clock Polarity: Low when idle
       Mode Fault Error: Disable
       Bit Order: MSB First
-      Callback: spi_callback
+      Callback: spi3_callback
       SPI Mode: Clock Synchronous Operation
       Full or Transmit Only Mode: Full Duplex
       Slave Select Polarity: Active Low
@@ -2592,7 +2592,7 @@ FSP Configuration
             PHY-LSI Reset Completion Timeout: 0x00020000
             Flow Control: Disable
             Port Type: Ethernet
-            Select PHY: Default
+            Select PHY: VSC8541
             Select MDIO type: GMAC
             Auto Negotiation: ON
             Speed: 10/100M
@@ -2617,10 +2617,10 @@ FSP Configuration
             PHY-LSI Reset Completion Timeout: 0x00020000
             Flow Control: Disable
             Port Type: Ethernet
-            Select PHY: Default
+            Select PHY: VSC8541
             Select MDIO type: GMAC
             Auto Negotiation: ON
-            Speed: 10/100/1000M
+            Speed: 10/100M
             Duplex: FULL
             Reset Port: 20
             Reset Pin: 7
@@ -2631,7 +2631,7 @@ FSP Configuration
               Port: 1
               PHY Link Signal Polarity: Active-Low
               Interface Type: RGMII
-              Converter Speed: 1000Mbps
+              Converter Speed: 100Mbps
               Converter Duplex: full duplex
               Reference Clock: input
               
@@ -2642,10 +2642,10 @@ FSP Configuration
             PHY-LSI Reset Completion Timeout: 0x00020000
             Flow Control: Disable
             Port Type: Ethernet
-            Select PHY: Default
+            Select PHY: VSC8541
             Select MDIO type: GMAC
             Auto Negotiation: ON
-            Speed: 10/100/1000M
+            Speed: 10/100M
             Duplex: FULL
             Reset Port: 20
             Reset Pin: 7
@@ -2656,7 +2656,7 @@ FSP Configuration
               Port: 2
               PHY Link Signal Polarity: Active-Low
               Interface Type: RGMII
-              Converter Speed: 1000Mbps
+              Converter Speed: 100Mbps
               Converter Duplex: full duplex
               Reference Clock: input
               
@@ -2678,5 +2678,5 @@ FSP Configuration
     Stack size (bytes): 1024
     Priority: 1
     Thread Context: NULL
-    Memory Allocation: Static
+    Memory Allocation: Dynamic
     

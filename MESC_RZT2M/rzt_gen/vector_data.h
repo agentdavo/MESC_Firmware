@@ -4,7 +4,7 @@
         #include "bsp_api.h"
                 /* Number of interrupts allocated */
         #ifndef VECTOR_DATA_IRQ_COUNT
-        #define VECTOR_DATA_IRQ_COUNT    (25)
+        #define VECTOR_DATA_IRQ_COUNT    (27)
         #endif
         /* ISR prototypes */
         void gmac_isr_pmt(void);
@@ -21,6 +21,7 @@
         void spi_txi_isr(void);
         void spi_eri_isr(void);
         void spi_tei_isr(void);
+        void adc_scan_end_isr(void);
 
         /* Vector table allocations */
         #define VECTOR_NUMBER_GMAC_PMT ((IRQn_Type) 251) /* GMAC_PMT (GMAC1 power management) */
@@ -44,6 +45,8 @@
         #define VECTOR_NUMBER_SPI1_SPTI ((IRQn_Type) 330) /* SPI1_SPTI (SPI1 Transmit buffer empty) */
         #define VECTOR_NUMBER_SPI1_SPEI ((IRQn_Type) 332) /* SPI1_SPEI (SPI1 errors) */
         #define VECTOR_NUMBER_SPI1_SPCEND ((IRQn_Type) 333) /* SPI1_SPCEND (SPI1 Communication complete) */
+        #define VECTOR_NUMBER_ADC0_ADI ((IRQn_Type) 345) /* ADC0_ADI (ADC0 A/D scan end interrupt) */
+        #define VECTOR_NUMBER_ADC1_ADI ((IRQn_Type) 350) /* ADC1_ADI (ADC1 A/D scan end interrupt) */
         #define VECTOR_NUMBER_SPI3_SPRI ((IRQn_Type) 443) /* SPI3_SPRI (SPI3 Reception buffer full) */
         #define VECTOR_NUMBER_SPI3_SPTI ((IRQn_Type) 444) /* SPI3_SPTI (SPI3 Transmit buffer empty) */
         #define VECTOR_NUMBER_SPI3_SPEI ((IRQn_Type) 446) /* SPI3_SPEI (SPI3 errors) */
@@ -93,6 +96,8 @@
             SPI1_SPTI_IRQn = 330, /* SPI1_SPTI (SPI1 Transmit buffer empty) */
             SPI1_SPEI_IRQn = 332, /* SPI1_SPEI (SPI1 errors) */
             SPI1_SPCEND_IRQn = 333, /* SPI1_SPCEND (SPI1 Communication complete) */
+            ADC0_ADI_IRQn = 345, /* ADC0_ADI (ADC0 A/D scan end interrupt) */
+            ADC1_ADI_IRQn = 350, /* ADC1_ADI (ADC1 A/D scan end interrupt) */
             SPI3_SPRI_IRQn = 443, /* SPI3_SPRI (SPI3 Reception buffer full) */
             SPI3_SPTI_IRQn = 444, /* SPI3_SPTI (SPI3 Transmit buffer empty) */
             SPI3_SPEI_IRQn = 446, /* SPI3_SPEI (SPI3 errors) */

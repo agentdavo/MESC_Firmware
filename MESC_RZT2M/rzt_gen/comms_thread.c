@@ -1,12 +1,12 @@
 /* generated thread source file - do not edit */
 #include "comms_thread.h"
 
-#if 1
+#if 0
                 static StaticTask_t comms_thread_memory;
                 #if defined(__ARMCC_VERSION)           /* AC6 compiler */
-                static uint8_t comms_thread_stack[512] BSP_PLACE_IN_SECTION(BSP_UNINIT_SECTION_PREFIX ".stack.thread") BSP_ALIGN_VARIABLE(BSP_STACK_ALIGNMENT);
+                static uint8_t comms_thread_stack[1024] BSP_PLACE_IN_SECTION(BSP_UNINIT_SECTION_PREFIX ".stack.thread") BSP_ALIGN_VARIABLE(BSP_STACK_ALIGNMENT);
                 #else
-                static uint8_t comms_thread_stack[512] BSP_PLACE_IN_SECTION(BSP_UNINIT_SECTION_PREFIX ".stack.comms_thread") BSP_ALIGN_VARIABLE(BSP_STACK_ALIGNMENT);
+                static uint8_t comms_thread_stack[1024] BSP_PLACE_IN_SECTION(BSP_UNINIT_SECTION_PREFIX ".stack.comms_thread") BSP_ALIGN_VARIABLE(BSP_STACK_ALIGNMENT);
                 #endif
                 #endif
                 TaskHandle_t comms_thread;
@@ -88,7 +88,7 @@ const spi_cfg_t g_spi3_cfg =
     .p_transfer_rx       = &FSP_NOT_DEFINED,
 #endif
 #undef FSP_NOT_DEFINED
-    .p_callback          = spi_callback,
+    .p_callback          = spi3_callback,
 
     .p_context           = NULL,
     .p_extend            = (void *)&g_spi3_ext_cfg,
@@ -175,7 +175,7 @@ const spi_cfg_t g_spi1_cfg =
     .p_transfer_rx       = &FSP_NOT_DEFINED,
 #endif
 #undef FSP_NOT_DEFINED
-    .p_callback          = spi_callback,
+    .p_callback          = spi1_callback,
 
     .p_context           = NULL,
     .p_extend            = (void *)&g_spi1_ext_cfg,
@@ -262,7 +262,7 @@ const spi_cfg_t g_spi0_cfg =
     .p_transfer_rx       = &FSP_NOT_DEFINED,
 #endif
 #undef FSP_NOT_DEFINED
-    .p_callback          = spi_callback,
+    .p_callback          = spi0_callback,
 
     .p_context           = NULL,
     .p_extend            = (void *)&g_spi0_ext_cfg,
@@ -451,7 +451,7 @@ sci_uart_instance_ctrl_t     g_uart0_ctrl;
                 .data_bits           = UART_DATA_BITS_8,
                 .parity              = UART_PARITY_OFF,
                 .stop_bits           = UART_STOP_BITS_1,
-                .p_callback          = user_uart_callback,
+                .p_callback          = uart0_callback,
                 .p_context           = NULL,
                 .p_extend            = &g_uart0_cfg_extend,
 #define FSP_NOT_DEFINED (1)
@@ -680,17 +680,17 @@ extern uint32_t g_fsp_common_thread_count;
                     /* Initialize each kernel object. */
                     
 
-                    #if 1
+                    #if 0
                     comms_thread = xTaskCreateStatic(
                     #else
                     BaseType_t comms_thread_create_err = xTaskCreate(
                     #endif
                         comms_thread_func,
                         (const char *)"Comms Thread",
-                        512/4, // In words, not bytes
+                        1024/4, // In words, not bytes
                         (void *) &comms_thread_parameters, //pvParameters
-                        1,
-                        #if 1
+                        5,
+                        #if 0
                         (StackType_t *)&comms_thread_stack,
                         (StaticTask_t *)&comms_thread_memory
                         #else
@@ -698,7 +698,7 @@ extern uint32_t g_fsp_common_thread_count;
                         #endif
                     );
 
-                    #if 1
+                    #if 0
                     if (NULL == comms_thread)
                     {
                         rtos_startup_err_callback(comms_thread, 0);

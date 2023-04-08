@@ -27,8 +27,8 @@ extern spi_instance_ctrl_t g_spi3_ctrl;
 extern const spi_cfg_t g_spi3_cfg;
 
 /** Callback used by SPI Instance. */
-#ifndef spi_callback
-void spi_callback(spi_callback_args_t * p_args);
+#ifndef spi3_callback
+void spi3_callback(spi_callback_args_t * p_args);
 #endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi1;
@@ -38,8 +38,8 @@ extern spi_instance_ctrl_t g_spi1_ctrl;
 extern const spi_cfg_t g_spi1_cfg;
 
 /** Callback used by SPI Instance. */
-#ifndef spi_callback
-void spi_callback(spi_callback_args_t * p_args);
+#ifndef spi1_callback
+void spi1_callback(spi_callback_args_t * p_args);
 #endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi0;
@@ -49,8 +49,8 @@ extern spi_instance_ctrl_t g_spi0_ctrl;
 extern const spi_cfg_t g_spi0_cfg;
 
 /** Callback used by SPI Instance. */
-#ifndef spi_callback
-void spi_callback(spi_callback_args_t * p_args);
+#ifndef spi0_callback
+void spi0_callback(spi_callback_args_t * p_args);
 #endif
 /* Transfer on DMAC Instance. */
 extern const transfer_instance_t g_transfer1;
@@ -88,8 +88,8 @@ extern void sci_uart_txi_dmac_isr(IRQn_Type irq);
             extern const uart_cfg_t g_uart0_cfg;
             extern const sci_uart_extended_cfg_t g_uart0_cfg_extend;
 
-            #ifndef user_uart_callback
-            void user_uart_callback(uart_callback_args_t * p_args);
+            #ifndef uart0_callback
+            void uart0_callback(uart_callback_args_t * p_args);
             #endif
 /** CANFD on CANFD Instance. */
 extern const can_instance_t g_canfd1;
