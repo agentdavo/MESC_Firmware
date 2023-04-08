@@ -4,16 +4,19 @@
         #include "bsp_api.h"
                 /* Number of interrupts allocated */
         #ifndef VECTOR_DATA_IRQ_COUNT
-        #define VECTOR_DATA_IRQ_COUNT    (27)
+        #define VECTOR_DATA_IRQ_COUNT    (34)
         #endif
         /* ISR prototypes */
+        void R_IRQ1_isr(void);
+        void r_mtu_tgiv3_interrupt(void);
+        void r_mtu_tgiv6_interrupt(void);
         void gmac_isr_pmt(void);
         void gmac_isr_sbd(void);
         void ethsw_isr_intr(void);
-        void sci_uart_eri_isr(void);
-        void sci_uart_rxi_isr(void);
-        void sci_uart_txi_isr(void);
-        void sci_uart_tei_isr(void);
+        void m_sci0_eri_interrupt(void);
+        void m_sci0_rxi_interrupt(void);
+        void m_sci0_txi_interrupt(void);
+        void m_sci0_tei_interrupt(void);
         void canfd_rx_fifo_isr(void);
         void canfd_error_isr(void);
         void canfd_channel_tx_isr(void);
@@ -22,8 +25,15 @@
         void spi_eri_isr(void);
         void spi_tei_isr(void);
         void adc_scan_end_isr(void);
+        void r_enc_ch0_int_isr(void);
+        void r_enc_ch0_err_int_isr(void);
+        void r_enc_ch1_int_isr(void);
+        void r_enc_ch1_err_int_isr(void);
 
         /* Vector table allocations */
+        #define VECTOR_NUMBER_INTCPU0 ((IRQn_Type) 0) /* INTCPU0 (Software interrupt 0) */
+        #define VECTOR_NUMBER_TGIA3 ((IRQn_Type) 84) /* TGIA3 (MTU3.TGRA input capture/compare match) */
+        #define VECTOR_NUMBER_TGIA6 ((IRQn_Type) 97) /* TGIA6 (MTU6.TGRA input capture/compare match) */
         #define VECTOR_NUMBER_GMAC_PMT ((IRQn_Type) 251) /* GMAC_PMT (GMAC1 power management) */
         #define VECTOR_NUMBER_GMAC_SBD ((IRQn_Type) 252) /* GMAC_SBD (GMAC1 general interrupt) */
         #define VECTOR_NUMBER_ETHSW_INTR ((IRQn_Type) 253) /* ETHSW_INTR (Ethernet Switch interrupt) */
@@ -47,6 +57,10 @@
         #define VECTOR_NUMBER_SPI1_SPCEND ((IRQn_Type) 333) /* SPI1_SPCEND (SPI1 Communication complete) */
         #define VECTOR_NUMBER_ADC0_ADI ((IRQn_Type) 345) /* ADC0_ADI (ADC0 A/D scan end interrupt) */
         #define VECTOR_NUMBER_ADC1_ADI ((IRQn_Type) 350) /* ADC1_ADI (ADC1 A/D scan end interrupt) */
+        #define VECTOR_NUMBER_ENCIF_INT0 ((IRQn_Type) 372) /* ENCIF_INT0 (ENCIF CH0 Interrupt A) */
+        #define VECTOR_NUMBER_ENCIF_INT1 ((IRQn_Type) 373) /* ENCIF_INT1 (ENCIF CH0 Interrupt B) */
+        #define VECTOR_NUMBER_ENCIF_INT4 ((IRQn_Type) 376) /* ENCIF_INT4 (ENCIF CH1 Interrupt A) */
+        #define VECTOR_NUMBER_ENCIF_INT5 ((IRQn_Type) 377) /* ENCIF_INT5 (ENCIF CH1 Interrupt B) */
         #define VECTOR_NUMBER_SPI3_SPRI ((IRQn_Type) 443) /* SPI3_SPRI (SPI3 Reception buffer full) */
         #define VECTOR_NUMBER_SPI3_SPTI ((IRQn_Type) 444) /* SPI3_SPTI (SPI3 Transmit buffer empty) */
         #define VECTOR_NUMBER_SPI3_SPEI ((IRQn_Type) 446) /* SPI3_SPEI (SPI3 errors) */
@@ -75,6 +89,9 @@
             HypervisorTimerInt = -6,
             VirtualTimerInt = -5,
             NonSecurePhysicalTimerInt = -2,
+            INTCPU0_IRQn = 0, /* INTCPU0 (Software interrupt 0) */
+            TGIA3_IRQn = 84, /* TGIA3 (MTU3.TGRA input capture/compare match) */
+            TGIA6_IRQn = 97, /* TGIA6 (MTU6.TGRA input capture/compare match) */
             GMAC_PMT_IRQn = 251, /* GMAC_PMT (GMAC1 power management) */
             GMAC_SBD_IRQn = 252, /* GMAC_SBD (GMAC1 general interrupt) */
             ETHSW_INTR_IRQn = 253, /* ETHSW_INTR (Ethernet Switch interrupt) */
@@ -98,6 +115,10 @@
             SPI1_SPCEND_IRQn = 333, /* SPI1_SPCEND (SPI1 Communication complete) */
             ADC0_ADI_IRQn = 345, /* ADC0_ADI (ADC0 A/D scan end interrupt) */
             ADC1_ADI_IRQn = 350, /* ADC1_ADI (ADC1 A/D scan end interrupt) */
+            ENCIF_INT0_IRQn = 372, /* ENCIF_INT0 (ENCIF CH0 Interrupt A) */
+            ENCIF_INT1_IRQn = 373, /* ENCIF_INT1 (ENCIF CH0 Interrupt B) */
+            ENCIF_INT4_IRQn = 376, /* ENCIF_INT4 (ENCIF CH1 Interrupt A) */
+            ENCIF_INT5_IRQn = 377, /* ENCIF_INT5 (ENCIF CH1 Interrupt B) */
             SPI3_SPRI_IRQn = 443, /* SPI3_SPRI (SPI3 Reception buffer full) */
             SPI3_SPTI_IRQn = 444, /* SPI3_SPTI (SPI3 Transmit buffer empty) */
             SPI3_SPEI_IRQn = 446, /* SPI3_SPEI (SPI3 errors) */

@@ -1222,6 +1222,17 @@ FSP Configuration
       XTAL Y11 CGC_XTAL - - - - - - - - O "Read only" - 
     
   User Events
+    TGIA3 (MTU3.TGRA input capture/compare match): r_mtu_tgiv3_interrupt
+    TGIA6 (MTU6.TGRA input capture/compare match): r_mtu_tgiv6_interrupt
+    SCI0_ERI (SCI0 Receive error): m_sci0_eri_interrupt
+    SCI0_RXI (SCI0 Receive data full): m_sci0_rxi_interrupt
+    SCI0_TXI (SCI0 Transmit data empty): m_sci0_txi_interrupt
+    SCI0_TEI (SCI0 Transmit end): m_sci0_tei_interrupt
+    INTCPU0 (Software interrupt 0): R_IRQ1_isr
+    ENCIF_INT0 (ENCIF CH0 Interrupt A): r_enc_ch0_int_isr
+    ENCIF_INT4 (ENCIF CH1 Interrupt A): r_enc_ch1_int_isr
+    ENCIF_INT1 (ENCIF CH0 Interrupt B): r_enc_ch0_err_int_isr
+    ENCIF_INT5 (ENCIF CH1 Interrupt B): r_enc_ch1_err_int_isr
     
   User Event Links
     

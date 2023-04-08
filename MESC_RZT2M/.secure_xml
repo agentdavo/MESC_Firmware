@@ -10,7 +10,7 @@
     <option key="#RTOS#" value="rtos.awsfreertos"/>
     <option key="#pinconfiguration#" value="R9A07G075M24GBG.pincfg"/>
     <option key="#FSPVersion#" value="1.2.0"/>
-    <option key="#ConfigurationFragments#" value="Renesas##BSP##Board##rzt2m_rsk##xspi0_x1_boot"/>
+    <option key="#ConfigurationFragments#" value="Renesas##BSP##Board##rzt2m_rsk##xspi0_x1_boot|Renesas##BSP##Board##rzt2m_rsk##ram_execution"/>
     <option key="#SELECTED_TOOLCHAIN#" value="gcc-arm-embedded"/>
     <option key="#ToolchainVersion#" value="12.2.1.arm-12-24"/>
   </generalSettings>
@@ -75,16 +75,16 @@
       <configSetting altId="canfd1.cantx1.p02_0" configurationId="canfd1.cantx1" isUsedByDriver="true"/>
       <configSetting altId="dsmif0.mclk0.p21_1" configurationId="dsmif0.mclk0" isUsedByDriver="true"/>
       <configSetting altId="dsmif0.mdat0.p21_2" configurationId="dsmif0.mdat0" isUsedByDriver="true"/>
-      <configSetting altId="dsmif1.mclk1.p21_3" configurationId="dsmif1.mclk1" isUsedByDriver="true"/>
-      <configSetting altId="dsmif1.mdat1.p21_4" configurationId="dsmif1.mdat1" isUsedByDriver="true"/>
-      <configSetting altId="dsmif2.mclk2.p15_5" configurationId="dsmif2.mclk2" isUsedByDriver="true"/>
-      <configSetting altId="dsmif2.mdat2.p15_6" configurationId="dsmif2.mdat2" isUsedByDriver="true"/>
-      <configSetting altId="dsmif3.mclk3.p21_7" configurationId="dsmif3.mclk3" isUsedByDriver="true"/>
-      <configSetting altId="dsmif3.mdat3.p22_0" configurationId="dsmif3.mdat3" isUsedByDriver="true"/>
-      <configSetting altId="dsmif4.mclk4.p20_5" configurationId="dsmif4.mclk4" isUsedByDriver="true"/>
-      <configSetting altId="dsmif4.mdat4.p20_6" configurationId="dsmif4.mdat4" isUsedByDriver="true"/>
-      <configSetting altId="dsmif5.mclk5.p20_7" configurationId="dsmif5.mclk5" isUsedByDriver="true"/>
-      <configSetting altId="dsmif5.mdat5.p21_0" configurationId="dsmif5.mdat5" isUsedByDriver="true"/>
+      <configSetting altId="dsmif1.mclk1.p21_3" configurationId="dsmif1.mclk1"/>
+      <configSetting altId="dsmif1.mdat1.p21_4" configurationId="dsmif1.mdat1"/>
+      <configSetting altId="dsmif2.mclk2.p15_5" configurationId="dsmif2.mclk2"/>
+      <configSetting altId="dsmif2.mdat2.p15_6" configurationId="dsmif2.mdat2"/>
+      <configSetting altId="dsmif3.mclk3.p21_7" configurationId="dsmif3.mclk3"/>
+      <configSetting altId="dsmif3.mdat3.p22_0" configurationId="dsmif3.mdat3"/>
+      <configSetting altId="dsmif4.mclk4.p20_5" configurationId="dsmif4.mclk4"/>
+      <configSetting altId="dsmif4.mdat4.p20_6" configurationId="dsmif4.mdat4"/>
+      <configSetting altId="dsmif5.mclk5.p20_7" configurationId="dsmif5.mclk5"/>
+      <configSetting altId="dsmif5.mdat5.p21_0" configurationId="dsmif5.mdat5"/>
       <configSetting altId="encif.encif0.p01_6" configurationId="encif.encif0"/>
       <configSetting altId="encif.encif1.p01_7" configurationId="encif.encif1"/>
       <configSetting altId="encif.encif2.p12_7" configurationId="encif.encif2"/>
@@ -170,33 +170,33 @@
       <configSetting altId="mtu3.mtclkb.p23_2" configurationId="mtu3.mtclkb"/>
       <configSetting altId="mtu3.mtclkc.p23_3" configurationId="mtu3.mtclkc"/>
       <configSetting altId="mtu3.mtclkd.p23_4" configurationId="mtu3.mtclkd"/>
-      <configSetting altId="mtu30.mtioc0a.p14_3" configurationId="mtu30.mtioc0a"/>
-      <configSetting altId="mtu30.mtioc0b.p11_5" configurationId="mtu30.mtioc0b"/>
-      <configSetting altId="mtu30.mtioc0c.p13_3" configurationId="mtu30.mtioc0c"/>
-      <configSetting altId="mtu30.mtioc0d.p13_4" configurationId="mtu30.mtioc0d"/>
-      <configSetting altId="mtu31.mtioc1a.p11_1" configurationId="mtu31.mtioc1a" isUsedByDriver="true"/>
-      <configSetting altId="mtu31.mtioc1b.p11_2" configurationId="mtu31.mtioc1b" isUsedByDriver="true"/>
-      <configSetting altId="mtu32.mtioc2a.p11_3" configurationId="mtu32.mtioc2a" isUsedByDriver="true"/>
-      <configSetting altId="mtu32.mtioc2b.p11_4" configurationId="mtu32.mtioc2b" isUsedByDriver="true"/>
-      <configSetting altId="mtu33.mtioc3a.p03_5" configurationId="mtu33.mtioc3a" isUsedByDriver="true"/>
-      <configSetting altId="mtu33.mtioc3b.p17_6" configurationId="mtu33.mtioc3b" isUsedByDriver="true"/>
-      <configSetting altId="mtu33.mtioc3c.p03_7" configurationId="mtu33.mtioc3c" isUsedByDriver="true"/>
-      <configSetting altId="mtu33.mtioc3d.p18_1" configurationId="mtu33.mtioc3d" isUsedByDriver="true"/>
-      <configSetting altId="mtu34.mtioc4a.p17_7" configurationId="mtu34.mtioc4a" isUsedByDriver="true"/>
-      <configSetting altId="mtu34.mtioc4b.p18_2" configurationId="mtu34.mtioc4b" isUsedByDriver="true"/>
-      <configSetting altId="mtu34.mtioc4c.p18_0" configurationId="mtu34.mtioc4c" isUsedByDriver="true"/>
-      <configSetting altId="mtu34.mtioc4d.p18_3" configurationId="mtu34.mtioc4d" isUsedByDriver="true"/>
+      <configSetting altId="mtu30.mtioc0a.p14_3" configurationId="mtu30.mtioc0a" isUsedByDriver="true"/>
+      <configSetting altId="mtu30.mtioc0b.p11_5" configurationId="mtu30.mtioc0b" isUsedByDriver="true"/>
+      <configSetting altId="mtu30.mtioc0c.p13_3" configurationId="mtu30.mtioc0c" isUsedByDriver="true"/>
+      <configSetting altId="mtu30.mtioc0d.p13_4" configurationId="mtu30.mtioc0d" isUsedByDriver="true"/>
+      <configSetting altId="mtu31.mtioc1a.p11_1" configurationId="mtu31.mtioc1a"/>
+      <configSetting altId="mtu31.mtioc1b.p11_2" configurationId="mtu31.mtioc1b"/>
+      <configSetting altId="mtu32.mtioc2a.p11_3" configurationId="mtu32.mtioc2a"/>
+      <configSetting altId="mtu32.mtioc2b.p11_4" configurationId="mtu32.mtioc2b"/>
+      <configSetting altId="mtu33.mtioc3a.p03_5" configurationId="mtu33.mtioc3a"/>
+      <configSetting altId="mtu33.mtioc3b.p17_6" configurationId="mtu33.mtioc3b"/>
+      <configSetting altId="mtu33.mtioc3c.p03_7" configurationId="mtu33.mtioc3c"/>
+      <configSetting altId="mtu33.mtioc3d.p18_1" configurationId="mtu33.mtioc3d"/>
+      <configSetting altId="mtu34.mtioc4a.p17_7" configurationId="mtu34.mtioc4a"/>
+      <configSetting altId="mtu34.mtioc4b.p18_2" configurationId="mtu34.mtioc4b"/>
+      <configSetting altId="mtu34.mtioc4c.p18_0" configurationId="mtu34.mtioc4c"/>
+      <configSetting altId="mtu34.mtioc4d.p18_3" configurationId="mtu34.mtioc4d"/>
       <configSetting altId="mtu35.mtic5u.p16_5" configurationId="mtu35.mtic5u"/>
       <configSetting altId="mtu35.mtic5v.p18_5" configurationId="mtu35.mtic5v"/>
       <configSetting altId="mtu35.mtic5w.p16_7" configurationId="mtu35.mtic5w"/>
-      <configSetting altId="mtu36.mtioc6a.p19_1" configurationId="mtu36.mtioc6a" isUsedByDriver="true"/>
-      <configSetting altId="mtu36.mtioc6b.p19_3" configurationId="mtu36.mtioc6b" isUsedByDriver="true"/>
-      <configSetting altId="mtu36.mtioc6c.p19_2" configurationId="mtu36.mtioc6c" isUsedByDriver="true"/>
-      <configSetting altId="mtu36.mtioc6d.p19_6" configurationId="mtu36.mtioc6d" isUsedByDriver="true"/>
-      <configSetting altId="mtu37.mtioc7a.p19_4" configurationId="mtu37.mtioc7a" isUsedByDriver="true"/>
-      <configSetting altId="mtu37.mtioc7b.p19_7" configurationId="mtu37.mtioc7b" isUsedByDriver="true"/>
-      <configSetting altId="mtu37.mtioc7c.p19_5" configurationId="mtu37.mtioc7c" isUsedByDriver="true"/>
-      <configSetting altId="mtu37.mtioc7d.p20_0" configurationId="mtu37.mtioc7d" isUsedByDriver="true"/>
+      <configSetting altId="mtu36.mtioc6a.p19_1" configurationId="mtu36.mtioc6a"/>
+      <configSetting altId="mtu36.mtioc6b.p19_3" configurationId="mtu36.mtioc6b"/>
+      <configSetting altId="mtu36.mtioc6c.p19_2" configurationId="mtu36.mtioc6c"/>
+      <configSetting altId="mtu36.mtioc6d.p19_6" configurationId="mtu36.mtioc6d"/>
+      <configSetting altId="mtu37.mtioc7a.p19_4" configurationId="mtu37.mtioc7a"/>
+      <configSetting altId="mtu37.mtioc7b.p19_7" configurationId="mtu37.mtioc7b"/>
+      <configSetting altId="mtu37.mtioc7c.p19_5" configurationId="mtu37.mtioc7c"/>
+      <configSetting altId="mtu37.mtioc7d.p20_0" configurationId="mtu37.mtioc7d"/>
       <configSetting altId="mtu38.mtioc8a.p23_5" configurationId="mtu38.mtioc8a"/>
       <configSetting altId="mtu38.mtioc8b.p23_6" configurationId="mtu38.mtioc8b"/>
       <configSetting altId="mtu38.mtioc8c.p15_3" configurationId="mtu38.mtioc8c"/>
