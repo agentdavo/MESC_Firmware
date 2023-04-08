@@ -1,0 +1,23 @@
+{
+  "tasks": [
+    {
+      "type": "cmake",
+      "command": "build",
+      "group": "none",
+      "label": "FSP Smart Configurator",
+      "detail": "Edit configuration in FSP Smart Configurator",
+      "targets": [
+        "rasc"
+      ],
+      "presentation": {
+        "panel": "shared",
+        "clear": false,
+        "showReuseMessage": false,
+        "reveal": "silent",
+        "focus": false,
+        "echo": false
+      }
+    }
+  ],
+  "version": "2.0.0"
+}
