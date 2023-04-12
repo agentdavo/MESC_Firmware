@@ -256,6 +256,8 @@ typedef struct {
   uint32_t encoder_OK;
   uint16_t enc_angle;
   uint16_t enc_offset;
+  float encsin;
+  float enccos;
   uint16_t encoder_polarity_invert;
   int enc_obs_angle;
   float FLAdiff;
@@ -493,6 +495,8 @@ typedef struct{
 	bool conf_is_valid;
 	int32_t safe_start[2];
 	uint32_t key_bits; //When any of these are low, we keep the motor disabled
+	bool sample_now;
+	bool sample_no_auto_send;
 }MESC_motor_typedef;
 
 extern MESC_motor_typedef mtr[NUM_MOTORS];
@@ -575,6 +579,10 @@ typedef struct {
 	float RCPWM_req;
 	float ADC1_req;
 	float ADC2_req;
+
+	float REMOTE_ADC1_req;
+	float REMOTE_ADC2_req;
+
 
 	uint16_t nKillswitch;
 	uint16_t invert_killswitch;

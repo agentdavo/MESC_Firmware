@@ -391,10 +391,8 @@ void fastLoop(MESC_motor_typedef *_motor) {
 				_motor->FOC.FOCAngle = (uint16_t)(32768.0f + 10430.0f * fast_atan2(_motor->FOC.flux_b, _motor->FOC.flux_a)) - 32768;
 			}
 		}else if(_motor->FOC.enc_start_now){
-			float encsin, enccos;
-			sin_cos_fast((_motor->FOC.enc_angle-10430), &encsin, &enccos);
-			_motor->FOC.flux_a = 0.95f*_motor->FOC.flux_a + enccos * 0.05f * _motor->m.flux_linkage;
-			_motor->FOC.flux_b = 0.95f*_motor->FOC.flux_b + encsin * 0.05f * _motor->m.flux_linkage;
+			_motor->FOC.flux_a = 0.95f*_motor->FOC.flux_a + _motor->FOC.enccos * 0.05f * _motor->m.flux_linkage;
+			_motor->FOC.flux_b = 0.95f*_motor->FOC.flux_b + _motor->FOC.encsin * 0.05f * _motor->m.flux_linkage;
 			flux_observer(_motor);
 		}else{
 			flux_observer(_motor);
@@ -600,15 +598,16 @@ if(_motor->MotorState==MOTOR_STATE_RUN||_motor->MotorState==MOTOR_STATE_MEASURIN
 #ifdef LOGGING
 if(lognow){
 	static int post_error_samples;
-	if(_motor->MotorState!=MOTOR_STATE_ERROR){
+	if(_motor->MotorState!=MOTOR_STATE_ERROR && _motor->sample_now == false){
 	logVars(_motor);
-	post_error_samples = 50;
+	post_error_samples = LOGLENGTH/2;
 	}else{//If we have an error state, we want to keep the data surrounding the error log, including some sampled during and after the fault
 		if(post_error_samples>1){
 			logVars(_motor);
 			post_error_samples--;
 		}else if(post_error_samples == 1){
 			print_samples_now = 1;
+			_motor->sample_now = false;
 			post_error_samples--;
 		}else{
 			__NOP();
@@ -1147,7 +1146,7 @@ if (fluxb < -_motor->FOC.flux_observed) {
       }else{
 		  _motor->FOC.FW_current = _motor->FOC.FW_current +0.01f*_motor->FOC.FW_curr_max;
       }
-      if(_motor->FOC.FW_current>0.0f){_motor->FOC.FW_current=0.0f;}
+      if(_motor->FOC.FW_current>_motor->FOC.Idq_req.d){_motor->FOC.FW_current=_motor->FOC.Idq_req.d;}
       if(_motor->FOC.FW_current<-_motor->FOC.FW_curr_max){_motor->FOC.FW_current= -_motor->FOC.FW_curr_max;}
 #else
   } //Just close the circle limiter bracket
@@ -3044,7 +3043,7 @@ void ThrottleTemperature(MESC_motor_typedef *_motor){
 	handleThrottleTemperature( _motor, _motor->Conv.MOSu_T , &dTmax, ERROR_OVERTEMPU );
 	handleThrottleTemperature( _motor, _motor->Conv.MOSv_T , &dTmax, ERROR_OVERTEMPV );
 	handleThrottleTemperature( _motor, _motor->Conv.MOSw_T , &dTmax, ERROR_OVERTEMPW );
-	handleThrottleTemperature( _motor, _motor->Conv.Motor_T, &dTmax, ERROR_OVERTEMP_MOTOR );
+	//handleThrottleTemperature( _motor, _motor->Conv.Motor_T, &dTmax, ERROR_OVERTEMP_MOTOR );
 
 	_motor->FOC.T_rollback = (1.0f-dTmax/(temp_profile->limit.Tmax-temp_profile->limit.Thot));
 	if(_motor->FOC.T_rollback<=0.0f){
@@ -3148,14 +3147,22 @@ void MESC_IC_IRQ_Handler(MESC_motor_typedef *_motor, uint32_t SR, uint32_t CCR1,
 		_motor->FOC.encoder_duration = CCR1;
 		_motor->FOC.encoder_pulse = CCR2;
 		_motor->FOC.encoder_OK = 1;
-//		_motor->FOC.enc_angle =
-//				(uint16_t)((((4119*CCR2)/CCR1-16)*(uint32_t)_motor->m.pole_pairs)%65536);
+
+		if(CCR2<14||CCR1<3500||CCR1>4500){
+			//Handle the error?
+		}
+		if(CCR2<16){//No error but need to stop it from underflowing the following math
+			CCR2 = 16;
+		}
 		_motor->FOC.enc_angle = _motor->FOC.enc_offset +
 						(uint16_t)(((65536*(CCR2-16))/(CCR1-24)*(uint32_t)_motor->m.pole_pairs)%65536);
 		if(_motor->FOC.encoder_polarity_invert){
 			_motor->FOC.enc_angle = 65536 - _motor->FOC.enc_angle;
 		}
 	}
+	//Calculate the sin and cos coefficients for future use in the flux observer
+	sin_cos_fast((_motor->FOC.enc_angle-10430), &_motor->FOC.encsin, &_motor->FOC.enccos);
+
 	if(SR & 0x1||_motor->FOC.encoder_pulse<14||_motor->FOC.encoder_pulse>(_motor->FOC.encoder_duration-7)){
 		SRtemp3 = SR;
 		_motor->FOC.encoder_OK = 0;
