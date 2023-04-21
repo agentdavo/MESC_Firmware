@@ -27,8 +27,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_BAT_H
-#define MESC_BAT_H
+#pragma once
 
 #include <stdint.h>
 
@@ -59,65 +58,58 @@ Vmid and Vmid to Vmin. (Vtop region is ignored) These values are rebased on Vlow
 to reduce adverse impact on battery condition due to over discharge.
 */
 
-#define BAT_PROFILE_SIGNATURE MAKE_UINT32_STRING('M','B','P','E')
+#define BAT_PROFILE_SIGNATURE MAKE_UINT32_STRING('M', 'B', 'P', 'E')
 
 enum BATDisplay
 {
-    BAT_DISPLAY_PERCENT,
-    BAT_DISPLAY_AMPHOUR,
+  BAT_DISPLAY_PERCENT,
+  BAT_DISPLAY_AMPHOUR,
 };
 
 typedef enum BATDisplay BATDisplay;
 
 struct BATProfile
 {
-    struct
-    {
-    float       Imax;   /* Amp      */
-    float       Vmax;   /* Volt     */
-    float       Cmax;   /* Amp Hour */
+  struct
+  {
+    float Imax; /* Amp      */
+    float Vmax; /* Volt     */
+    float Cmax; /* Amp Hour */
 
-    float       Vmid;   /* Volt     */
-    float       Cmid;   /* Amp Hour */
+    float Vmid; /* Volt     */
+    float Cmid; /* Amp Hour */
 
-    float       Vlow;   /* Volt     */
-    float       Clow;   /* Amp Hour */
+    float Vlow; /* Volt     */
+    float Clow; /* Amp Hour */
 
-    float       Vmin;   /* Volt     */
-    }           cell;
+    float Vmin; /* Volt     */
+  } cell;
 
-    struct
-    {
-    float       Imax;   /* Amp      */
-    float       Pmax;   /* Watt     */
+  struct
+  {
+    float Imax; /* Amp      */
+    float Pmax; /* Watt     */
 
-    float       ESR;    /* Ohm      */
+    float ESR; /* Ohm      */
 
-    uint8_t     parallel;
-    uint8_t     series;
-    uint8_t     _[2];
-    }           battery;
+    uint8_t parallel;
+    uint8_t series;
+    uint8_t _[2];
+  } battery;
 
-    BATDisplay  display;
+  BATDisplay display;
 };
 
 typedef struct BATProfile BATProfile;
 
-void bat_init( BATProfile const * const profile );
+void bat_init(BATProfile const* const profile);
 
-void bat_notify_profile_update( void );
+void bat_notify_profile_update(void);
 
-float battery_get_power(
-    float const Iq, float const Vq,
-    float const Id, float const Vd );
+float battery_get_power(float const Iq, float const Vq, float const Id, float const Vd);
 
-float battery_get_current(
-    float const Iq, float const Vq,
-    float const Id, float const Vd,
-    float const Vbat );
+float battery_get_current(float const Iq, float const Vq, float const Id, float const Vd, float const Vbat);
 
-float bat_get_charge_level( float const V, float const I );
+float bat_get_charge_level(float const V, float const I);
 
-float bat_get_level_voltage( float const L_C );
-
-#endif
+float bat_get_level_voltage(float const L_C);

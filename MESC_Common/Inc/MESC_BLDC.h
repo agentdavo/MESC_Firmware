@@ -5,19 +5,6 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_MESC_BLDC_H_
-#define INC_MESC_BLDC_H_
+#pragma once
 
-#include "stm32fxxx_hal.h"
-#include "MESCfoc.h"
-
-
-
-
-
-/* Function prototypes -----------------------------------------------*/
-
-
-
-
-#endif /* INC_MESC_BLDC_H_ */
+#include <MESCfoc.h>

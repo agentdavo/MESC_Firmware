@@ -5,8 +5,7 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_MX_FOC_GAN_H_
-#define INC_MX_FOC_GAN_H_
+#pragma once
 
 #define MCMASTER_70KV_8080
 
@@ -75,4 +74,3 @@
 #define SLOWLEDIO GPIO_PIN_7
 #define SLOWLEDIONO 7
 
-#endif /* INC_MX_FOC_GAN_H_ */

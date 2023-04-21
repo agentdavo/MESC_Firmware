@@ -27,8 +27,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_STM_H
-#define MESC_STM_H
+#pragma once
 
 /*
 NOTE
@@ -37,12 +36,10 @@ To avoid importing STM dependencies in the stand-alone contexts, this alias
 allows the intended actual type (stm) to be explicitly annotated against the
 real type (mesc)
 */
-#define MESC_STM_ALIAS(mesc,stm) mesc
+#define MESC_STM_ALIAS(mesc, stm) mesc
 
 #ifdef MESC_STM_FIXUP
 // Starting HAL_StatusTypeDef
 #define HAL_OK (0)
 // Finished HAL_StatusTypeDef
-#endif
-
 #endif

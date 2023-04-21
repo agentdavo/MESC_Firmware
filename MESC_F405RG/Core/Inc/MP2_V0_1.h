@@ -5,8 +5,8 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_MP2_V0_1_H_
-#define INC_MP2_V0_1_H_
+#pragma once
+
 //Pick a motor for default
 #define MCMASTER_70KV_8080//QS165//CA120//
 #define PWM_FREQUENCY 20000
@@ -99,4 +99,3 @@
 #define KILLSWITCH_PIN GPIO_PIN_3
 #define KILLSWITCH_IONO 3
 
-#endif /* INC_MP2_V0_1_H_ */

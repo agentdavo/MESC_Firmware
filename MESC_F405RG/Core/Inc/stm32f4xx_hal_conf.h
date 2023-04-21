@@ -22,8 +22,7 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_HAL_CONF_H
-#define __STM32F4xx_HAL_CONF_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -38,7 +37,7 @@
   */
 #define HAL_MODULE_ENABLED
 
-  #define HAL_ADC_MODULE_ENABLED
+#define HAL_ADC_MODULE_ENABLED
 /* #define HAL_CRYP_MODULE_ENABLED   */
 #define HAL_CAN_MODULE_ENABLED
 /* #define HAL_CRC_MODULE_ENABLED   */
@@ -489,4 +488,3 @@
 }
 #endif
 
-#endif /* __STM32F4xx_HAL_CONF_H */

@@ -27,59 +27,53 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef INC_MESCERROR_H_
-#define INC_MESCERROR_H_
+#pragma once
 
-//Includes
-#include "stm32fxxx_hal.h"
 #include "MESCfoc.h"
 
-//Variables
-extern  uint32_t MESC_errors;
+extern uint32_t MESC_errors;
 struct MESC_log_vars
 {
-	float current_A;
-	float current_B;
-	float current_C;
-	float voltage;
-	float motor_flux;
-	float flux_a;
-	float flux_b;
-	int count;
+  float current_A;
+  float current_B;
+  float current_C;
+  float voltage;
+  float motor_flux;
+  float flux_a;
+  float flux_b;
+  int count;
 };
 
+enum
+{
+  //Define anticipated errors possible, not all will be implemented
+  ERROR_OVERCURRENT_PHA,
+  ERROR_OVERCURRENT_PHB,
+  ERROR_OVERCURRENT_PHC,
+  ERROR_OVERVOLTAGE,
+  ERROR_UNDERVOLTAGE,
+  ERROR_BRK,
+  ERROR_OVERTEMPU,
+  ERROR_OVERTEMPV,
+  ERROR_OVERTEMPW,
+  ERROR_OVERTEMP_MOTOR,
+  ERROR_HARDFAULT,
+  ERROR_BUSFAULT,
+  ERROR_NMI,
+  ERROR_MEMFAULT,
+  ERROR_USAGE,
+  ERROR_ADC_OUT_OF_RANGE_IA,
+  ERROR_ADC_OUT_OF_RANGE_IB,
+  ERROR_ADC_OUT_OF_RANGE_IC,
+  ERROR_ADC_OUT_OF_RANGE_VBUS,
+  ERROR_WDG,
+  ERROR_UNBALANCED_CURRENT,
+  ERROR_MEASUREMENT_FAIL,
+  ERROR_DETECTION_FAIL,
+  ERROR_HALL0,
+  ERROR_HALL7,
+  ERROR_MATH,
+  ERROR_INPUT_OOR
+};
 
-
-//Define anticipated errors possible, not all will be implemented
-#define ERROR_OVERCURRENT_PHA 1
-#define ERROR_OVERCURRENT_PHB 2
-#define ERROR_OVERCURRENT_PHC 3
-#define ERROR_OVERVOLTAGE 4
-#define ERROR_UNDERVOLTAGE 5
-#define ERROR_BRK 6
-#define ERROR_OVERTEMPU 7
-#define ERROR_OVERTEMPV 8
-#define ERROR_OVERTEMPW 9
-#define ERROR_OVERTEMP_MOTOR 10
-#define ERROR_HARDFAULT 11
-#define ERROR_BUSFAULT 12
-#define ERROR_NMI 13
-#define ERROR_MEMFAULT 14
-#define ERROR_USAGE 15
-#define ERROR_ADC_OUT_OF_RANGE_IA 16
-#define ERROR_ADC_OUT_OF_RANGE_IB 17
-#define ERROR_ADC_OUT_OF_RANGE_IC 18
-#define ERROR_ADC_OUT_OF_RANGE_VBUS 19
-#define ERROR_WDG 20
-#define ERROR_UNBALANCED_CURRENT 21
-#define ERROR_MEASUREMENT_FAIL 22
-#define ERROR_DETECTION_FAIL 23
-#define ERROR_HALL0 24
-#define ERROR_HALL7 25
-#define ERROR_MATH 26
-#define ERROR_INPUT_OOR 27
-
-
-void handleError(MESC_motor_typedef *_motor, uint32_t error_code);
-
-#endif /* INC_MESCERROR_H_ */
+void handleError(MESC_motor_typedef* _motor, uint32_t error_code);

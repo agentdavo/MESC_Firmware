@@ -27,58 +27,58 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "MESCtemp.h"
+#include <MESCtemp.h>
 
-#include "MESCcli.h"
-#include "MESCprofile.h"
+#include <MESCcli.h>
+#include <MESCprofile.h>
 
-#include "stm32fxxx_hal.h"
+#include <conversions.h>
 
-#include "conversions.h"
+#include <HAL/MESC_HAL.h>
 
 #include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 
-TEMPProfile const * temp_profile = NULL;
+TEMPProfile const* temp_profile = NULL;
 
-void temp_init( TEMPProfile const * const profile )
+void temp_init(TEMPProfile const* const profile)
 {
-    if (profile == PROFILE_DEFAULT)
+  if (profile == PROFILE_DEFAULT)
     {
-        static TEMPProfile temp_profile_default =
+      static TEMPProfile temp_profile_default = {
+      .reading = TEMP_READING_BOARD,
+      .V = 3.3f,
+      .R_F = MESC_PROFILE_TEMP_R_F,
+      .adc_range = 4096,
+      .method = TEMP_METHOD_STEINHART_HART_BETA_R,
+      .schema = MESC_PROFILE_TEMP_SCHEMA,
+      .parameters.SH.Beta = MESC_PROFILE_TEMP_SH_BETA,
+      .parameters.SH.r = MESC_PROFILE_TEMP_SH_R,
+      .parameters.SH.T0 = CVT_CELSIUS_TO_KELVIN_F(25.0f),
+      .parameters.SH.R0 = MESC_PROFILE_TEMP_SH_R0,
+
+      .limit.Tmin = CVT_CELSIUS_TO_KELVIN_F(-15.0f),
+      .limit.Thot = CVT_CELSIUS_TO_KELVIN_F(80.0f),
+      .limit.Tmax = CVT_CELSIUS_TO_KELVIN_F(100.0f),
+      };
+      uint32_t temp_length = sizeof(temp_profile_default);
+
+      ProfileStatus const ret = profile_get_entry("TEMP", TEMP_PROFILE_SIGNATURE, &temp_profile_default, &temp_length);
+
+      temp_profile = &temp_profile_default;
+
+      if (ret != PROFILE_STATUS_SUCCESS)
         {
-            .reading            = TEMP_READING_BOARD,
-            .V                  = 3.3f,
-            .R_F                = MESC_PROFILE_TEMP_R_F,
-            .adc_range          = 4096,
-            .method             = TEMP_METHOD_STEINHART_HART_BETA_R,
-            .schema             = MESC_PROFILE_TEMP_SCHEMA,
-            .parameters.SH.Beta = MESC_PROFILE_TEMP_SH_BETA,
-            .parameters.SH.r    = MESC_PROFILE_TEMP_SH_R,
-            .parameters.SH.T0   = CVT_CELSIUS_TO_KELVIN_F( 25.0f ),
-            .parameters.SH.R0   = MESC_PROFILE_TEMP_SH_R0,
-
-            .limit.Tmin         = CVT_CELSIUS_TO_KELVIN_F( -15.0f ),
-			.limit.Thot         = CVT_CELSIUS_TO_KELVIN_F(  80.0f ),
-            .limit.Tmax         = CVT_CELSIUS_TO_KELVIN_F( 100.0f ),
-        };
-        uint32_t temp_length = sizeof(temp_profile_default);
-
-        ProfileStatus const ret = profile_get_entry(
-            "TEMP", TEMP_PROFILE_SIGNATURE,
-            &temp_profile_default, &temp_length );
-
-        temp_profile = &temp_profile_default;
-
-        if (ret != PROFILE_STATUS_SUCCESS)
-        {
-            cli_reply( "TEMP FAILED" "\r" "\n" );
+          cli_reply(
+          "TEMP FAILED"
+          "\r"
+          "\n");
         }
     }
-    else
+  else
     {
-        temp_profile = profile;
+      temp_profile = profile;
     }
 }
 
@@ -122,39 +122,39 @@ TEMP_SCHEMA_R_T_ON_R_F
             Vout
 */
 
-static float temp_calculate_R_T( float const Vout )
+static float temp_calculate_R_T(float const Vout)
 {
-    if (temp_profile == NULL)
+  if (temp_profile == NULL)
     {
-        return 0.0f;
+      return 0.0f;
     }
 
-    switch (temp_profile->schema)
+  switch (temp_profile->schema)
     {
-        case TEMP_SCHEMA_R_F_ON_R_T:
+      case TEMP_SCHEMA_R_F_ON_R_T:
         {
-            float const num = (Vout * temp_profile->R_F);
-            float const den = (temp_profile->V - Vout);
-            float const R_T = (num / den);
-            // return elec_potdiv_Rlo( temp_profile->V, Vout, temp_profile->R_F );
-            return R_T;
+          float const num = (Vout * temp_profile->R_F);
+          float const den = (temp_profile->V - Vout);
+          float const R_T = (num / den);
+          // return elec_potdiv_Rlo( temp_profile->V, Vout, temp_profile->R_F );
+          return R_T;
         }
-        case TEMP_SCHEMA_R_T_ON_R_F:
+      case TEMP_SCHEMA_R_T_ON_R_F:
         {
-            float const num = (temp_profile->V * temp_profile->R_F);
-            float const den = Vout;
-            float const R_T = (num / den) - temp_profile->R_F;
-            // return elec_potdiv_Rhi( temp_profile->V, Vout, temp_profile->R_F );
-            return R_T;
+          float const num = (temp_profile->V * temp_profile->R_F);
+          float const den = Vout;
+          float const R_T = (num / den) - temp_profile->R_F;
+          // return elec_potdiv_Rhi( temp_profile->V, Vout, temp_profile->R_F );
+          return R_T;
         }
-        default:
+      default:
         {
-            // error
-            return 0.0f;
+          // error
+          return 0.0f;
         }
     }
 }
-#if 0 // STEINHART_HART_ABC
+#if 0  // STEINHART_HART_ABC
 /*
 Steinhart & Hart A/B/C method
 */
@@ -203,7 +203,7 @@ static float temp_calculate_SteinhartHart_ABC( float const R_T )
 /*
 Steinhart & Hart Beta/r method
 */
-#if 0 // STEINHART_HART_ABC
+#if 0  // STEINHART_HART_ABC
 static void temp_derive_SteinhartHart_ABC_from_Beta( TEMPProfile * const profile )
 {
     profile->parameters.SH.C = 0.0f; // C is always zero when using Beta
@@ -211,141 +211,141 @@ static void temp_derive_SteinhartHart_ABC_from_Beta( TEMPProfile * const profile
     profile->parameters.SH.A = (profile->parameters.SH.T0 - (profile->parameters.SH.B * logf( profile->parameters.SH.R0 )));
 }
 #endif
-static float temp_calculate_SteinhartHart_Beta_r( float const R_T )
+static float temp_calculate_SteinhartHart_Beta_r(float const R_T)
 {
-    assert(temp_profile != NULL);
-    return temp_profile->parameters.SH.Beta / logf( R_T / temp_profile->parameters.SH.r );
+  assert(temp_profile != NULL);
+  return temp_profile->parameters.SH.Beta / logf(R_T / temp_profile->parameters.SH.r);
 }
 
 /*
 API
 */
 
-float temp_read( uint32_t const adc_raw )
+float temp_read(uint32_t const adc_raw)
 {
-    if (temp_profile == NULL)
+  if (temp_profile == NULL)
     {
-        return 999.9f;
+      return 999.9f;
     }
 
-    float const adc  = (float)adc_raw;
-    float const Vout = ((temp_profile->V * adc) / (float)temp_profile->adc_range);
-    float const R_T = temp_calculate_R_T( Vout );
+  float const adc = (float)adc_raw;
+  float const Vout = ((temp_profile->V * adc) / (float)temp_profile->adc_range);
+  float const R_T = temp_calculate_R_T(Vout);
 
-    float T;
+  float T;
 
-    switch (temp_profile->method)
+  switch (temp_profile->method)
     {
-        case TEMP_METHOD_STEINHART_HART_BETA_R:
+      case TEMP_METHOD_STEINHART_HART_BETA_R:
         {
-            T = temp_calculate_SteinhartHart_Beta_r( R_T );
-            break;
+          T = temp_calculate_SteinhartHart_Beta_r(R_T);
+          break;
         }
-        default:
+      default:
         {
-            T = 0.0f;
-            break;
+          T = 0.0f;
+          break;
         }
     }
 
-    return T;
+  return T;
 }
 
-uint32_t temp_get_adc( float const T )
+uint32_t temp_get_adc(float const T)
 {
-    if (temp_profile == NULL)
+  if (temp_profile == NULL)
     {
-        return 0;
+      return 0;
     }
 
-    float R_T;
+  float R_T;
 
-    switch (temp_profile->method)
+  switch (temp_profile->method)
     {
-        case TEMP_METHOD_STEINHART_HART_BETA_R:
+      case TEMP_METHOD_STEINHART_HART_BETA_R:
         {
-            float const K = CVT_CELSIUS_TO_KELVIN_F( T );
-            R_T = temp_profile->parameters.SH.r * expf( temp_profile->parameters.SH.Beta / K );
-            // OR R_T =  R0 * exp( Beta * (1 / K - 1 / T0) )
-            break;
+          float const K = CVT_CELSIUS_TO_KELVIN_F(T);
+          R_T = temp_profile->parameters.SH.r * expf(temp_profile->parameters.SH.Beta / K);
+          // OR R_T =  R0 * exp( Beta * (1 / K - 1 / T0) )
+          break;
         }
-        default:
+      default:
         {
-            R_T = 0.0f;
-            break;
-        }
-    }
-
-    float Vout;
-
-    switch (temp_profile->schema)
-    {
-        case TEMP_SCHEMA_R_F_ON_R_T:
-        {
-            Vout = (temp_profile->V *               R_T) / (temp_profile->R_F + R_T);
-            //Vout = elec_potdiv_Vout( temp_profile->V, temp_profile->R_F, R_T );
-            break;
-        }
-        case TEMP_SCHEMA_R_T_ON_R_F:
-        {
-            Vout = (temp_profile->V * temp_profile->R_F) / (temp_profile->R_F + R_T);
-            //Vout = elec_potdiv_Vout( temp_profile->V, R_T, temp_profile->R_F );
-            break;
-        }
-        default:
-        {
-            Vout = 0.0f;
-            break;
+          R_T = 0.0f;
+          break;
         }
     }
 
-    uint32_t const adc_raw = (uint32_t)((Vout * ((float)temp_profile->adc_range)) / temp_profile->V);
+  float Vout;
 
-    return adc_raw;
+  switch (temp_profile->schema)
+    {
+      case TEMP_SCHEMA_R_F_ON_R_T:
+        {
+          Vout = (temp_profile->V * R_T) / (temp_profile->R_F + R_T);
+          //Vout = elec_potdiv_Vout( temp_profile->V, temp_profile->R_F, R_T );
+          break;
+        }
+      case TEMP_SCHEMA_R_T_ON_R_F:
+        {
+          Vout = (temp_profile->V * temp_profile->R_F) / (temp_profile->R_F + R_T);
+          //Vout = elec_potdiv_Vout( temp_profile->V, R_T, temp_profile->R_F );
+          break;
+        }
+      default:
+        {
+          Vout = 0.0f;
+          break;
+        }
+    }
+
+  uint32_t const adc_raw = (uint32_t)((Vout * ((float)temp_profile->adc_range)) / temp_profile->V);
+
+  return adc_raw;
 }
 
-TEMPState temp_check( float const T, float * const dT )
+TEMPState temp_check(float const T, float* const dT)
 {
-	// If there is no temperature reading, assume it is OK
-    if (temp_profile == NULL)
+  // If there is no temperature reading, assume it is OK
+  if (temp_profile == NULL)
     {
-        return TEMP_STATE_OK;
+      return TEMP_STATE_OK;
     }
-	// If the temperature is (suspiciously) too cold, assume it is OK
-	if (T <= temp_profile->limit.Tmin)
-	{
-		return TEMP_STATE_OK;
-	}
-	// If the temperature is below hot, it is fine
-	else if (T <= temp_profile->limit.Thot)
-	{
-		return TEMP_STATE_OK;
-	}
-	// If the temperature is hot but below the maximum return the temperature overshoot for correction
-	else if (T < temp_profile->limit.Tmax)
-	{
-		if (dT != NULL)
-		{
-			*dT = T - temp_profile->limit.Thot;
-		}
-		return TEMP_STATE_ROLLBACK;
-	}
-	// Otherwise it has overheated
-	if (dT != NULL)
-	{
-		*dT = T - temp_profile->limit.Thot;
-	}
-	return TEMP_STATE_OVERHEATED;
+  // If the temperature is (suspiciously) too cold, assume it is OK
+  if (T <= temp_profile->limit.Tmin)
+    {
+      return TEMP_STATE_OK;
+    }
+  // If the temperature is below hot, it is fine
+  else if (T <= temp_profile->limit.Thot)
+    {
+      return TEMP_STATE_OK;
+    }
+  // If the temperature is hot but below the maximum return the temperature overshoot for correction
+  else if (T < temp_profile->limit.Tmax)
+    {
+      if (dT != NULL)
+        {
+          *dT = T - temp_profile->limit.Thot;
+        }
+      return TEMP_STATE_ROLLBACK;
+    }
+  // Otherwise it has overheated
+  if (dT != NULL)
+    {
+      *dT = T - temp_profile->limit.Thot;
+    }
+  return TEMP_STATE_OVERHEATED;
 }
 
-TEMPState temp_check_raw( uint32_t const adc_raw, float * const dT )
+TEMPState temp_check_raw(uint32_t const adc_raw, float* const dT)
 {
-	// If there is no temperature reading, assume it is OK
-    if (temp_profile == NULL)
+  // If there is no temperature reading, assume it is OK
+  if (temp_profile == NULL)
     {
-        return TEMP_STATE_OK;
+      return TEMP_STATE_OK;
     }
 
-    float const T = temp_read( adc_raw );
-    return temp_check( T, dT );
+  float const T = temp_read(adc_raw);
+  return temp_check(T, dT);
 }

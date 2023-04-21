@@ -5,22 +5,12 @@
  *      Author: cod3b453
  */
 
-#ifndef INC_MESCFLASH_H_
-#define INC_MESCFLASH_H_
+#pragma once
 
 #include "MESCprofile.h"
 
-/*
-TODO: Define in MESChw_setup.c
-BEGIN
-*/
-uint32_t getFlashBaseAddress( void );
-uint32_t getFlashBaseSize( void );
-ProfileStatus eraseFlash( uint32_t const address, uint32_t const length );
-/*
-END
-*/
+uint32_t getFlashBaseAddress();
+uint32_t getFlashBaseSize();
+ProfileStatus eraseFlash(uint32_t address, uint32_t length);
 
-void flash_register_profile_io( void );
-
-#endif /* INC_MESCFLASH_H_ */
+void flash_register_profile_io();

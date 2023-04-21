@@ -5,8 +5,7 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_MX_FOC_IMS_H_
-#define INC_MX_FOC_IMS_H_
+#pragma once
 
 //Pick a motor for default
 //#define MCMASTER_70KV_8080
@@ -94,4 +93,3 @@
 #define KILLSWITCH_PIN GPIO_PIN_2
 #define KILLSWITCH_IONO 2
 
-#endif /* INC_MX_FOC_IMS_H_ */

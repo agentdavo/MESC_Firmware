@@ -36,58 +36,106 @@ OTHER DEALINGS IN THE SOFTWARE.
  * 		- Font_16x26
  *
  */
+#pragma once
 
-#ifndef _SSD1306_H
-#define _SSD1306_H
+#include <fonts.h>
 
-#include "stm32fxxx_hal.h"
-#include "fonts.h"
+#include <stdint.h>
+#include <stdbool.h>
 
-// I2c address
 #ifndef SSD1306_I2C_ADDR
-#define SSD1306_I2C_ADDR        0x78
-#endif // SSD1306_I2C_ADDR
+#define SSD1306_I2C_ADDR 0x78 ///< I2c address
+#endif
 
-// SSD1306 width in pixels
 #ifndef SSD1306_WIDTH
-#define SSD1306_WIDTH           128
-#endif // SSD1306_WIDTH
+#define SSD1306_WIDTH 128 ///< SSD1306 width in pixels
+#endif
 
-// SSD1306 LCD height in pixels
+
 #ifndef SSD1306_HEIGHT
-#define SSD1306_HEIGHT          64
-#endif // SSD1306_HEIGHT
+#define SSD1306_HEIGHT 64 ///< SSD1306 LCD height in pixels
+#endif
 
-
-//
-//  Enumeration for screen colors
-//
-typedef enum {
-	Black = 0x00, // Black color, no pixel
-	White = 0x01  //Pixel is set. Color depends on LCD
+/**
+ * Enumeration for screen colors
+ */
+typedef enum
+{
+	Black = 0x00, ///< Black color, no pixel
+	White = 0x01  ///< Pixel is set. Color depends on LCD
 } SSD1306_COLOR;
 
-//
-//  Struct to store transformations
-//
-typedef struct {
+/**
+ * Struct to store transformations.
+ */
+typedef struct
+{
 	uint16_t CurrentX;
 	uint16_t CurrentY;
 	uint8_t Inverted;
 	uint8_t Initialized;
 } SSD1306_t;
 
-//
-//  Function definitions
-//
+#ifdef __cplus_plus
+extern "C"
+{
+#endif
 
-uint8_t ssd1306_Init(I2C_HandleTypeDef *hi2c);
-void ssd1306_UpdateScreen(I2C_HandleTypeDef *hi2c);
+  /**
+ * Screen initialization.
+ * @return true - success, false failed.
+ */
+bool ssd1306_Init();
+
+/**
+ * Fill the whole screen with the given color.
+ * @param color
+ */
 void ssd1306_Fill(SSD1306_COLOR color);
+
+/**
+ * Draw one pixel in the screenbuffer.
+ * @param x coordinate.
+ * @param y coordinate.
+ * @param color pixel color.
+ */
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
+
+/**
+ * Write the screenbuffer with changed to the screen.
+ */
+void ssd1306_UpdateScreen();
+
+/**
+ * Draw 1 char to the screen buffer.
+ * @param ch character which needed to be written.
+ * @param Font selected font.
+ * @param color black or white.
+ * @return written char for validation
+ */
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
-char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
-void ssd1306_SetCursor(uint8_t x, uint8_t y);
+
+/**
+ * Write full string to screenbuffer.
+ * @param str
+ * @param Font
+ * @param color
+ * @return '\0' if ok, any character from str if problems occurred.
+ */
+char ssd1306_WriteString(char const *str, FontDef Font, SSD1306_COLOR color);
+
+/**
+* Invert background/foreground colors.
+*/
 void ssd1306_InvertColors(void);
 
-#endif  // _SSD1306_H
+/**
+ * Set cursor position.
+ * @param x position.
+ * @param y position.
+ */
+void ssd1306_SetCursor(uint8_t x, uint8_t y);
+
+#ifdef __cplus_plus
+}
+#endif

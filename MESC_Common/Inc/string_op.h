@@ -27,19 +27,11 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_STRING_OP_H
-#define MESC_STRING_OP_H
+#pragma once
 
-#include "bit_op.h"
+#include <bit_op.h>
 
-#define MAKE_UINT16_STRING(a,b) \
-       (((uint16_t)(a) <<  BYTE_SHIFT(0)) \
-    |   ((uint16_t)(b) <<  BYTE_SHIFT(1)))
+#define MAKE_UINT16_STRING(a, b) (((uint16_t)(a) << BYTE_SHIFT(0)) | ((uint16_t)(b) << BYTE_SHIFT(1)))
 
-#define MAKE_UINT32_STRING(a,b,c,d) \
-       (((uint32_t)(a) << BYTE_SHIFT(0))  \
-    |   ((uint32_t)(b) << BYTE_SHIFT(1))  \
-    |   ((uint32_t)(c) << BYTE_SHIFT(2))  \
-    |   ((uint32_t)(d) << BYTE_SHIFT(3)))
-
-#endif
+#define MAKE_UINT32_STRING(a, b, c, d) \
+  (((uint32_t)(a) << BYTE_SHIFT(0)) | ((uint32_t)(b) << BYTE_SHIFT(1)) | ((uint32_t)(c) << BYTE_SHIFT(2)) | ((uint32_t)(d) << BYTE_SHIFT(3)))

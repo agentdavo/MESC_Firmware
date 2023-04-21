@@ -5,8 +5,7 @@
  *      Author: Lenovo
  */
 
-#ifndef INC_STM32FXXX_HAL_H_
-#define INC_STM32FXXX_HAL_H_
+#pragma once
 
 #include "stm32f4xx_hal.h"
 #include "MESC_F405.h"
@@ -41,4 +40,3 @@ Profile defaults
 #define MESC_PROFILE_TEMP_SH_R    0.098243f
 #define MESC_PROFILE_TEMP_SH_R0   10000.0f
 
-#endif /* INC_STM32FXXX_HAL_H_ */

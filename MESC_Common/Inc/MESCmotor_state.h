@@ -22,12 +22,10 @@
  *      Author: David Molony
  */
 
-#ifndef MESC_MOTOR_STATE_H
-#define MESC_MOTOR_STATE_H
+#pragma once
 
-#include "stm32fxxx_hal.h"
-
-typedef enum {
+typedef enum
+{
   MOTOR_STATE_INITIALISING = 0,
   // Starting up the inverter, we need to get the offsets for the current sensors and do any checks
   MOTOR_STATE_DETECTING = 1,
@@ -83,50 +81,56 @@ typedef enum {
   MOTOR_STATE_RUN_BLDC = 14,
   /*We are going to run, but using a BLDC controller, not FOC
    */
-
 } motor_state_e;
 
 extern motor_state_e MotorState;
 
-typedef enum {
+typedef enum
+{
   MOTOR_SENSOR_MODE_SENSORLESS,
   MOTOR_SENSOR_MODE_HALL,
   MOTOR_SENSOR_MODE_OPENLOOP,
   MOTOR_SENSOR_MODE_ENCODER,
   MOTOR_SENSOR_MODE_HFI,
-  } motor_sensor_mode_e;
+} motor_sensor_mode_e;
 
-  typedef enum {
-    MOTOR_CONTROL_MODE_TORQUE,
-	MOTOR_CONTROL_MODE_SPEED,
-	MOTOR_CONTROL_MODE_DUTY,
-	MOTOR_CONTROL_MODE_POSITION,
-	MOTOR_CONTROL_MODE_SOMETHING,
-    } motor_control_mode_e;
+typedef enum
+{
+  MOTOR_CONTROL_MODE_TORQUE,
+  MOTOR_CONTROL_MODE_SPEED,
+  MOTOR_CONTROL_MODE_DUTY,
+  MOTOR_CONTROL_MODE_POSITION,
+  MOTOR_CONTROL_MODE_SOMETHING,
+} motor_control_mode_e;
 
-typedef enum {
+typedef enum
+{
   HFI_TYPE_NONE,
   HFI_TYPE_45,
   HFI_TYPE_D,
   HFI_TYPE_SPECIAL,
-}HFI_type_e;
-typedef enum {
-	U,
-	V,
-	W,
-	N,
-}HighPhase_e;
+} HFI_type_e;
+
+typedef enum
+{
+  U,
+  V,
+  W,
+  N,
+} HighPhase_e;
 
 extern motor_sensor_mode_e MotorSensorMode;
 
-typedef enum {
-TEST_TYPE_DEAD_TIME_IDENT,
-TEST_TYPE_DOUBLE_PULSE,
-TEST_TYPE_HARDWARE_VERIFICATION,
+typedef enum
+{
+  TEST_TYPE_DEAD_TIME_IDENT,
+  TEST_TYPE_DOUBLE_PULSE,
+  TEST_TYPE_HARDWARE_VERIFICATION,
 } test_mode_e;
 extern test_mode_e TestMode;
 
-typedef enum {
+typedef enum
+{
   MOTOR_ERROR_NONE,
   MOTOR_ERROR_HALL0,
   MOTOR_ERROR_HALL7,
@@ -141,15 +145,17 @@ typedef enum {
 
 extern motor_error_type_e MotorError;
 
-typedef enum {
+typedef enum
+{
   MOTOR_DIRECTION_CLOCKWISE,
   MOTOR_DIRECTION_COUNTERCLOCKWISE
 } motor_direction_e;
 
 extern motor_direction_e MotorDirection;
 
-typedef enum {
-	MOTOR_CONTROL_TYPE_FOC,
+typedef enum
+{
+  MOTOR_CONTROL_TYPE_FOC,
   MOTOR_CONTROL_TYPE_BLDC
 } motor_control_type_e;
 
@@ -157,10 +163,5 @@ typedef enum {
 #define KILLSWITCH_KEY 2
 #define SAFESTART_KEY 4
 
-/* Function prototypes -----------------------------------------------*/
-
 void MESC_Init();
-
 void MESCmotor_state_set(motor_state_e mState);
-
-#endif

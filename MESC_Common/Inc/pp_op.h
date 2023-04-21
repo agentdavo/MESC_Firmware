@@ -27,10 +27,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_PP_OP_H
-#define MESC_PP_OP_H
+#pragma once
 
-#define JOIN_(lhs,rhs)  lhs ## rhs
-#define JOIN(lhs,rhs)   JOIN_(lhs,rhs)
-
-#endif
+#define JOIN_(lhs, rhs) lhs##rhs
+#define JOIN(lhs, rhs) JOIN_(lhs, rhs)

@@ -222,20 +222,18 @@ void mesc_init_3( MESC_motor_typedef *_motor )
 //    hadc3.Instance->CR2|=ADC_CR2_JEXTEN;
 
 
-    HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_4 );
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);    //OI HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_4);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);    //OI HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1); //OI HAL_TIMEx_PWMN_Start(_motor->mtimer, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);    //OI HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2); //OI HAL_TIMEx_PWMN_Start(_motor->mtimer, TIM_CHANNEL_2);
 
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);    //OI HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3); //OI HAL_TIMEx_PWMN_Start(_motor->mtimer, TIM_CHANNEL_3);
 
-    HAL_TIM_PWM_Start(    _motor->mtimer, TIM_CHANNEL_1 );
-    HAL_TIMEx_PWMN_Start( _motor->mtimer, TIM_CHANNEL_1 );
-
-    HAL_TIM_PWM_Start(    _motor->mtimer, TIM_CHANNEL_2 );
-    HAL_TIMEx_PWMN_Start( _motor->mtimer, TIM_CHANNEL_2 );
-
-    HAL_TIM_PWM_Start(    _motor->mtimer, TIM_CHANNEL_3 );
-    HAL_TIMEx_PWMN_Start( _motor->mtimer, TIM_CHANNEL_3 );
-    generateBreak(_motor);//We have started the timers, but we really do not want them PWMing yet
+    generateBreak(0); //We have started the timers, but we really do not want them PWMing yet
 
     HAL_Delay(50); //Need to let the ADC start before we enable the fastloop interrupt, otherwise it returns 0 and errors.
 
-    __HAL_TIM_ENABLE_IT(_motor->mtimer, TIM_IT_UPDATE);
+    __HAL_TIM_ENABLE_IT(&htim1, TIM_IT_UPDATE); //OI __HAL_TIM_ENABLE_IT(_motor->mtimer, TIM_IT_UPDATE);
 }

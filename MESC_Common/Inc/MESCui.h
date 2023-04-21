@@ -27,103 +27,100 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_UI_H
-#define MESC_UI_H
+#pragma once
 
 #include <stdint.h>
 
-#define UI_PROFILE_SIGNATURE MAKE_UINT32_STRING('M','U','P','E')
+#define UI_PROFILE_SIGNATURE MAKE_UINT32_STRING('M', 'U', 'P', 'E')
 
 enum UIProfileType
 {
-    // Inputs
-    UI_PROFILE_THROTTLE,
-    UI_PROFILE_BRAKE,
-    UI_PROFILE_BUTTON,
+  // Inputs
+  UI_PROFILE_THROTTLE,
+  UI_PROFILE_BRAKE,
+  UI_PROFILE_BUTTON,
 
-    // Outputs
-    UI_PROFILE_INDICATOR,
-    UI_PROFILE_SCREEN,
+  // Outputs
+  UI_PROFILE_INDICATOR,
+  UI_PROFILE_SCREEN,
 };
 
 typedef enum UIProfileType UIProfileType;
 
 enum UIResponse
 {
-    UI_RESPONSE_LINEAR,
-    UI_RESPONSE_LOG,
+  UI_RESPONSE_LINEAR,
+  UI_RESPONSE_LOG,
 };
 
 typedef enum UIResponse UIResponse;
 
 enum UIActivation
 {
-    UI_ACTIVATION_LEVEL,
-    UI_ACTIVATION_EDGE,
+  UI_ACTIVATION_LEVEL,
+  UI_ACTIVATION_EDGE,
 };
 
 typedef enum UIActivation UIActivation;
 
 struct UIProfile
 {
-    UIProfileType   type;
+  UIProfileType type;
 
-    union
-    {
+  union
+  {
     // Inputs
     struct
     {
-    uint32_t        adc_min;
-    uint32_t        adc_max;
-    UIResponse      response;
-    uint32_t        adc_trig;
-    float           Imax;
-    uint32_t        rcpwm_t_min;
-    uint32_t        rcpwm_t_max;
-    }               throttle;
+      uint32_t adc_min;
+      uint32_t adc_max;
+      UIResponse response;
+      uint32_t adc_trig;
+      float Imax;
+      uint32_t rcpwm_t_min;
+      uint32_t rcpwm_t_max;
+    } throttle;
 
     struct
     {
-    uint32_t        adc_min;
-    uint32_t        adc_max;
-    UIResponse      response;
-    uint32_t        adc_trig;
-    float           Imax;
-    uint32_t        _[2];
-    }               brake;
+      uint32_t adc_min;
+      uint32_t adc_max;
+      UIResponse response;
+      uint32_t adc_trig;
+      float Imax;
+      uint32_t _[2];
+    } brake;
 
     struct
     {
-    uint32_t        interface;
-    uint32_t        address;
-    uint32_t        identifier;
-    uint32_t        _[4];
-    }               button;
+      uint32_t interface;
+      uint32_t address;
+      uint32_t identifier;
+      uint32_t _[4];
+    } button;
 
     // Outputs
     struct
     {
-    uint32_t        interface;
-    uint32_t        address;
-    uint32_t        identifier;
-    UIActivation    activation;
-    uint32_t        _[3];
-    }               indicator;
+      uint32_t interface;
+      uint32_t address;
+      uint32_t identifier;
+      UIActivation activation;
+      uint32_t _[3];
+    } indicator;
 
     struct
     {
-    uint32_t        interface;
-    uint32_t        address;
-    uint32_t        width;
-    uint32_t        height;
-    uint32_t        _[3];
-    }               screen;
+      uint32_t interface;
+      uint32_t address;
+      uint32_t width;
+      uint32_t height;
+      uint32_t _[3];
+    } screen;
 
-    }               desc;
+  } desc;
 };
 
 typedef struct UIProfile UIProfile;
 
-void ui_init( UIProfile const * const profile );
-
-#endif
+void ui_init(UIProfile const* const profile);

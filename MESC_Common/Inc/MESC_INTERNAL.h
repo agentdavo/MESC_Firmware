@@ -27,8 +27,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_INTERNAL_H
-#define MESC_INTERNAL_H
+#pragma once
 
 /*
 NOTE
@@ -36,6 +35,4 @@ NOTE
 To avoid exposing internal definitions to the global namespace the actual
 internal type (internal) is hidden and substituted for the public type (mesc)
 */
-#define MESC_INTERNAL_ALIAS(mesc,internal) mesc
-
-#endif
+#define MESC_INTERNAL_ALIAS(mesc, internal) mesc

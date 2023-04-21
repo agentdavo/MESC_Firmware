@@ -24,14 +24,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "MESC_Comms.h"
+#include <MESC_Comms.h>
+
+#include <MESCBLDC.h>
+#include <MESCfoc.h>
+#include <MESChw_setup.h>
+#include <MESCmotor_state.h>
 
 #include <stdio.h>
-
-#include "MESCBLDC.h"
-#include "MESCfoc.h"
-#include "MESChw_setup.h"
-#include "MESCmotor_state.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // RCPWM implementation

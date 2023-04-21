@@ -5,8 +5,7 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_CL700_V0_3_H_
-#define INC_CL700_V0_3_H_
+#pragma once
 
 //Pick a motor for default
 #define QS138_90H
@@ -93,4 +92,3 @@
 //#define KILLSWITCH_PIN GPIO_PIN_2
 //#define KILLSWITCH_IONO 2
 
-#endif /* INC_MX_FOC_IMS_H_ */

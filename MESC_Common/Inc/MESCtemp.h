@@ -27,92 +27,89 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_TEMP_H
-#define MESC_TEMP_H
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
 
-#define TEMP_PROFILE_SIGNATURE MAKE_UINT32_STRING('M','T','P','E')
+#define TEMP_PROFILE_SIGNATURE MAKE_UINT32_STRING('M', 'T', 'P', 'E')
 
 enum TEMPMethod
 {
-    TEMP_METHOD_STEINHART_HART_BETA_R,
+  TEMP_METHOD_STEINHART_HART_BETA_R,
 };
 
 typedef enum TEMPMethod TEMPMethod;
 
 enum TEMPSchema
 {
-    TEMP_SCHEMA_R_F_ON_R_T,
-    TEMP_SCHEMA_R_T_ON_R_F
+  TEMP_SCHEMA_R_F_ON_R_T,
+  TEMP_SCHEMA_R_T_ON_R_F
 };
 
 typedef enum TEMPSchema TEMPSchema;
 
 enum TEMPReading
 {
-    TEMP_READING_BOARD,
-    TEMP_READING_MOTOR,
+  TEMP_READING_BOARD,
+  TEMP_READING_MOTOR,
 };
 
 typedef enum TEMPReading TEMPReading;
 
 struct TEMPProfile
 {
-    TEMPReading reading;
-    float       V;
-    float       R_F;
+  TEMPReading reading;
+  float V;
+  float R_F;
 
-    uint32_t    adc_range;
+  uint32_t adc_range;
 
-    TEMPMethod  method;
-    TEMPSchema  schema;
+  TEMPMethod method;
+  TEMPSchema schema;
 
-    union
-    {
+  union
+  {
     struct
     {
-    float       A;
-    float       B;
-    float       C;
+      float A;
+      float B;
+      float C;
 
-    float       Beta;
-    float       r;
+      float Beta;
+      float r;
 
-    float       T0;
-    float       R0;
-    }           SH;
-    }           parameters;
+      float T0;
+      float R0;
+    } SH;
+  } parameters;
 
-    struct
-    {
-    float       Tmin;
-    float       Thot;
-    float       Tmax;
-    }           limit;
+  struct
+  {
+    float Tmin;
+    float Thot;
+    float Tmax;
+  } limit;
 };
 
 typedef struct TEMPProfile TEMPProfile;
-extern TEMPProfile const * temp_profile;
+extern TEMPProfile const* temp_profile;
 
-void temp_init( TEMPProfile const * const profile );
+void temp_init(TEMPProfile const* const profile);
 
-float temp_read( uint32_t const adc_raw );
+float temp_read(uint32_t const adc_raw);
 
-uint32_t temp_get_adc( float const T );
+uint32_t temp_get_adc(float const T);
 
 enum TEMPState
 {
-	TEMP_STATE_OK,
-    TEMP_STATE_ROLLBACK,
-	TEMP_STATE_OVERHEATED,
+  TEMP_STATE_OK,
+  TEMP_STATE_ROLLBACK,
+  TEMP_STATE_OVERHEATED,
 };
 
 typedef enum TEMPState TEMPState;
 
-TEMPState temp_check( float const T, float * const dT );
+TEMPState temp_check(float const T, float* const dT);
 
-TEMPState temp_check_raw( uint32_t const adc_raw, float * const dT );
-
-#endif
+TEMPState temp_check_raw(uint32_t const adc_raw, float* const dT);

@@ -35,64 +35,64 @@
  *      Author: David Molony
  */
 
-#ifndef MESC_FOC_H
-#define MESC_FOC_H
+#pragma once
 
+#include <MESC_BLDC.h>
+#include <MESCmotor.h>
+#include <MESCmotor_state.h>
 
-#include <stdbool.h>
-#include "stm32fxxx_hal.h"
-#include "MESCmotor_state.h"
-#include "MESCmotor.h"
-#include "MESC_BLDC.h"
+#include <HAL/MESC_HAL.h>
 
 //#include "MESCposition.h"
 #define LOGGING
 
-#define FOC_PERIODS                (1)
+#define FOC_PERIODS (1)
 
 //Default options which can be overwritten by user
 #ifndef PWM_FREQUENCY
-#define PWM_FREQUENCY 20000 //This is half the VESC zero vector frequency; i.e. 20k is equivalent to VESC 40k
+#define PWM_FREQUENCY 20000  //This is half the VESC zero vector frequency; i.e. 20k is equivalent to VESC 40k
 #endif
 
 #ifndef SLOW_LOOP_FREQUENCY
-#define SLOW_LOOP_FREQUENCY 100 //Frequency of the slow loop (MIN: 16Hz!)
+#define SLOW_LOOP_FREQUENCY 100  //Frequency of the slow loop (MIN: 16Hz!)
 #endif
 #ifndef SLOWTIM_SCALER
-#define SLOWTIM_SCALER 1 //There is an annoying /2 on the htim2 and other random timers that is present in the F405 but not the F401 and some others. Unclear where to get this from HAL library.
+#define SLOWTIM_SCALER \
+  1  //There is an annoying /2 on the htim2 and other random timers that is present in the F405 but not the F401 and some others. Unclear where to get this from HAL library.
 #endif
 
 #ifndef DEADTIME_COMP_V
-#define DEADTIME_COMP_V 0 	//Arbitrary value for starting, needs determining through TEST_TYP_DEAD_TIME_IDENT.
-#endif						//Basically this is half the time between MOSoff and MOSon
-							//and needs dtermining experimentally, either with openloop
-							//sin wave drawing or by finding the zero current switching "power knee point"
-							//Not defining this uses 5 sector and overmodulation compensation
-							//5 sector is harder on the low side FETs (for now)but offers equal performance at low speed, better at high speed.
+#define DEADTIME_COMP_V 0  //Arbitrary value for starting, needs determining through TEST_TYP_DEAD_TIME_IDENT.
+#endif                     //Basically this is half the time between MOSoff and MOSon
+                           //and needs dtermining experimentally, either with openloop
+                           //sin wave drawing or by finding the zero current switching "power knee point"
+                           //Not defining this uses 5 sector and overmodulation compensation
+                           //5 sector is harder on the low side FETs (for now)but offers equal performance at low speed, better at high speed.
 #ifndef OVERMOD_DT_COMP_THRESHOLD
-#define OVERMOD_DT_COMP_THRESHOLD 100	//Prototype concept that allows 100% (possibly greater) modulation by
-										//skipping turn off when the modulation is close to VBus, then compensating next cycle.
-										//Only works with 5 sector (bottom clamp) - comment out #define SEVEN_SECTOR
+#define OVERMOD_DT_COMP_THRESHOLD 100  //Prototype concept that allows 100% (possibly greater) modulation by
+                                       //skipping turn off when the modulation is close to VBus, then compensating next cycle.
+                                       //Only works with 5 sector (bottom clamp) - comment out #define SEVEN_SECTOR
 #endif
 
 #ifndef MAX_MODULATION
-#define MAX_MODULATION 0.95f //default is 0.95f, can allow higher or lower. up to
-							//1.1 stable with 5 sector switching,
-							//1.05 is advised as max for low side shunts
+#define MAX_MODULATION                                        \
+  0.95f  //default is 0.95f, can allow higher or lower. up to \
+         //1.1 stable with 5 sector switching,                \
+         //1.05 is advised as max for low side shunts
 #endif
 
 #ifndef I_MEASURE
-#define I_MEASURE 20.0f //Higher setpoint for resistance measurement
+#define I_MEASURE 20.0f  //Higher setpoint for resistance measurement
 #endif
 #ifndef IMEASURE_CLOSEDLOOP
-#define IMEASURE_CLOSEDLOOP 8.5f 	//After spinning up openloop and getting an approximation,
-									//this current is used to driver the motor and collect a refined flux linkage
+#define IMEASURE_CLOSEDLOOP 8.5f  //After spinning up openloop and getting an approximation,
+                                  //this current is used to driver the motor and collect a refined flux linkage
 #endif
 #ifndef V_MEASURE
-#define V_MEASURE 4.0f 	//Voltage setpoint for measuring inductance
+#define V_MEASURE 4.0f  //Voltage setpoint for measuring inductance
 #endif
 #ifndef ERPM_MEASURE
-#define ERPM_MEASURE 3000.0f//Speed to do the flux linkage measurement at
+#define ERPM_MEASURE 3000.0f  //Speed to do the flux linkage measurement at
 #endif
 
 #ifndef MIN_IQ_REQUEST
@@ -116,14 +116,14 @@
 #endif
 
 #ifndef CURRENT_BANDWIDTH
-#define CURRENT_BANDWIDTH 0.25f*PWM_FREQUENCY //Note, current bandwidth in rads-1, PWMfrequency in Hz, so the default is about fPWM = 25xcurrent bandwidth.
+#define CURRENT_BANDWIDTH 0.25f * PWM_FREQUENCY  //Note, current bandwidth in rads-1, PWMfrequency in Hz, so the default is about fPWM = 25xcurrent bandwidth.
 #endif
 
 #ifndef DEFAULT_SPEED_KP
-#define DEFAULT_SPEED_KP 0.5f //Amps per eHz
+#define DEFAULT_SPEED_KP 0.5f  //Amps per eHz
 #endif
 #ifndef DEFAULT_SPEED_KI
-#define DEFAULT_SPEED_KI 0.1f //Amps per eHz per slowloop period... ToDo make it per second. At 100Hz slowloop, 0.1f corresponds to a 10Hz integral.
+#define DEFAULT_SPEED_KI 0.1f  //Amps per eHz per slowloop period... ToDo make it per second. At 100Hz slowloop, 0.1f corresponds to a 10Hz integral.
 #endif
 
 #ifndef ADC_OFFSET_DEFAULT
@@ -134,7 +134,7 @@
 #define HALL_IIR 0.05f
 #endif
 
-#define HALL_IIRN (1.0f-HALL_IIR)
+#define HALL_IIRN (1.0f - HALL_IIR)
 
 //Position and speed estimator defaults
 #ifndef PLL_KP
@@ -154,15 +154,13 @@
 #define POS_KD 0.002f
 #endif
 
-
 #ifndef DEFAULT_CONTROL_MODE
 #define DEFAULT_CONTROL_MODE MOTOR_CONTROL_MODE_TORQUE
 #endif
 
 #ifndef ABS_MIN_BUS_VOLTAGE
-#define ABS_MIN_BUS_VOLTAGE 12.0f //We do not run below the typical gate driver safe working voltage.
+#define ABS_MIN_BUS_VOLTAGE 12.0f  //We do not run below the typical gate driver safe working voltage.
 #endif
-
 
 #ifndef ADC1OOR
 #define ADC1OOR 4095
@@ -183,74 +181,80 @@
 #define ENCODER_E_OFFSET 0
 #endif
 
-typedef struct {
-	int Iu;
-	int Iv;
-	int Iw;
+typedef struct
+{
+  int Iu;
+  int Iv;
+  int Iw;
 
-	int Vbus;
+  int Vbus;
 
-	int Vu;
-	int Vv;
-	int Vw;
+  int Vu;
+  int Vv;
+  int Vw;
 
-	int MOSu_T;
-	int MOSv_T;
-	int MOSw_T;
+  int MOSu_T;
+  int MOSv_T;
+  int MOSw_T;
 
-	int Motor_T;
+  int Motor_T;
 
-	int ADC_in_ext1;
-	int ADC_in_ext2;
-}MESC_raw_typedef;
+  int ADC_in_ext1;
+  int ADC_in_ext2;
+} MESC_raw_typedef;
 
 //extern MESC_raw_typedef motor1;
+typedef struct
+{
+  int Iu;
+  int Iv;
+  int Iw;
+} MESC_offset_typedef;
 
-typedef struct {
-	int Iu;
-	int Iv;
-	int Iw;
-}MESC_offset_typedef;
+typedef struct
+{
+  float Iu;
+  float Iv;
+  float Iw;
 
-typedef struct {
-	float Iu;
-	float Iv;
-	float Iw;
+  float Vbus;
 
-	float Vbus;
+  float Vu;
+  float Vv;
+  float Vw;
 
-	float Vu;
-	float Vv;
-	float Vw;
+  float MOSu_T;
+  float MOSv_T;
+  float MOSw_T;
 
-	float MOSu_T;
-	float MOSv_T;
-	float MOSw_T;
+  float Motor_T;
+} MESC_Converted_typedef;
 
-	float Motor_T;
-}MESC_Converted_typedef;
+typedef struct
+{
+  float sin;
+  float cos;
+} MESCsin_cos_s;
 
-typedef struct {
-	float sin;
-	float cos;
-}MESCsin_cos_s;
-
-typedef struct {
+typedef struct
+{
   float d;
   float q;
 } MESCiq_s;
 
-typedef struct {
+typedef struct
+{
   float a;
   float b;
   float g;
 } MESCiab_s;
 
-typedef struct {
+typedef struct
+{
   int initing;  // Flag to say we are initialising
 
-  uint16_t openloop_step;//The angle to increment by for openloop
-  uint16_t FOCAngle;    // Angle generated in the hall sensor estimator
+  uint16_t openloop_step;  //The angle to increment by for openloop
+  uint16_t FOCAngle;       // Angle generated in the hall sensor estimator
   uint32_t encoder_duration;
   uint32_t encoder_pulse;
   uint32_t encoder_OK;
@@ -262,25 +266,24 @@ typedef struct {
   int enc_obs_angle;
   float FLAdiff;
   MESCsin_cos_s sincosangle;  // This variable carries the current sin and cosine of
-                         	  // the angle being used for Park and Clark transforms,
+                              // the angle being used for Park and Clark transforms,
                               // so they only need computing once per pwm cycle
-  MESCiab_s Vab;							//Float vector containing the Alpha beta frame voltage
-  MESCiab_s Iab;							// Float vector containing the Clark transformed current in Amps
-  MESCiq_s Idq;      						// Float vector containing the Park
-  	  	  	  	  	  	  	  	  	  	  	// transformed current in amps
+  MESCiab_s Vab;              // Float vector containing the Alpha beta frame voltage
+  MESCiab_s Iab;              // Float vector containing the Clark transformed current in Amps
+  MESCiq_s Idq;               // Float vector containing the Park
+                              // transformed current in amps
   MESCiq_s Vdq;
   MESCiq_s Idq_smoothed;
   MESCiq_s Idq_int_err;
   float id_mtpa;
   float iq_mtpa;
 
-
   float inverterVoltage[3];
-  MESCiq_s Idq_req;							//The input to the PI controller. Load this with the values you want.
-  MESCiq_s Idq_prereq; 						//Before we set the input to the current PI controller, we want to run a series of calcs (collect variables,
-										  	  //calculate MTPA... that needs to be done without it putting jitter onto the PI input.
-  float T_rollback;							//Scale the input parameters by this amount when thermal throttling
-  MESCiq_s currentPower;					//Power being consumed by the motor; this does not include steady state losses and losses to switching
+  MESCiq_s Idq_req;       // The input to the PI controller. Load this with the values you want.
+  MESCiq_s Idq_prereq;    // Before we set the input to the current PI controller, we want to run a series of calcs (collect variables,
+                          // calculate MTPA... that needs to be done without it putting jitter onto the PI input.
+  float T_rollback;       // Scale the input parameters by this amount when thermal throttling
+  MESCiq_s currentPower;  // Power being consumed by the motor; this does not include steady state losses and losses to switching
   float currentPowerab;
   float Ibus;
   float reqPower;
@@ -289,17 +292,16 @@ typedef struct {
   float speed_ki;
   float speed_error_int;
 
-  //Observer parameters
+  // Observer parameters
   float Ia_last;
   float Ib_last;
   float La_last;
   float Lb_last;
 
-
-//Hall start
+  // Hall start
   int hall_initialised;
   int hall_start_now;
-//Encoder start
+  // Encoder start
   int enc_start_now;
 
   float pwm_period;
@@ -337,7 +339,7 @@ typedef struct {
   uint32_t IRQentry;
   uint32_t IRQexit;
 
-  //HFI
+  // HFI
   uint16_t inject;
   uint16_t inject_high_low_now;
   float Vd_injectionV;
@@ -364,7 +366,7 @@ typedef struct {
   float mechRPM;
   float Ldq_now[2];
   float Ldq_now_dboost[2];
-  int d_polarity; //With this, we can swap the PLL polarity and therefore make it track Q instead of D. This is useful for detection
+  int d_polarity;  // With this, we can swap the PLL polarity and therefore make it track Q instead of D. This is useful for detection
 
   float IIR[2];
   uint32_t cycles_fastloop;
@@ -373,224 +375,221 @@ typedef struct {
 
 extern MESCfoc_s foc_vars;
 
-typedef struct {
-	//Measure resistance
-	float top_V;
-	float bottom_V;
-	float top_I;
-	float bottom_I;
-	float count_top;
-	float count_topq;
-	float count_bottom;
-	float count_bottomq;
+typedef struct
+{
+  // Measure resistance
+  float top_V;
+  float bottom_V;
+  float top_I;
+  float bottom_I;
+  float count_top;
+  float count_topq;
+  float count_bottom;
+  float count_bottomq;
 
-	float Vd_temp;
-	float Vq_temp;
-	float top_I_L;
-	float bottom_I_L;
-	float top_I_Lq;
-	float bottom_I_Lq;
-	int PWM_cycles;
-	HFI_type_e previous_HFI_type;
+  float Vd_temp;
+  float Vq_temp;
+  float top_I_L;
+  float bottom_I_L;
+  float top_I_Lq;
+  float bottom_I_Lq;
+  int PWM_cycles;
+  HFI_type_e previous_HFI_type;
 
-	//getkV
-	int angle_delta;
-	float temp_flux;
-	float temp_FLA;
-	float temp_FLB;
-
-	float hfi_voltage;
-
-	float measure_current;
-	float measure_voltage;
+  // getkV
+  int angle_delta;
+  float temp_flux;
+  float temp_FLA;
+  float temp_FLB;
+  float hfi_voltage;
+  float measure_current;
+  float measure_voltage;
 } MESCmeas_s;
 
-typedef struct {
-	float dir;
-	int current_hall_state;
-	uint16_t current_hall_angle;
-	int last_hall_state;
-	uint16_t last_hall_angle;
-	float ticks_since_last_observer_change;
-	float last_observer_period;
-	float one_on_last_observer_period;
-	float angular_velocity;
-	float angle_step;
-
-	int hall_error;
+typedef struct
+{
+  float dir;
+  int current_hall_state;
+  uint16_t current_hall_angle;
+  int last_hall_state;
+  uint16_t last_hall_angle;
+  float ticks_since_last_observer_change;
+  float last_observer_period;
+  float one_on_last_observer_period;
+  float angular_velocity;
+  float angle_step;
+  int hall_error;
 } MESChall_s;
 
-typedef struct{
-	uint16_t OL_periods;
-	uint16_t OL_countdown;
-	int  closed_loop;
-	int sector;
-	int direction;
-	float PWM_period;
+typedef struct
+{
+  uint16_t OL_periods;
+  uint16_t OL_countdown;
+  int closed_loop;
+  int sector;
+  int direction;
+  float PWM_period;
 
-	float I_set;
-	float I_meas;
-	float V_meas;
-	float V_meas_sect[6];
-	float rising_int;
-	float falling_int;
-	float rising_int_st;
-	float falling_int_st;
-	float last_p_error;
+  float I_set;
+  float I_meas;
+  float V_meas;
+  float V_meas_sect[6];
+  float rising_int;
+  float falling_int;
+  float rising_int_st;
+  float falling_int_st;
+  float last_p_error;
 
-	float I_error;
-	float int_I_error;
-	float I_pgain;
-	float I_igain;
+  float I_error;
+  float int_I_error;
+  float I_pgain;
+  float I_igain;
 
-	float com_flux;
-	float flux_integral;
-	float last_flux_integral;
+  float com_flux;
+  float flux_integral;
+  float last_flux_integral;
 
-	float V_bldc;
-	float V_bldc_to_PWM;
-	uint16_t BLDC_PWM;
+  float V_bldc;
+  float V_bldc_to_PWM;
+  uint16_t BLDC_PWM;
+} MESCBLDC_s;
 
-}MESCBLDC_s;
-
-
-/////////////Position controller data
-typedef struct{
-	float Kp;
-	float Ki;
-	float Kd;
-	float error;
-	uint32_t last_pll_pos;
-	float d_pos;
-	float p_error;
-	float d_error;
-	float int_error;
-	uint32_t set_position;
-	int32_t deadzone;
-}MESCPos_s;
-
+// Position controller data
+typedef struct
+{
+  float Kp;
+  float Ki;
+  float Kd;
+  float error;
+  uint32_t last_pll_pos;
+  float d_pos;
+  float p_error;
+  float d_error;
+  float int_error;
+  uint32_t set_position;
+  int32_t deadzone;
+} MESCPos_s;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////Main typedef for starting a motor instance////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-typedef struct{
+typedef struct
+{
+  void* mtimer;  // 3 phase PWM timer
+  void* stimer;  // Timer that services the slowloop
+#if 0            // Get rid of this dependency on stm specific
 	TIM_HandleTypeDef *mtimer; //3 phase PWM timer
 	TIM_HandleTypeDef *stimer; //Timer that services the slowloop
-//problematic if there is no SPI allocated//	SPI_HandleTypeDef *encspi; //The SPI we have configured to talk to the encoder for this motor instance
-	motor_state_e MotorState;
-	motor_sensor_mode_e MotorSensorMode;
-	motor_control_mode_e ControlMode;
-	motor_control_type_e MotorControlType;
-	HighPhase_e HighPhase;
-	HFI_type_e HFIType;
-	MESC_raw_typedef Raw;
-	MESC_Converted_typedef Conv;
-	MESC_offset_typedef offset;
-	MESCfoc_s FOC;
-	MESCPos_s pos;
-	MESCBLDC_s BLDC;
-	MOTORProfile m;
-	MESCmeas_s meas;
-	MESChall_s hall;
-	bool conf_is_valid;
-	int32_t safe_start[2];
-	uint32_t key_bits; //When any of these are low, we keep the motor disabled
-	bool sample_now;
-	bool sample_no_auto_send;
-}MESC_motor_typedef;
+#endif
+  //problematic if there is no SPI allocated//	SPI_HandleTypeDef *encspi; //The SPI we have configured to talk to the encoder for this motor instance
+  motor_state_e MotorState;
+  motor_sensor_mode_e MotorSensorMode;
+  motor_control_mode_e ControlMode;
+  motor_control_type_e MotorControlType;
+  HighPhase_e HighPhase;
+  HFI_type_e HFIType;
+  MESC_raw_typedef Raw;
+  MESC_Converted_typedef Conv;
+  MESC_offset_typedef offset;
+  MESCfoc_s FOC;
+  MESCPos_s pos;
+  MESCBLDC_s BLDC;
+  MOTORProfile m;
+  MESCmeas_s meas;
+  MESChall_s hall;
+  bool conf_is_valid;
+  int32_t safe_start[2];
+  uint32_t key_bits;  //When any of these are low, we keep the motor disabled
+  bool sample_now;
+  bool sample_no_auto_send;
+} MESC_motor_typedef;
 
 extern MESC_motor_typedef mtr[NUM_MOTORS];
 
-
 enum MESCADC
 {
-    ADCIU,
-    ADCIV,
-    ADCIW,
+  ADCIU,
+  ADCIV,
+  ADCIW,
 };
 
-#define SVPWM_MULTIPLIER \
-  1.1547f  // 1/cos30 which comes from the maximum between two 120 degree apart
-          // sin waves being at the
-#define Vd_MAX_PROPORTION 0.3f //These are only used when hard clamping limits are enabled, not when SQRT circle limitation used
+#define SVPWM_MULTIPLIER 1.1547f  // 1/cos30 which comes from the maximum between two 120 degree apart
+                                  // sin waves being at the
+#define Vd_MAX_PROPORTION 0.3f    //These are only used when hard clamping limits are enabled, not when SQRT circle limitation used
 #define Vq_MAX_PROPORTION 0.95f
 
 enum FOCChannels
 {
-    FOC_CHANNEL_PHASE_I,
-    FOC_CHANNEL_DC_V,
-    FOC_CHANNEL_PHASE_V,
-
-    FOC_CHANNELS
+  FOC_CHANNEL_PHASE_I,
+  FOC_CHANNEL_DC_V,
+  FOC_CHANNEL_PHASE_V,
+  FOC_CHANNELS
 };
 
-
-
-
-
-typedef struct {
+typedef struct
+{
   float dp_current_final[10];
 } MESCtest_s;
 
 extern MESCtest_s test_vals;
 
-
-enum RCPWMMode{
-	THROTTLE_ONLY,
-	THROTTLE_REVERSE,
-	THROTTLE_NO_REVERSE
+enum RCPWMMode
+{
+  THROTTLE_ONLY,
+  THROTTLE_REVERSE,
+  THROTTLE_NO_REVERSE
 };
 
-typedef struct {
+typedef struct
+{
 
-	///////////////////RCPWM//////////////////////
-	uint32_t IC_duration; 	//Retrieve this from timer input capture CC1
-	uint32_t IC_pulse; 		//Retrieve this from timer input capture CC2
-	uint32_t pulse_recieved;
+  ///////////////////RCPWM//////////////////////
+  uint32_t IC_duration;  //Retrieve this from timer input capture CC1
+  uint32_t IC_pulse;     //Retrieve this from timer input capture CC2
+  uint32_t pulse_recieved;
 
-	uint32_t IC_duration_MAX;
-	uint32_t IC_duration_MIN;
-	uint32_t IC_pulse_MAX;
-	uint32_t IC_pulse_MIN;
-	uint32_t IC_pulse_MID;
-	uint32_t IC_pulse_DEADZONE; //single sided; no response before MID +- this
-	float RCPWM_gain[2][2];
+  uint32_t IC_duration_MAX;
+  uint32_t IC_duration_MIN;
+  uint32_t IC_pulse_MAX;
+  uint32_t IC_pulse_MIN;
+  uint32_t IC_pulse_MID;
+  uint32_t IC_pulse_DEADZONE;  //single sided; no response before MID +- this
+  float RCPWM_gain[2][2];
 
-	 uint32_t fCC1;
-	 uint32_t fUPD;
+  uint32_t fCC1;
+  uint32_t fUPD;
 
-/////////////////ADC///////////////
-	uint32_t adc1_MIN; //Value below which response is zero
-	uint32_t adc1_MAX; //Max throttle calculated at this point
-	uint32_t adc1_OOR;
-	float adc1_gain[2];
+  /////////////////ADC///////////////
+  uint32_t adc1_MIN;  //Value below which response is zero
+  uint32_t adc1_MAX;  //Max throttle calculated at this point
+  uint32_t adc1_OOR;
+  float adc1_gain[2];
 
-	uint32_t adc2_MIN;
-	uint32_t adc2_MAX;
-	uint32_t adc2_OOR;
+  uint32_t adc2_MIN;
+  uint32_t adc2_MAX;
+  uint32_t adc2_OOR;
 
-	float adc2_gain[2];
+  float adc2_gain[2];
 
-	float ADC1_polarity;
-	float ADC2_polarity;
+  float ADC1_polarity;
+  float ADC2_polarity;
 
-	float UART_req;
-	float UART_dreq;
-	float RCPWM_req;
-	float ADC1_req;
-	float ADC2_req;
+  float UART_req;
+  float UART_dreq;
+  float RCPWM_req;
+  float ADC1_req;
+  float ADC2_req;
 
-	float REMOTE_ADC1_req;
-	float REMOTE_ADC2_req;
+  float REMOTE_ADC1_req;
+  float REMOTE_ADC2_req;
 
+  uint16_t nKillswitch;
+  uint16_t invert_killswitch;
 
-	uint16_t nKillswitch;
-	uint16_t invert_killswitch;
+  uint32_t input_options;  //0b...wxyz where w is UART, x is RCPWM, y is ADC1 z is ADC2
 
-	uint32_t input_options; //0b...wxyz where w is UART, x is RCPWM, y is ADC1 z is ADC2
-
-	MESCiq_s max_request_Idq;
-	MESCiq_s min_request_Idq;
+  MESCiq_s max_request_Idq;
+  MESCiq_s min_request_Idq;
 } input_vars_t;
 
 extern input_vars_t input_vars;
@@ -601,120 +600,157 @@ extern input_vars_t input_vars;
 #endif
 //We want to log primarily Ia Ib Ic, Vd,Vq, phase angle, which gives us a complete picture of the machine state
 //4 bytes per variable*6 variables*1000 = 24000bytes. Lowest spec target is F303CB with 48kB SRAM, so this is OK
-typedef struct {
-	float Vbus[LOGLENGTH];
-	float Iu[LOGLENGTH];
-	float Iv[LOGLENGTH];
-	float Iw[LOGLENGTH];
-	float Vd[LOGLENGTH];
-	float Vq[LOGLENGTH];
-	uint16_t angle[LOGLENGTH];
-	uint32_t current_sample;
+typedef struct
+{
+  float Vbus[LOGLENGTH];
+  float Iu[LOGLENGTH];
+  float Iv[LOGLENGTH];
+  float Iw[LOGLENGTH];
+  float Vd[LOGLENGTH];
+  float Vq[LOGLENGTH];
+  uint16_t angle[LOGLENGTH];
+  uint32_t current_sample;
 } sampled_vars_t;
 
 extern volatile int print_samples_now, lognow;
 
 extern sampled_vars_t sampled_vars;
 
-/* Function prototypes -----------------------------------------------*/
-
-void MESCInit(MESC_motor_typedef *_motor);
-void InputInit();
-void initialiseInverter(MESC_motor_typedef *_motor);
-
-void MESC_PWM_IRQ_handler(MESC_motor_typedef *_motor);
-							//Put this into the PWM interrupt,
-							//(or less optimally) ADC conversion complete interrupt
-							//If using ADC interrupt, may want to get ADC to convert on top and bottom of PWM
-void fastLoop(MESC_motor_typedef *_motor);
-void hyperLoop(MESC_motor_typedef *_motor);
-void VICheck(MESC_motor_typedef *_motor);
-void ADCConversion(MESC_motor_typedef *_motor);  // Roll this into the V_I_Check? less branching, can
-                       // probably reduce no.ops and needs doing every cycle
-                       // anyway...
-// convert currents from uint_16 ADC readings into float A and uint_16 voltages
-// into float volts Since the observer needs the Clark transformed current, do
-// the Clark and Park transform now
-void ADCPhaseConversion(MESC_motor_typedef *_motor);
-void hallAngleEstimator();  // Going to attempt to make a similar hall angle
-                            // estimator that rolls the hall state into the main
-                            // function, and calls a vector table to find the
-                            // angle from hall offsets.
-void flux_observer(MESC_motor_typedef *_motor);
-float fast_atan2(float y, float x);
-void angleObserver(MESC_motor_typedef *_motor);
-void OLGenerateAngle(MESC_motor_typedef *_motor);  // For open loop FOC startup, just use this to generate
-                         // an angle and velocity ramp, then keep the phase
-                         // currents at the requested value without really
-                         // thinking about things like synchronising, phase
-                         // etc...
-
-void MESCFOC(MESC_motor_typedef *_motor);  // Field and quadrature current control (PI?)
-                 // Inverse Clark and Park transforms
-
-void writePWM(MESC_motor_typedef *_motor);  // Offset the PWM to voltage centred (0Vduty is 50% PWM) or
-                  // subtract lowest phase to always clamp one phase at 0V or
-                  // SVPWM
-                  // write CCR registers
-
-void generateBreak(MESC_motor_typedef *_motor);  // Software break that does not stop the PWM timer but
-                       // disables the outputs, sum of phU,V,W_Break();
-void generateEnable(MESC_motor_typedef *_motor); // Opposite of generateBreak
-void generateBreakAll();	//Disables all drives
-
-
-void measureResistance(MESC_motor_typedef *_motor);
-void measureInductance(MESC_motor_typedef *_motor);
-void getkV(MESC_motor_typedef *_motor);
-float detectHFI(MESC_motor_typedef *_motor);
-
-void getHallTable(MESC_motor_typedef *_motor);
-void phU_Break(MESC_motor_typedef *_motor);   // Turn all phase U FETs off, Tristate the ouput - For BLDC
-                    // mode mainly, but also used for measuring
-void phU_Enable(MESC_motor_typedef *_motor);  // Basically un-break phase U, opposite of above...
-void phV_Break(MESC_motor_typedef *_motor);
-void phV_Enable(MESC_motor_typedef *_motor);
-void phW_Break(MESC_motor_typedef *_motor);
-void phW_Enable(MESC_motor_typedef *_motor);
-
-void calculateGains(MESC_motor_typedef *_motor);
-void calculateVoltageGain(MESC_motor_typedef *_motor);
-void calculateFlux(MESC_motor_typedef *_motor);
-
-void doublePulseTest(MESC_motor_typedef *_motor);
-
-void MESC_Slow_IRQ_handler(MESC_motor_typedef *_motor); 	//This loop should run off a slow timer e.g. timer 3,4... at 20-50Hz in reset mode
-														//Default setup is to use a 50Hz RCPWM input, which if the RCPWM is not present will run at 20Hz
-														//If entered from update (reset, CC1) no data available for the PWM in. If entered from CC2, new PWM data available
-void slowLoop(MESC_motor_typedef *_motor);
-void MESCTrack(MESC_motor_typedef *_motor);
-void deadshort(MESC_motor_typedef *_motor);
-void tle5012(MESC_motor_typedef *_motor);
-void getDeadtime(MESC_motor_typedef *_motor);
-void LRObserver(MESC_motor_typedef *_motor);
-void LRObserverCollect(MESC_motor_typedef *_motor);
-void HallFluxMonitor(MESC_motor_typedef *_motor);
-void logVars(MESC_motor_typedef *_motor);
-void printSamples(UART_HandleTypeDef *uart, DMA_HandleTypeDef *dma);
-void RunHFI(MESC_motor_typedef *_motor);
-void ToggleHFI(MESC_motor_typedef *_motor);
-void collectInputs(MESC_motor_typedef *_motor);
-void RunMTPA(MESC_motor_typedef *_motor);
-void safeStart(MESC_motor_typedef *_motor);
-
-void RunSpeedControl(MESC_motor_typedef *_motor);
-
-void MESC_IC_Init(
-#ifdef IC_TIMER
-TIM_HandleTypeDef _IC_TIMER
+#ifdef __cplus_plus
+extern "C"
+{
 #endif
-);
-void MESC_IC_IRQ_Handler(MESC_motor_typedef *_motor, uint32_t SR, uint32_t CCR1, uint32_t CCR2);
 
+  /**
+ *
+ * @param _motor
+ */
+  void MESCInit(MESC_motor_typedef* _motor);
 
-////BLDC
-void BLDCCommute(MESC_motor_typedef *_motor);
-void CalculateBLDCGains(MESC_motor_typedef *_motor);
+  void InputInit();
 
+  void initialiseInverter(MESC_motor_typedef* _motor);
 
+  void MESC_PWM_IRQ_handler(MESC_motor_typedef* _motor);
+
+  //Put this into the PWM interrupt,
+  //(or less optimally) ADC conversion complete interrupt
+  //If using ADC interrupt, may want to get ADC to convert on top and bottom of PWM
+  void fastLoop(MESC_motor_typedef* _motor);
+
+  void hyperLoop(MESC_motor_typedef* _motor);
+
+  void VICheck(MESC_motor_typedef* _motor);
+
+  void ADCConversion(MESC_motor_typedef* _motor);  // Roll this into the V_I_Check? less branching, can
+  // probably reduce no.ops and needs doing every cycle
+  // anyway...
+  // convert currents from uint_16 ADC readings into float A and uint_16 voltages
+  // into float volts Since the observer needs the Clark transformed current, do
+  // the Clark and Park transform now
+  void ADCPhaseConversion(MESC_motor_typedef* _motor);
+
+  void hallAngleEstimator();  // Going to attempt to make a similar hall angle
+  // estimator that rolls the hall state into the main
+  // function, and calls a vector table to find the
+  // angle from hall offsets.
+  void flux_observer(MESC_motor_typedef* _motor);
+
+  float fast_atan2(float y, float x);
+
+  void angleObserver(MESC_motor_typedef* _motor);
+
+  void OLGenerateAngle(MESC_motor_typedef* _motor);  // For open loop FOC startup, just use this to generate
+  // an angle and velocity ramp, then keep the phase
+  // currents at the requested value without really
+  // thinking about things like synchronising, phase
+  // etc...
+
+  void MESCFOC(MESC_motor_typedef* _motor);  // Field and quadrature current control (PI?)
+  // Inverse Clark and Park transforms
+
+  void writePWM(MESC_motor_typedef* _motor);  // Offset the PWM to voltage centred (0Vduty is 50% PWM) or
+  // subtract lowest phase to always clamp one phase at 0V or
+  // SVPWM
+  // write CCR registers
+
+  void generateBreak(uint32_t index);//OI MESC_motor_typedef* _motor);  // Software break that does not stop the PWM timer but
+  // disables the outputs, sum of phU,V,W_Break();
+  void generateEnable();//OI MESC_motor_typedef* _motor);  // Opposite of generateBreak
+  void generateBreakAll();                          //Disables all drives
+
+  void measureResistance(MESC_motor_typedef* _motor);
+
+  void measureInductance(MESC_motor_typedef* _motor);
+
+  void getkV(MESC_motor_typedef* _motor);
+
+  float detectHFI(MESC_motor_typedef* _motor);
+
+  void getHallTable(MESC_motor_typedef* _motor);
+
+  //OI void phU_Break(MESC_motor_typedef* _motor);  // Turn all phase U FETs off, Tristate the ouput - For BLDC
+  // mode mainly, but also used for measuring
+  //OI void phU_Enable(MESC_motor_typedef* _motor);  // Basically un-break phase U, opposite of above...
+  //OI void phV_Break(MESC_motor_typedef* _motor);
+  //OI void phV_Enable(MESC_motor_typedef* _motor);
+  //OI void phW_Break(MESC_motor_typedef* _motor);
+  //OI void phW_Enable(MESC_motor_typedef* _motor);
+
+  void calculateGains(MESC_motor_typedef* _motor);
+
+  void calculateVoltageGain(MESC_motor_typedef* _motor);
+
+  void calculateFlux(MESC_motor_typedef* _motor);
+
+  void doublePulseTest(MESC_motor_typedef* _motor);
+
+  void MESC_Slow_IRQ_handler(MESC_motor_typedef* _motor);  //This loop should run off a slow timer e.g. timer 3,4... at 20-50Hz in reset mode
+  //Default setup is to use a 50Hz RCPWM input, which if the RCPWM is not present will run at 20Hz
+  //If entered from update (reset, CC1) no data available for the PWM in. If entered from CC2, new PWM data available
+  void slowLoop(MESC_motor_typedef* _motor);
+
+  void MESCTrack(MESC_motor_typedef* _motor);
+
+  void deadshort(MESC_motor_typedef* _motor);
+
+  void tle5012(MESC_motor_typedef* _motor);
+
+  void getDeadtime(MESC_motor_typedef* _motor);
+
+  void LRObserver(MESC_motor_typedef* _motor);
+
+  void LRObserverCollect(MESC_motor_typedef* _motor);
+
+  void HallFluxMonitor(MESC_motor_typedef* _motor);
+
+  void logVars(MESC_motor_typedef* _motor);
+
+  void RunHFI(MESC_motor_typedef* _motor);
+
+  void ToggleHFI(MESC_motor_typedef* _motor);
+
+  void collectInputs(MESC_motor_typedef* _motor);
+
+  void RunMTPA(MESC_motor_typedef* _motor);
+
+  void safeStart(MESC_motor_typedef* _motor);
+
+  void RunSpeedControl(MESC_motor_typedef* _motor);
+
+  void MESC_IC_Init(
+#ifdef IC_TIMER
+  TIM_HandleTypeDef _IC_TIMER
+#endif
+  );
+
+  void MESC_IC_IRQ_Handler(MESC_motor_typedef* _motor, uint32_t SR, uint32_t CCR1, uint32_t CCR2);
+
+  ////BLDC
+  void BLDCCommute(MESC_motor_typedef* _motor);
+
+  void CalculateBLDCGains(MESC_motor_typedef* _motor);
+
+#ifdef __cplus_plus
+}
 #endif

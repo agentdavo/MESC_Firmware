@@ -1,4 +1,1 @@
-# Configuration file for user settings
-# This file should include the path for toolchain and other settings that user would like to override.
-# Example toolchain path definitions
-set(CMAKE_FIND_ROOT_PATH "/Applications/ArmGNUToolchain/12.2.mpacbti-rel1/arm-none-eabi/bin")
+set(CMAKE_FIND_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}/../gcc-arm-none-eabi-9-2019-q4-major/bin")

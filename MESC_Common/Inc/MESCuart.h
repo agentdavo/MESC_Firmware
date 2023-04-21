@@ -27,17 +27,13 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MESC_UART_H
-#define MESC_UART_H
+#pragma once
 
-#include "stm32fxxx_hal.h"
+#include <stdint.h>
 
 #define MESC_UART 0
-#define MESC_USB  1
+#define MESC_USB 1
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
-void USB_CDC_Callback(uint8_t *buffer, uint32_t len);
-
-void uart_init( void );
-
-#endif
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart);
+void USB_CDC_Callback(uint8_t* buffer, uint32_t len);
+void uart_init(void);

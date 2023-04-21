@@ -5,8 +5,7 @@
  *      Author: HPEnvy
  */
 
-#ifndef INC_GIGAVESC_H_
-#define INC_GIGAVESC_H_
+#pragma once
 
 //Pick a motor for default
 #define MCMASTER_70KV_8080
@@ -89,4 +88,4 @@
 //Assign a use for the input capture timer
 //#define IC_TIMER_RCPWM
 #define IC_TIMER_ENCODER
-#endif /* INC_MX_FOC_IMS_H_ */
+

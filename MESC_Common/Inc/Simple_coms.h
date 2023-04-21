@@ -5,11 +5,12 @@
  *      Author: D Molony
  */
 
-#ifndef INC_SIMPLE_COMS_H_
-#define INC_SIMPLE_COMS_H_
+#pragma once
 
-typedef struct {
-	UART_HandleTypeDef *UART_handle;
+#include <stdint.h>
+
+typedef struct
+{
 	uint16_t some_thing;
 	int16_t other_thing;
 	char data[100];
@@ -18,10 +19,13 @@ typedef struct {
 	uint32_t period;
 } COMS_data_t;
 
+#ifdef __cplus_plus
+extern "C" {
+#endif
 
-void SimpleComsInit(UART_HandleTypeDef *uart, COMS_data_t *coms_instance);
-
+void SimpleComsInit(COMS_data_t *coms_instance);
 void SimpleComsProcess(COMS_data_t *coms_instance);
 
-
-#endif /* INC_SIMPLE_COMS_H_ */
+#ifdef __cplus_plus
+}
+#endif
