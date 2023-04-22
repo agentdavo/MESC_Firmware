@@ -153,8 +153,10 @@
       <configSetting altId="ether_ethsw.ethsw_phylink2.p00_5" configurationId="ether_ethsw.ethsw_phylink2"/>
       <configSetting altId="ether_gmac.gmac_mdc.p08_7" configurationId="ether_gmac.gmac_mdc"/>
       <configSetting altId="ether_gmac.gmac_mdio.p09_0" configurationId="ether_gmac.gmac_mdio"/>
+      <configSetting altId="gpt0.gtioc0a.p17_4" configurationId="gpt0.gtioc0a" isUsedByDriver="true"/>
       <configSetting altId="gpt14.gtioc14a.p05_4" configurationId="gpt14.gtioc14a"/>
       <configSetting altId="gpt16.gtioc16a.p21_5" configurationId="gpt16.gtioc16a"/>
+      <configSetting altId="gpt2.gtioc2a.p00_7" configurationId="gpt2.gtioc2a" isUsedByDriver="true"/>
       <configSetting altId="gpt8.gtioc8a.p12_5" configurationId="gpt8.gtioc8a"/>
       <configSetting altId="iic1.iic_scl1.p22_6" configurationId="iic1.iic_scl1"/>
       <configSetting altId="iic1.iic_sda1.p22_7" configurationId="iic1.iic_sda1"/>
@@ -205,6 +207,38 @@
       <configSetting altId="mtu_poe3.poe10_hash.p04_4" configurationId="mtu_poe3.poe10_hash" isUsedByDriver="true"/>
       <configSetting altId="mtu_poe3.poe4_hash.p22_1" configurationId="mtu_poe3.poe4_hash" isUsedByDriver="true"/>
       <configSetting altId="mtu_poe3.poe8_hash.p14_5" configurationId="mtu_poe3.poe8_hash" isUsedByDriver="true"/>
+      <configSetting altId="p02_1.input" configurationId="p02_1"/>
+      <configSetting altId="p02_4.input" configurationId="p02_4"/>
+      <configSetting altId="p02_5.input" configurationId="p02_5"/>
+      <configSetting altId="p03_2.input" configurationId="p03_2"/>
+      <configSetting altId="p04_0.input" configurationId="p04_0"/>
+      <configSetting altId="p04_1.input" configurationId="p04_1"/>
+      <configSetting altId="p04_2.input" configurationId="p04_2"/>
+      <configSetting altId="p04_5.input" configurationId="p04_5"/>
+      <configSetting altId="p07_5.input" configurationId="p07_5"/>
+      <configSetting altId="p07_6.input" configurationId="p07_6"/>
+      <configSetting altId="p07_7.input" configurationId="p07_7"/>
+      <configSetting altId="p08_0.input" configurationId="p08_0"/>
+      <configSetting altId="p08_2.input" configurationId="p08_2"/>
+      <configSetting altId="p08_3.input" configurationId="p08_3"/>
+      <configSetting altId="p11_7.input" configurationId="p11_7"/>
+      <configSetting altId="p13_5.input" configurationId="p13_5"/>
+      <configSetting altId="p13_6.input" configurationId="p13_6"/>
+      <configSetting altId="p13_7.input" configurationId="p13_7"/>
+      <configSetting altId="p14_0.input" configurationId="p14_0"/>
+      <configSetting altId="p14_1.input" configurationId="p14_1"/>
+      <configSetting altId="p16_4.input" configurationId="p16_4"/>
+      <configSetting altId="p17_0.input" configurationId="p17_0"/>
+      <configSetting altId="p17_1.input" configurationId="p17_1"/>
+      <configSetting altId="p19_0.input" configurationId="p19_0"/>
+      <configSetting altId="p20_1.input" configurationId="p20_1"/>
+      <configSetting altId="p20_2.input" configurationId="p20_2"/>
+      <configSetting altId="p20_3.input" configurationId="p20_3"/>
+      <configSetting altId="p20_4.input" configurationId="p20_4"/>
+      <configSetting altId="p21_6.input" configurationId="p21_6"/>
+      <configSetting altId="p22_3.input" configurationId="p22_3"/>
+      <configSetting altId="p22_4.input" configurationId="p22_4"/>
+      <configSetting altId="p22_5.input" configurationId="p22_5"/>
       <configSetting altId="sci0.rxd_miso0.p16_6" configurationId="sci0.rxd_miso0" isUsedByDriver="true"/>
       <configSetting altId="sci0.txd_mosi0.p16_0" configurationId="sci0.txd_mosi0" isUsedByDriver="true"/>
       <configSetting altId="spi0.spi_miso0.p13_2" configurationId="spi0.spi_miso0" isUsedByDriver="true"/>
