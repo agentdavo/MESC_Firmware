@@ -14,9 +14,11 @@ You make have to manually change the GeneratedCfg.cmake fsp.ld to fsp_xspi0_boot
 ```
 
 - [x] initial config FSP Smart Configurator
-- [ ] import ../MESC_Common
-- [ ] find stm code in ../MESC_Common and make MCU agnostic 
-
+- [x] import ../MESC_Common
+- [x] find stm code in ../MESC_Common and make MCU agnostic
+- [x] add Cmake workflows for Ubuntu, Mac OS etc
+- [ ] compile all needed sources for RZ
+- [ ] implement HAL for RZ
 
 ```
 MESCBLDC.c

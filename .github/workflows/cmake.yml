@@ -1,0 +1,29 @@
+name: CMake
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "MESC_HAL", "master" ]
+  pull_request:
+    branches: [ "MESC_HAL", "master" ]
+
+jobs:
+  github-build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo apt-get -yq update
+          sudo apt-get -yq install cmake ninja-build
+          sudo apt-get -yq install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+          sudo apt-get -yq install libstdc++-arm-none-eabi-newlib libnewlib-nano-arm-none-eabi
+          sudo apt-get -yq install binutils-arm-none-eabi gcc-arm-none-eabi gdb-arm-none-eabi libnewlib-arm-none-eabi
+
+      - name: Checkout Files
+        uses: actions/checkout@v3
+
+      - name: Build Init
+        run: cmake -DCMAKE_BUILD_TYPE=Release "-B $GITHUB_WORKSPACE/build" -G Ninja
+
+      - name: Build
+        run: cmake --build $GITHUB_WORKSPACE/build -j 10
