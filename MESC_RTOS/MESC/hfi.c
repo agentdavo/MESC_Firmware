@@ -29,10 +29,11 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#include <MESC/hfi.h>
-#include "string.h"
-#include "MESCfoc.h"
-#include "MESChw_setup.h"
+#include "hfi.h"
+
+#include <MESCfoc.h>
+
+#include <string.h>
 
 #define APP_NAME "hfi"
 #define APP_DESCRIPTION "HFI test"
@@ -108,9 +109,9 @@ static void highlight(TERMINAL_HANDLE * handle, char * text ,int index, int coun
 }
 
 
-static void TASK_main(void *pvParameters){
-
-	MESC_motor_typedef * motor_curr = &mtr[0];
+static void TASK_main(void* pvParameters)
+{
+	  MESC_motor* motor_curr = &mtr[0];
 
     TERMINAL_HANDLE * handle = (TERMINAL_HANDLE*)pvParameters;
     TERM_sendVT100Code(handle,_VT100_CURSOR_DISABLE, 0);

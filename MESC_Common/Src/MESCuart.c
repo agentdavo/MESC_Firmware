@@ -27,6 +27,8 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef USE_TTERM
+
 #include <MESCuart.h>
 
 #include <MESCcli.h>
@@ -39,13 +41,11 @@
 extern UART_HandleTypeDef HW_UART;
 #endif
 
-extern TIM_HandleTypeDef htim1;
-
 static uint8_t UART_rx_buffer[2];
 
 extern uint8_t b_read_flash;
 
-#ifndef USE_TTERM
+extern TIM_HandleTypeDef htim1;
 
 #if MESC_UART_USB
 static void usb_ack(void) {}

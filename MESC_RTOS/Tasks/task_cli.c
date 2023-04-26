@@ -39,18 +39,19 @@
 #include "DASH/MESCinterface.h"
 #endif
 
-#include "Common/RTOS_flash.h"
+//OI #include "Common/RTOS_flash.h"
+#include "HAL/MESC_HAL.h"
 #include "main.h"
 #include "task_cli.h"
-#include "cmsis_os.h"
+//OI #include "cmsis_os.h"
 #include "TTerm/Core/include/TTerm.h"
 #include "task_can.h"
 
+#if 0
 #ifdef MESC_UART_USB
 #include "usbd_cdc_if.h"
 #include "usbd_def.h"
 #endif
-
 
 void putbuffer_uart(unsigned char *buf, unsigned int len, port_str * port){
 	UART_HandleTypeDef *uart_handle = port->hw;
@@ -69,12 +70,15 @@ void putbuffer_uart(unsigned char *buf, unsigned int len, port_str * port){
 	if(port->half_duplex) uart_handle->Instance->CR1 |= USART_CR1_RE;
 	xSemaphoreGive(port->tx_semaphore);
 }
+#endif
+
 volatile bool cmplt = false;
 
 void USB_CDC_TransmitCplt(){
 	cmplt = true;
 }
 
+#if 0
 void putbuffer_usb(unsigned char *buf, unsigned int len, port_str * port){
 #ifdef MESC_UART_USB
 	xSemaphoreTake(port->tx_semaphore, portMAX_DELAY);
@@ -84,7 +88,7 @@ void putbuffer_usb(unsigned char *buf, unsigned int len, port_str * port){
 	xSemaphoreGive(port->tx_semaphore);
 #endif
 }
-
+#endif
 
 void putbuffer_stream(unsigned char *buf, unsigned int len, port_str * port){
 	xSemaphoreTake(port->tx_semaphore, portMAX_DELAY);
@@ -117,6 +121,7 @@ void putbuffer(unsigned char *buf, unsigned int len, port_str * port){
 	}
 }
 
+#if 0
 static void uart_init(port_str * port){
 	UART_HandleTypeDef *uart_handle = port->hw;
 
@@ -133,7 +138,7 @@ static uint32_t uart_get_write_pos(port_str * port){
 	UART_HandleTypeDef *uart_handle = port->hw;
 	return ( ((uint32_t)port->rx_buffer_size - __HAL_DMA_GET_COUNTER(uart_handle->hdmarx)) & ((uint32_t)port->rx_buffer_size -1));
 }
-
+#endif
 
 void ext_printf(port_str * port, const char* format, ...) {
 	va_list arg;
@@ -284,7 +289,7 @@ void task_cli(void * argument)
 		}
 
 		if(ulTaskNotifyTake(pdTRUE, 1)){
-			HAL_UART_MspDeInit(port->hw);
+      uart_msp_deinit(port->hw); //OI HAL_UART_MspDeInit(port->hw);
 			port->task_handle = NULL;
 			vPortFree(port->rx_buffer);
 			vTaskDelete(NULL);
@@ -296,7 +301,7 @@ void task_cli(void * argument)
 
 void task_cli_init(port_str * port){
 	if(port->task_handle == NULL){
-		xTaskCreate(task_cli, "tskCLI", 1024, (void*)port, osPriorityNormal, &port->task_handle);
+		xTaskCreate(task_cli, "tskCLI", 1024, (void*)port, /*osPriorityNormal*/0, &port->task_handle);
 	}
 }
 

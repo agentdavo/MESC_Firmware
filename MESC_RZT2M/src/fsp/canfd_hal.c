@@ -2,6 +2,9 @@
 
 #include "canfd_hal.h"
 
+#include "stdio.h"
+#define APP_ERR_PRINT printf
+
 bool g_canfd0_write_complete = false;
 bool g_canfd1_write_complete = false;
 

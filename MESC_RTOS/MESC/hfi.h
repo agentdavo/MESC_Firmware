@@ -29,11 +29,9 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#if !defined(app_hfi_H)
-#define app_hfi_H
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
 
 uint8_t REGISTER_hfi(TermCommandDescriptor * desc);
 
-#endif

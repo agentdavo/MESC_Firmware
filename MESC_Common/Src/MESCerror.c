@@ -29,7 +29,6 @@
 
 #include <MESCerror.h>
 #include <MESCfoc.h>
-#include <MESChw_setup.h>
 #include <MESCmotor_state.h>
 
 #include <HAL/MESC_HAL.h>
@@ -37,7 +36,7 @@
 struct MESC_log_vars error_log;
 uint32_t MESC_errors;  //This is a bitwise uint32_t representation of the errors that have occurred.
 
-void handleError(MESC_motor_typedef* _motor, uint32_t error_code)
+void handleError(MESC_motor* _motor, uint32_t error_code)
 {
   generateBreak(_motor);  //Always generate a break when something bad happens
   _motor->MotorState = MOTOR_STATE_ERROR;
@@ -62,7 +61,7 @@ void clearErrors()
 }
 
 //Observe caution when using this function, BRK hypothetically occurs after a disastrous error.
-void clearBRK(MESC_motor_typedef* _motor)
+void clearBRK(MESC_motor* _motor)
 {
   //If the requested current is zero then sensible to proceed
   if ((foc_vars.Idq_req.q + foc_vars.Idq_req.d) == 0.0f)

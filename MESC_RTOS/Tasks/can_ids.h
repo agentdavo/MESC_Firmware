@@ -5,8 +5,7 @@
  *      Author: jensk
  */
 
-#ifndef CAN_IDS_H_
-#define CAN_IDS_H_
+#pragma once
 
 #define CAN_ID_IQREQ 			0x001
 #define CAN_ID_ADC1_2_REQ		0x010
@@ -44,5 +43,3 @@ typedef enum{
 	NODE_TYPE_DASH
 }node_type;
 
-
-#endif /* CAN_IDS_H_ */

@@ -1,5 +1,4 @@
-#ifndef RZT2M_FSP_INIT_HAL_H_
-#define RZT2M_FSP_INIT_HAL_H_
+#pragma once
 
 #include "hal_data.h"
 #include "elc_hal.h"
@@ -15,4 +14,3 @@
 
 fsp_err_t rzt2m_fsp_init(void);
 
-#endif /* RZT2M_FSP_INIT_HAL_H_ */

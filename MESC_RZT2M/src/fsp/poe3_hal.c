@@ -2,6 +2,9 @@
 
 #include "poe3_hal.h"
 
+#include "stdio.h"
+#define APP_ERR_PRINT printf
+
 fsp_err_t poe3_hal_init(void)
 {
     fsp_err_t err = FSP_SUCCESS;

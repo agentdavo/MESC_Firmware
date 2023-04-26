@@ -25,7 +25,6 @@
 #include <MESCBLDC.h>
 
 #include <MESCfoc.h>
-#include <MESChw_setup.h>
 #include <MESCmotor_state.h>
 
 #include <HAL/MESC_HAL.h>

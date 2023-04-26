@@ -1,8 +1,7 @@
 #include <MESChw_rzt2m.h>
-#include "hal_data.h"
+#include <MESCfoc.h>
 
-#include "MESChw_setup.h"
-#include "MESCfoc.h"
+#include "hal_data.h"
 
 hw_setup_s g_hw_setup;
 motor_s motor;
@@ -10,13 +9,8 @@ motor_s motor;
 static volatile adc_event_t g_adc0_scan_complete_flag;
 static volatile adc_event_t g_adc1_scan_complete_flag;
 
-/**********************************************************************************************************************
- * Function Name: hw_init
- * Description  : Fills the parameters of the hardware struct
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void hw_init(MESC_motor_typedef *_motor) {
+void hw_init(MESC_motor* _motor)
+{
   g_hw_setup.Imax       = ABS_MAX_PHASE_CURRENT;
   g_hw_setup.Vmax       = ABS_MAX_BUS_VOLTAGE;
   g_hw_setup.Vmin       = ABS_MIN_BUS_VOLTAGE;
@@ -31,42 +25,28 @@ void hw_init(MESC_motor_typedef *_motor) {
   g_hw_setup.RawVoltLim = 0;
 
   motor.Lphase          = 0;
-
 }
 
-
-/**********************************************************************************************************************
- * Function Name: setAWDVals
- * Description  : 
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void setAWDVals() {
+void setAWDVals()
+{
 }
 
-
-/**********************************************************************************************************************
- * Function Name: getRawADC
- * Description  : 
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void getRawADC(MESC_motor_typedef *_motor) {
-	
+void getRawADC(MESC_motor* _motor)
+{
 	fsp_err_t err = FSP_SUCCESS;
 	
-    uint16_t adc_data0  = 0 ;
+  uint16_t adc_data0  = 0 ;
 	uint16_t adc_data1  = 0 ;
 	uint16_t adc_data2  = 0 ;
 	uint16_t adc_data3  = 0 ;
 	uint16_t adc_data4  = 0 ;
 	uint16_t adc_data5  = 0 ;
 	uint16_t adc_data6  = 0 ;
-    uint16_t adc_data7  = 0 ;
-    uint16_t adc_data8  = 0 ;
-    uint16_t adc_data9  = 0 ;
+  uint16_t adc_data7  = 0 ;
+  uint16_t adc_data8  = 0 ;
+  uint16_t adc_data9  = 0 ;
 	uint16_t adc_data10 = 0 ;
-    uint16_t adc_data11 = 0 ;
+  uint16_t adc_data11 = 0 ;
 	
 	// if _motor->id = 0
 	// ppoulate raw adc values for Motor 1
@@ -109,7 +89,6 @@ void getRawADC(MESC_motor_typedef *_motor) {
 		err = R_ADC_Read(&g_adc1_ctrl, M2_MOST_W, &adc_data9);
 		err = R_ADC_Read(&g_adc1_ctrl, M2_THROT,  &adc_data10);
 		err = R_ADC_Read(&g_adc1_ctrl, M2_TEMP,   &adc_data11);
-	
 		
 	// motor phase voltages
     _motor->Raw.Vu          = adc_data1;
@@ -133,18 +112,11 @@ void getRawADC(MESC_motor_typedef *_motor) {
 	_motor->Raw.Motor_T     = adc_data11;
 }
 
-
-/**********************************************************************************************************************
- * Function Name: getRawADCVph
- * Description  : 
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void getRawADCVph(MESC_motor_typedef *_motor){
-	
+void getRawADCVph(MESC_motor* _motor)
+{
 	fsp_err_t err = FSP_SUCCESS;
 	
-    uint16_t adc_data0  = 0 ;
+  uint16_t adc_data0  = 0 ;
 	uint16_t adc_data1  = 0 ;
 	uint16_t adc_data2  = 0 ;
 	
@@ -173,41 +145,19 @@ void getRawADCVph(MESC_motor_typedef *_motor){
 		err = R_ADC_Read(&g_adc1_ctrl, M2_VOL_W,  &adc_data2);
 	
 	// motor phase voltages
-    _motor->Raw.Vu          = adc_data0;
-    _motor->Raw.Vv          = adc_data1;
-    _motor->Raw.Vw          = adc_data2;
-	
+    _motor->Raw.Vu = adc_data0;
+    _motor->Raw.Vv = adc_data1;
+    _motor->Raw.Vw = adc_data2;
 }
 
-
-/**********************************************************************************************************************
- * Function Name: mesc_init_1
- * Description  : HW specific initialisation for MESCInit() before delay
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void mesc_init_1( MESC_motor_typedef *_motor )
+void mesc_init_1(MESC_motor* _motor)
 {
 }
 
-
-/**********************************************************************************************************************
- * Function Name: mesc_init_2
- * Description  : HW specific initialisation for MESCInit() after delay
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void mesc_init_2( MESC_motor_typedef *_motor )
+void mesc_init_2(MESC_motor* _motor)
 {
 }
 
-
-/**********************************************************************************************************************
- * Function Name: mesc_init_3
- * Description  : HW specific initialisation for MESCInit() after hw_init()
- * Arguments    : none
- * Return Value : 0
- *********************************************************************************************************************/
-void mesc_init_3( MESC_motor_typedef *_motor )
+void mesc_init_3(MESC_motor* _motor)
 {
 }

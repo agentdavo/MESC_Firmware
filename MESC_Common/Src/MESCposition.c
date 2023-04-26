@@ -11,7 +11,7 @@
 
 #include <math.h>
 
-void RunPosControl(MESC_motor_typedef* _motor)
+void RunPosControl(MESC_motor* _motor)
 {
   _motor->pos.set_position += 1;
   //	if(_motor->pos.set_position>200000){_motor->pos.set_position = 100000;}

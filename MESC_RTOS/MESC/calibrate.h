@@ -29,11 +29,9 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#if !defined(app_calibrate_H)
-#define app_calibrate_H
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
 
 uint8_t REGISTER_calibrate(TermCommandDescriptor * desc);
 
-#endif

@@ -2,6 +2,9 @@
 
 #include "elc_hal.h"
 
+#include "stdio.h"
+#define APP_ERR_PRINT printf
+
 fsp_err_t elc_hal_init(void)
 {
     fsp_err_t err = FSP_SUCCESS;

@@ -25,8 +25,6 @@
  */
 #include <MESCsin_lut.h>
 
-#include <MESChw_setup.h>
-
 #include <stdint.h>
 
 #if !USE_HIGH_RES

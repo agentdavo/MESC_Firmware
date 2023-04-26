@@ -29,8 +29,7 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#ifndef TASK_CAN_H_
-#define TASK_CAN_H_
+#pragma once
 
 #include "FreeRTOS.h"
 #include "stream_buffer.h"
@@ -93,6 +92,5 @@ uint32_t PACK_buf_to_u32(uint8_t* buffer);
 uint16_t PACK_buf_to_u16(uint8_t* buffer);
 uint8_t PACK_buf_to_u8(uint8_t* buffer);
 
+#endif
 
-#endif
-#endif

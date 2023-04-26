@@ -29,6 +29,7 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
+#if 0
 #include "RTOS_flash.h"
 #include "main.h"
 #include "MESChw_setup.h"
@@ -178,3 +179,4 @@ uint32_t RTOS_flash_end_write(void * address, void * data, uint32_t len){
 	FLASH_WaitForLastOperation(500);
 	return written;
 }
+#endif

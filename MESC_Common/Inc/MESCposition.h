@@ -9,4 +9,4 @@
 
 #include "MESCfoc.h"
 
-void RunPosControl(MESC_motor_typedef* _motor);
+void RunPosControl(MESC_motor* _motor);

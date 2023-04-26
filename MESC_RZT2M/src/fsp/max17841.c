@@ -122,7 +122,6 @@ void bms_wr_all_slaves(uint8_t reg, uint16_t data) {
 	// 5 Check for receive buffer errors
 	bms_wr_cmd(0x09); // xxh. Read RX_Interrupt_Flags register
 	bms_wr_cmd(0xFF); // 00h. If no errors, continue. Otherwise, clear and go to error routine.
-	 
 }
 
 void bms_rd_all_slaves(uint8_t reg) {
@@ -171,6 +170,6 @@ void bms_rd_all_slaves(uint8_t reg) {
 
 void bms_wr_cmd(uint8_t cmd)
 {
-    R_SPI_Write(&g_spi2_ctrl, &cmd, sizeof( cmd ), SPI_BIT_WIDTH_8_BITS);
+  //R_SPI_Write(&g_spi2_ctrl, &cmd, sizeof( cmd ), SPI_BIT_WIDTH_8_BITS);
 	R_SPI_Write(&g_spi3_ctrl, &cmd, sizeof( cmd ), SPI_BIT_WIDTH_8_BITS);
 }

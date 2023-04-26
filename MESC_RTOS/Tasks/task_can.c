@@ -34,7 +34,7 @@
 
 #include "can_ids.h"
 
-#include "cmsis_os.h"
+//OI #include "cmsis_os.h"
 #include "string.h"
 
 #include "init.h"

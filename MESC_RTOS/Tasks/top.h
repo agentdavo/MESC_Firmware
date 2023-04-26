@@ -21,11 +21,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if !defined(app_top_H)
-#define app_top_H
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
 
-uint8_t REGISTER_top(TermCommandDescriptor * desc);
+uint8_t REGISTER_top(TermCommandDescriptor* desc);
 
-#endif

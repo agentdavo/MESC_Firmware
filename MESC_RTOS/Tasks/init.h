@@ -29,8 +29,7 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#ifndef INC_INIT_H_
-#define INC_INIT_H_
+#pragma once
 
 #include "task_cli.h"
 #include "TTerm/Core/include/TTerm.h"
@@ -56,4 +55,3 @@ extern TASK_CAN_handle can1;
 
 extern TERMINAL_HANDLE null_handle;
 
-#endif /* INC_INIT_H_ */

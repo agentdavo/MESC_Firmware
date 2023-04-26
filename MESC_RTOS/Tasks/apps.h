@@ -21,11 +21,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if !defined(app_apps_H)
-#define app_apps_H
+#pragma once
 
 #include <MESC/calibrate.h>
 #include <MESC/hfi.h>
+
 #include "TTerm/Core/include/TTerm.h"
 
 #include "top.h"
@@ -34,4 +34,3 @@
 
 uint8_t REGISTER_apps(TermCommandDescriptor * desc);
 
-#endif

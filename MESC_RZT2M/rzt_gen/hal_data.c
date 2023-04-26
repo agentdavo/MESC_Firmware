@@ -871,9 +871,9 @@ const adc_instance_t g_adc0 =
     .p_channel_cfg = &g_adc0_channel_cfg,
     .p_api     = &g_adc_on_adc
 };
-poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl_ctrl;
+poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl;
 /** POE3 setting. */
-const poe3_cfg_t g_mtu3_three_phase_poe_ctrl_cfg =
+const poe3_cfg_t g_mtu3_three_phase_poe_cfg =
 {
     .poe0                  = {
                                  .mode                  = POE3_HIZ_MODE_FALLING_EDGE,
@@ -955,10 +955,10 @@ const poe3_cfg_t g_mtu3_three_phase_poe_ctrl_cfg =
     .p_context             = NULL,
 };
 /* Instance structure to use this module. */
-const poe3_instance_t g_mtu3_three_phase_poe_ctrl =
+const poe3_instance_t g_mtu3_three_phase_poe =
 {
-    .p_ctrl                = &g_mtu3_three_phase_poe_ctrl_ctrl,
-    .p_cfg                 = &g_mtu3_three_phase_poe_ctrl_cfg,
+    .p_ctrl                = &g_mtu3_three_phase_poe_ctrl,
+    .p_cfg                 = &g_mtu3_three_phase_poe_cfg,
     .p_api                 = &g_poe30_on_poe3
 };
 mtu3_instance_ctrl_t g_timer6_ctrl;
@@ -1173,8 +1173,8 @@ const timer_instance_t g_timer5 =
     .p_cfg         = &g_timer5_cfg,
     .p_api         = &g_timer_on_mtu3
 };
-mtu3_three_phase_instance_ctrl_t g_mtu3_m1_3ph_drv_ctrl_ctrl;
-const mtu3_three_phase_extended_cfg_t g_mtu3_m1_3ph_drv_ctrl_extend =
+mtu3_three_phase_instance_ctrl_t g_mtu3_m1_3ph_drv_ctrl;
+const mtu3_three_phase_extended_cfg_t g_mtu3_m1_3ph_drv_extend =
 {
     .pwm_mode    = MTU3_THREE_PHASE_PWM_MODE_1,
     .period_half = 0x1388 / 2,
@@ -1195,7 +1195,7 @@ const mtu3_three_phase_extended_cfg_t g_mtu3_m1_3ph_drv_ctrl_extend =
     },
     .sync        = MTU3_THREE_PHASE_SYNCHRONOUS_CHANNEL_DISABLE
 };
-const three_phase_cfg_t g_mtu3_m1_3ph_drv_ctrl_cfg =
+const three_phase_cfg_t g_mtu3_m1_3ph_drv_cfg =
 {
     .buffer_mode         = THREE_PHASE_BUFFER_MODE_SINGLE,
     .p_timer_instance    =
@@ -1205,13 +1205,13 @@ const three_phase_cfg_t g_mtu3_m1_3ph_drv_ctrl_cfg =
     },
     .channel_mask        = (1 << 6) | (1 << 7),
     .p_context           = NULL,
-    .p_extend            = &g_mtu3_m1_3ph_drv_ctrl_extend,
+    .p_extend            = &g_mtu3_m1_3ph_drv_extend,
 };
 /* Instance structure to use this module. */
-const three_phase_instance_t g_mtu3_m1_3ph_drv_ctrl =
+const three_phase_instance_t g_mtu3_m1_3ph_drv =
 {
-    .p_ctrl        = &g_mtu3_m1_3ph_drv_ctrl_ctrl,
-    .p_cfg         = &g_mtu3_m1_3ph_drv_ctrl_cfg,
+    .p_ctrl        = &g_mtu3_m1_3ph_drv_ctrl,
+    .p_cfg         = &g_mtu3_m1_3ph_drv_cfg,
     .p_api         = &g_three_phase_on_mtu3_three_phase
 };
 mtu3_instance_ctrl_t g_timer4_ctrl;
@@ -1426,8 +1426,8 @@ const timer_instance_t g_timer3 =
     .p_cfg         = &g_timer3_cfg,
     .p_api         = &g_timer_on_mtu3
 };
-mtu3_three_phase_instance_ctrl_t g_mtu3_m0_3ph_drv_ctrl_ctrl;
-const mtu3_three_phase_extended_cfg_t g_mtu3_m0_3ph_drv_ctrl_extend =
+mtu3_three_phase_instance_ctrl_t g_mtu3_m0_3ph_drv_ctrl;
+const mtu3_three_phase_extended_cfg_t g_mtu3_m0_3ph_drv_extend =
 {
     .pwm_mode    = MTU3_THREE_PHASE_PWM_MODE_1,
     .period_half = 0x1388 / 2,
@@ -1448,7 +1448,7 @@ const mtu3_three_phase_extended_cfg_t g_mtu3_m0_3ph_drv_ctrl_extend =
     },
     .sync        = MTU3_THREE_PHASE_SYNCHRONOUS_CHANNEL_DISABLE
 };
-const three_phase_cfg_t g_mtu3_m0_3ph_drv_ctrl_cfg =
+const three_phase_cfg_t g_mtu3_m0_3ph_drv_cfg =
 {
     .buffer_mode         = THREE_PHASE_BUFFER_MODE_SINGLE,
     .p_timer_instance    =
@@ -1458,18 +1458,18 @@ const three_phase_cfg_t g_mtu3_m0_3ph_drv_ctrl_cfg =
     },
     .channel_mask        = (1 << 3) | (1 << 4),
     .p_context           = NULL,
-    .p_extend            = &g_mtu3_m0_3ph_drv_ctrl_extend,
+    .p_extend            = &g_mtu3_m0_3ph_drv_extend,
 };
 /* Instance structure to use this module. */
-const three_phase_instance_t g_mtu3_m0_3ph_drv_ctrl =
+const three_phase_instance_t g_mtu3_m0_3ph_drv =
 {
-    .p_ctrl        = &g_mtu3_m0_3ph_drv_ctrl_ctrl,
-    .p_cfg         = &g_mtu3_m0_3ph_drv_ctrl_cfg,
+    .p_ctrl        = &g_mtu3_m0_3ph_drv_ctrl,
+    .p_cfg         = &g_mtu3_m0_3ph_drv_cfg,
     .p_api         = &g_three_phase_on_mtu3_three_phase
 };
-gpt_instance_ctrl_t g_gpt2_slowLoop_ctrl_ctrl;
+gpt_instance_ctrl_t g_gpt2_slowLoop_ctrl;
 #if 0
-const gpt_extended_pwm_cfg_t g_gpt2_slowLoop_ctrl_pwm_extend =
+const gpt_extended_pwm_cfg_t g_gpt2_slowLoop_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT2_UDF)
@@ -1499,7 +1499,7 @@ const gpt_extended_pwm_cfg_t g_gpt2_slowLoop_ctrl_pwm_extend =
     .interrupt_skip_func_adc_b  = GPT_INTERRUPT_SKIP_SELECT_NONE,
 };
 #endif
-const gpt_extended_cfg_t g_gpt2_slowLoop_ctrl_extend =
+const gpt_extended_cfg_t g_gpt2_slowLoop_extend =
 {
     .gtioca = { .output_enabled = false,
                 .stop_level     = GPT_PIN_LEVEL_LOW
@@ -1529,7 +1529,7 @@ const gpt_extended_cfg_t g_gpt2_slowLoop_ctrl_extend =
     .capture_filter_gtioca       = GPT_CAPTURE_FILTER_NONE,
     .capture_filter_gtiocb       = GPT_CAPTURE_FILTER_NONE,
 #if 0
-    .p_pwm_cfg                   = &g_gpt2_slowLoop_ctrl_pwm_extend,
+    .p_pwm_cfg                   = &g_gpt2_slowLoop_pwm_extend,
 #else
     .p_pwm_cfg                   = NULL,
 #endif
@@ -1541,14 +1541,14 @@ const gpt_extended_cfg_t g_gpt2_slowLoop_ctrl_extend =
 #endif
     .icds                = 0,
 };
-const timer_cfg_t g_gpt2_slowLoop_ctrl_cfg =
+const timer_cfg_t g_gpt2_slowLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
     .channel             = 2,
     .p_callback          = NULL,
     .p_context           = NULL,
-    .p_extend            = &g_gpt2_slowLoop_ctrl_extend,
+    .p_extend            = &g_gpt2_slowLoop_extend,
     .cycle_end_ipl       = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT2_OVF)
     .cycle_end_irq       = VECTOR_NUMBER_GPT2_OVF,
@@ -1557,15 +1557,15 @@ const timer_cfg_t g_gpt2_slowLoop_ctrl_cfg =
 #endif
 };
 /* Instance structure to use this module. */
-const timer_instance_t g_gpt2_slowLoop_ctrl =
+const timer_instance_t g_gpt2_slowLoop =
 {
-    .p_ctrl        = &g_gpt2_slowLoop_ctrl_ctrl,
-    .p_cfg         = &g_gpt2_slowLoop_ctrl_cfg,
+    .p_ctrl        = &g_gpt2_slowLoop_ctrl,
+    .p_cfg         = &g_gpt2_slowLoop_cfg,
     .p_api         = &g_timer_on_gpt
 };
-gpt_instance_ctrl_t g_gpt1_fastLoop_ctrl_ctrl;
+gpt_instance_ctrl_t g_gpt1_fastLoop_ctrl;
 #if 0
-const gpt_extended_pwm_cfg_t g_gpt1_fastLoop_ctrl_pwm_extend =
+const gpt_extended_pwm_cfg_t g_gpt1_fastLoop_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT1_UDF)
@@ -1595,7 +1595,7 @@ const gpt_extended_pwm_cfg_t g_gpt1_fastLoop_ctrl_pwm_extend =
     .interrupt_skip_func_adc_b  = GPT_INTERRUPT_SKIP_SELECT_NONE,
 };
 #endif
-const gpt_extended_cfg_t g_gpt1_fastLoop_ctrl_extend =
+const gpt_extended_cfg_t g_gpt1_fastLoop_extend =
 {
     .gtioca = { .output_enabled = false,
                 .stop_level     = GPT_PIN_LEVEL_LOW
@@ -1625,7 +1625,7 @@ const gpt_extended_cfg_t g_gpt1_fastLoop_ctrl_extend =
     .capture_filter_gtioca       = GPT_CAPTURE_FILTER_NONE,
     .capture_filter_gtiocb       = GPT_CAPTURE_FILTER_NONE,
 #if 0
-    .p_pwm_cfg                   = &g_gpt1_fastLoop_ctrl_pwm_extend,
+    .p_pwm_cfg                   = &g_gpt1_fastLoop_pwm_extend,
 #else
     .p_pwm_cfg                   = NULL,
 #endif
@@ -1637,14 +1637,14 @@ const gpt_extended_cfg_t g_gpt1_fastLoop_ctrl_extend =
 #endif
     .icds                = 0,
 };
-const timer_cfg_t g_gpt1_fastLoop_ctrl_cfg =
+const timer_cfg_t g_gpt1_fastLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
     .channel             = 1,
     .p_callback          = NULL,
     .p_context           = NULL,
-    .p_extend            = &g_gpt1_fastLoop_ctrl_extend,
+    .p_extend            = &g_gpt1_fastLoop_extend,
     .cycle_end_ipl       = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT1_OVF)
     .cycle_end_irq       = VECTOR_NUMBER_GPT1_OVF,
@@ -1653,15 +1653,15 @@ const timer_cfg_t g_gpt1_fastLoop_ctrl_cfg =
 #endif
 };
 /* Instance structure to use this module. */
-const timer_instance_t g_gpt1_fastLoop_ctrl =
+const timer_instance_t g_gpt1_fastLoop =
 {
-    .p_ctrl        = &g_gpt1_fastLoop_ctrl_ctrl,
-    .p_cfg         = &g_gpt1_fastLoop_ctrl_cfg,
+    .p_ctrl        = &g_gpt1_fastLoop_ctrl,
+    .p_cfg         = &g_gpt1_fastLoop_cfg,
     .p_api         = &g_timer_on_gpt
 };
-gpt_instance_ctrl_t g_gpt0_hyperLoop_ctrl_ctrl;
+gpt_instance_ctrl_t g_gpt0_hyperLoop_ctrl;
 #if 0
-const gpt_extended_pwm_cfg_t g_gpt0_hyperLoop_ctrl_pwm_extend =
+const gpt_extended_pwm_cfg_t g_gpt0_hyperLoop_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT0_UDF)
@@ -1691,7 +1691,7 @@ const gpt_extended_pwm_cfg_t g_gpt0_hyperLoop_ctrl_pwm_extend =
     .interrupt_skip_func_adc_b  = GPT_INTERRUPT_SKIP_SELECT_NONE,
 };
 #endif
-const gpt_extended_cfg_t g_gpt0_hyperLoop_ctrl_extend =
+const gpt_extended_cfg_t g_gpt0_hyperLoop_extend =
 {
     .gtioca = { .output_enabled = false,
                 .stop_level     = GPT_PIN_LEVEL_LOW
@@ -1721,7 +1721,7 @@ const gpt_extended_cfg_t g_gpt0_hyperLoop_ctrl_extend =
     .capture_filter_gtioca       = GPT_CAPTURE_FILTER_NONE,
     .capture_filter_gtiocb       = GPT_CAPTURE_FILTER_NONE,
 #if 0
-    .p_pwm_cfg                   = &g_gpt0_hyperLoop_ctrl_pwm_extend,
+    .p_pwm_cfg                   = &g_gpt0_hyperLoop_pwm_extend,
 #else
     .p_pwm_cfg                   = NULL,
 #endif
@@ -1733,14 +1733,14 @@ const gpt_extended_cfg_t g_gpt0_hyperLoop_ctrl_extend =
 #endif
     .icds                = 0,
 };
-const timer_cfg_t g_gpt0_hyperLoop_ctrl_cfg =
+const timer_cfg_t g_gpt0_hyperLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
     .channel             = 0,
     .p_callback          = NULL,
     .p_context           = NULL,
-    .p_extend            = &g_gpt0_hyperLoop_ctrl_extend,
+    .p_extend            = &g_gpt0_hyperLoop_extend,
     .cycle_end_ipl       = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT0_OVF)
     .cycle_end_irq       = VECTOR_NUMBER_GPT0_OVF,
@@ -1749,10 +1749,10 @@ const timer_cfg_t g_gpt0_hyperLoop_ctrl_cfg =
 #endif
 };
 /* Instance structure to use this module. */
-const timer_instance_t g_gpt0_hyperLoop_ctrl =
+const timer_instance_t g_gpt0_hyperLoop =
 {
-    .p_ctrl        = &g_gpt0_hyperLoop_ctrl_ctrl,
-    .p_cfg         = &g_gpt0_hyperLoop_ctrl_cfg,
+    .p_ctrl        = &g_gpt0_hyperLoop_ctrl,
+    .p_cfg         = &g_gpt0_hyperLoop_cfg,
     .p_api         = &g_timer_on_gpt
 };
 void g_hal_init(void) {

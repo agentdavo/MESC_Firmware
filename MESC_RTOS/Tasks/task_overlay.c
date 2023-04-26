@@ -29,17 +29,10 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-
-#include <stdlib.h>
-#include <string.h>
-
 #include "task_overlay.h"
 #include "task_cli.h"
 #include "task_can.h"
-#include "cmsis_os.h"
-#include <stdio.h>
-
-
+//OI #include "cmsis_os.h"
 
 /* RTOS includes. */
 #include "FreeRTOS.h"
@@ -47,6 +40,9 @@
 #include "queue.h"
 #include "semphr.h"
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 /* ------------------------------------------------------------------------ */
 /*
@@ -78,7 +74,7 @@
 
 void show_overlay(TERMINAL_HANDLE * handle){
 #ifndef DASH
-	MESC_motor_typedef * motor_curr = &mtr[0];
+	MESC_motor* motor_curr = &mtr[0];
 
 	TERM_sendVT100Code(handle, _VT100_CURSOR_SAVE_POSITION,0);
 	TERM_sendVT100Code(handle, _VT100_CURSOR_DISABLE,0);
@@ -276,7 +272,7 @@ void start_overlay_task(TERMINAL_HANDLE * handle){
 
     if (port->overlay_handle.task_handle == NULL) {
 
-        xTaskCreate(task_overlay_TaskProc, "Overlay", 512, handle, osPriorityNormal, &port->overlay_handle.task_handle);
+        xTaskCreate(task_overlay_TaskProc, "Overlay", 512, handle, /*OI osPriorityNormal*/0, &port->overlay_handle.task_handle);
 
     }
 }

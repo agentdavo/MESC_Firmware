@@ -2,6 +2,8 @@
 
 #include "hal_data.h"
 
+#include "stdio.h"
+#define APP_ERR_PRINT printf
 
 fsp_err_t gpt_timers_hal_init(void)
 {

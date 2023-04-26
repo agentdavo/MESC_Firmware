@@ -110,9 +110,9 @@ static void highlight(TERMINAL_HANDLE * handle, char * text ,int index, int coun
 }
 
 
-static void TASK_main(void *pvParameters){
-
-	MESC_motor_typedef * motor_curr = &mtr[0];
+static void TASK_main(void* pvParameters)
+{
+	MESC_motor* motor_curr = &mtr[0];
 
     TERMINAL_HANDLE * handle = (TERMINAL_HANDLE*)pvParameters;
     TERM_sendVT100Code(handle,_VT100_CURSOR_DISABLE, 0);

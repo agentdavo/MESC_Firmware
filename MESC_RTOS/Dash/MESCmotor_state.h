@@ -25,7 +25,7 @@
 #ifndef MESC_MOTOR_STATE_H
 #define MESC_MOTOR_STATE_H
 
-#include "stm32fxxx_hal.h"
+#include "rzt_hal.h"
 
 typedef enum {
   MOTOR_STATE_INITIALISING = 0,

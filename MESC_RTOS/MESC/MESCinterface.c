@@ -34,19 +34,23 @@
 #include "TTerm/Core/include/TTerm.h"
 #include "Tasks/task_cli.h"
 #include "Tasks/task_overlay.h"
-#include "MESCmotor_state.h"
-#include "MESCmotor.h"
-#include "MESCflash.h"
+
+#include <MESCfoc.h>
+#include <MESCmotor_state.h>
+#include <MESCmotor.h>
+#include <MESCflash.h>
+#include "MESCinterface.h"
+
+#include <MESCerror.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <MESC/MESCinterface.h>
 
 extern uint16_t deadtime_comp;
 
-uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
-
-	MESC_motor_typedef * motor_curr = &mtr[0];
+uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args)
+{
+	MESC_motor* motor_curr = &mtr[0];
 	port_str * port = handle->port;
 
 	motor.measure_current = I_MEASURE;
@@ -427,10 +431,10 @@ uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
 }
 
 
-extern TIM_HandleTypeDef htim1;
+//OI extern TIM_HandleTypeDef htim1;
 
-
-void callback(TermVariableDescriptor * var){
+void callback(TermVariableDescriptor* var)
+{
 	calculateFlux(&mtr[0]);
 	calculateGains(&mtr[0]);
 	calculateVoltageGain(&mtr[0]);
@@ -439,57 +443,57 @@ void callback(TermVariableDescriptor * var){
 
 uint8_t adc_node;
 
-
-void populate_vars(){
-	//		   | Variable							| MIN		| MAX		| NAME			| DESCRIPTION							| RW			| CALLBACK	| VAR LIST HANDLE
-	TERM_addVar(mtr[0].m.Imax						, 0.0f		, 500.0f	, "i_max"		, "Max current"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.Pmax						, 0.0f		, 50000.0f	, "p_max"		, "Max power"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.direction					, 0			, 1			, "direction"	, "Motor direction"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.pole_pairs					, 0			, 255		, "pole_pairs"	, "Motor pole pairs"					, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.RPMmax						, 0			, 300000	, "rpm_max"		, "Max RPM"								, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.Vmax						, 0.0f		, 600.0f	, "v_max"		, "Max voltage"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.flux_linkage				, 0.0f		, 100.0f	, "flux"		, "Flux linkage"						, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(mtr[0].m.flux_linkage_gain			, 0.0f		, 100.0f	, "flux_gain"	, "Flux linkage gain"					, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.non_linear_centering_gain	, 0.0f		, 10000.0f	, "flux_n_lin"	, "Flux centering gain"					, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].m.R							, 0.0f		, 10.0f		, "r_phase"		, "Phase resistance"					, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(mtr[0].m.L_D						, 0.0f		, 10.0f		, "ld_phase"	, "Phase inductance"					, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(mtr[0].m.L_Q						, 0.0f		, 10.0f		, "lq_phase"	, "Phase inductance"					, VAR_ACCESS_RW	, callback  , &TERM_varList);
-	TERM_addVar(mtr[0].HFIType						, 0			, 3			, "hfi"			, "HFI type [0=None, 1=45deg, 2=d axis]", VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].meas.hfi_voltage				, 0.0f		, 50.0f		, "hfi_volt"	, "HFI voltage"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].FOC.HFI45_mod_didq			, 0.0f		, 2.0f		, "hfi_mod_didq", "HFI mod didq"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].FOC.HFI_Gain					, 0.0f		, 5000.0f	, "hfi_gain"	, "HFI gain"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.adc1_MAX					, 0			, 4096		, "adc1_max"	, "ADC1 max val"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.adc1_MIN					, 0			, 4096		, "adc1_min"	, "ADC1 min val"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.ADC1_polarity			, -1.0f		, 1.0f		, "adc1_pol"	, "ADC1 polarity"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.adc2_MAX					, 0			, 4096		, "adc2_max"	, "ADC2 max val"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.adc2_MIN					, 0			, 4096		, "adc2_min"	, "ADC2 min val"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.ADC2_polarity			, -1.0f		, 1.0f		, "adc2_pol"	, "ADC2 polarity"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.max_request_Idq.q		, 0.0f		, 300.0f	, "curr_max"	, "Max motor current"					, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(input_vars.min_request_Idq.q		, -300.0f	, 0.0f		, "curr_min"	, "Min motor current"					, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(mtr[0].FOC.pwm_frequency			, 0.0f		, 100000.0f	, "pwm_freq"	, "PWM frequency"						, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(input_vars.UART_req					, -1000.0f	, 1000.0f	, "UART_req"	, "Uart input"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].FOC.FW_curr_max				, 0.0f		, 200.0f	, "FW_curr"		, "Field Weakening Current"				, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(input_vars.input_options			, 0			, 16		, "input_opt"	, "Inputs [1=ADC1 2=ADC2 4=PPM 8=UART]"	, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(mtr[0].safe_start[0]				, 0			, 1000		, "safe_start"	, "Countdown before allowing throttle"	, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(mtr[0].safe_start[1]				, 0			, 1000		, "safe_count"	, "Live count before allowing throttle"	, VAR_ACCESS_R	, NULL		, &TERM_varList);
+void populate_vars()
+{
+  //         | Variable                           | MIN    | MAX     | NAME          | DESCRIPTION                          | RW          | CALLBACK | VAR LIST HANDLE
+  TERM_addVar(mtr[0].m.Imax,                      0.0f,    500.0f,   "i_max",        "Max current",                          VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.Pmax,                      0.0f,    50000.0f, "p_max",        "Max power",                            VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.direction,                 0,       1,        "direction",    "Motor direction",                      VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.pole_pairs,                0,       255,      "pole_pairs",   "Motor pole pairs",                     VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.RPMmax,                    0,       300000,   "rpm_max",      "Max RPM",                              VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.Vmax,                      0.0f,    600.0f,   "v_max",        "Max voltage",                          VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.flux_linkage,              0.0f,    100.0f,   "flux",         "Flux linkage",                         VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].m.flux_linkage_gain,         0.0f,    100.0f,   "flux_gain",    "Flux linkage gain",                    VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.non_linear_centering_gain, 0.0f,    10000.0f, "flux_n_lin",   "Flux centering gain",                  VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].m.R,                         0.0f,    10.0f,    "r_phase",      "Phase resistance",                     VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].m.L_D,                       0.0f,    10.0f,    "ld_phase",     "Phase inductance",                     VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].m.L_Q,                       0.0f,    10.0f,    "lq_phase",     "Phase inductance",                     VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].HFIType,                     0,       3,        "hfi",          "HFI type [0=None, 1=45deg, 2=d axis]", VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].meas.hfi_voltage,            0.0f,    50.0f,    "hfi_volt",     "HFI voltage",                          VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].FOC.HFI45_mod_didq,          0.0f,    2.0f,     "hfi_mod_didq", "HFI mod didq",                         VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].FOC.HFI_Gain,                0.0f,    5000.0f,  "hfi_gain",     "HFI gain",                             VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.adc1_MAX,                0,       4096,     "adc1_max",     "ADC1 max val",                         VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.adc1_MIN,                0,       4096,     "adc1_min",     "ADC1 min val",                         VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.ADC1_polarity,           -1.0f,   1.0f,     "adc1_pol",     "ADC1 polarity",                        VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.adc2_MAX,                0,       4096,     "adc2_max",     "ADC2 max val",                         VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.adc2_MIN,                0,       4096,     "adc2_min",     "ADC2 min val",                         VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.ADC2_polarity,           -1.0f,   1.0f,     "adc2_pol",     "ADC2 polarity",                        VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.max_request_Idq.q,       0.0f,    300.0f,   "curr_max",     "Max motor current",                    VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(input_vars.min_request_Idq.q,       -300.0f, 0.0f,     "curr_min",     "Min motor current",                    VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].FOC.pwm_frequency,           0.0f,    100000.0f,"pwm_freq",     "PWM frequency",                        VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(input_vars.UART_req,                -1000.0f,1000.0f,  "UART_req",     "Uart input",                           VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].FOC.FW_curr_max,             0.0f,    200.0f,   "FW_curr",      "Field Weakening Current",              VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(input_vars.input_options,           0,       16,       "input_opt",    "Inputs [1=ADC1 2=ADC2 4=PPM 8=UART]",  VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(mtr[0].safe_start[0],               0,       1000,     "safe_start",   "Countdown before allowing throttle",   VAR_ACCESS_RW, NULL,     &TERM_varList);
+  TERM_addVar(mtr[0].safe_start[1],               0,       1000,     "safe_count",   "Live count before allowing throttle",  VAR_ACCESS_R,  NULL,     &TERM_varList);
 #ifdef HAL_CAN_MODULE_ENABLED
-	TERM_addVar(can1.node_id						, 1			, 254		, "node_id"	    , "Node ID"								, VAR_ACCESS_RW	, callback	, &TERM_varList);
-	TERM_addVar(adc_node							, 1			, 254		, "can_adc"	    , "can ADC ID"							, VAR_ACCESS_RW	, callback	, &TERM_varList);
+  TERM_addVar(can1.node_id,                       1,       254,      "node_id",      "Node ID",                              VAR_ACCESS_RW, callback, &TERM_varList);
+  TERM_addVar(adc_node,                           1,       254,      "can_adc",      "can ADC ID",                           VAR_ACCESS_RW, callback, &TERM_varList);
 #endif
 
-	TermVariableDescriptor * desc;
-	desc = TERM_addVar(MESC_errors						,-HUGE_VAL 	, HUGE_VAL  , "error"		, "System errors"						, VAR_ACCESS_TR  , NULL		, &TERM_varList);
-	desc = TERM_addVar(mtr[0].Conv.Vbus					, 0.0f		, HUGE_VAL  , "vbus"		, "Read input voltage"					, VAR_ACCESS_TR  , NULL		, &TERM_varList);
-	TERM_setFlag(desc, FLAG_TELEMETRY_ON);
+  TermVariableDescriptor* desc;
+  desc = TERM_addVar(MESC_errors,                 -HUGE_VAL, HUGE_VAL, "error", "System errors",                             VAR_ACCESS_TR, NULL,     &TERM_varList);
+  desc = TERM_addVar(mtr[0].Conv.Vbus,            0.0f,      HUGE_VAL, "vbus",  "Read input voltage",                        VAR_ACCESS_TR, NULL,     &TERM_varList);
+  TERM_setFlag(desc, FLAG_TELEMETRY_ON);
 
-	desc = TERM_addVar(mtr[0].FOC.eHz					    , -HUGE_VAL , HUGE_VAL  , "ehz"			, "Motor electrical hz"					, VAR_ACCESS_TR  , NULL		, &TERM_varList);
-	TERM_setFlag(desc, FLAG_TELEMETRY_ON);
-
+  desc = TERM_addVar(mtr[0].FOC.eHz,              -HUGE_VAL, HUGE_VAL, "ehz", "Motor electrical hz",                         VAR_ACCESS_TR, NULL,     &TERM_varList);
+  TERM_setFlag(desc, FLAG_TELEMETRY_ON);
 }
 
 #ifdef HAL_CAN_MODULE_ENABLED
-void TASK_CAN_packet_cb(TASK_CAN_handle * handle, uint32_t id, uint8_t sender, uint8_t receiver, uint8_t* data, uint32_t len){
-	MESC_motor_typedef * motor_curr = &mtr[0];
+void TASK_CAN_packet_cb(TASK_CAN_handle* handle, uint32_t id, uint8_t sender, uint8_t receiver, uint8_t* data, uint32_t len)
+{
+	MESC_motor* motor_curr = &mtr[0];
 
 	switch(id){
 		case CAN_ID_IQREQ:{
@@ -520,9 +524,9 @@ void TASK_CAN_packet_cb(TASK_CAN_handle * handle, uint32_t id, uint8_t sender, u
 	}
 }
 
-void TASK_CAN_telemetry_fast(TASK_CAN_handle * handle){
-
-	MESC_motor_typedef * motor_curr = &mtr[0];
+void TASK_CAN_telemetry_fast(TASK_CAN_handle* handle)
+{
+	MESC_motor* motor_curr = &mtr[0];
 
 	TASK_CAN_add_float(handle	, CAN_ID_ADC1_2_REQ	  	, CAN_BROADCAST, input_vars.ADC1_req		, input_vars.ADC2_req	, 0);
 	TASK_CAN_add_float(handle	, CAN_ID_SPEED		  	, CAN_BROADCAST, motor_curr->FOC.eHz		, 0.0f					, 0);
@@ -533,9 +537,9 @@ void TASK_CAN_telemetry_fast(TASK_CAN_handle * handle){
 
 }
 
-void TASK_CAN_telemetry_slow(TASK_CAN_handle * handle){
-
-	MESC_motor_typedef * motor_curr = &mtr[0];
+void TASK_CAN_telemetry_slow(TASK_CAN_handle* handle)
+{
+	MESC_motor* motor_curr = &mtr[0];
 
 	TASK_CAN_add_float(handle	, CAN_ID_TEMP_MOT_MOS1	, CAN_BROADCAST, motor_curr->Conv.Motor_T			, motor_curr->Conv.MOSu_T			, 0);
 	TASK_CAN_add_float(handle	, CAN_ID_TEMP_MOS2_MOS3	, CAN_BROADCAST, motor_curr->Conv.MOSv_T			, motor_curr->Conv.MOSw_T			, 0);
@@ -546,12 +550,13 @@ void TASK_CAN_telemetry_slow(TASK_CAN_handle * handle){
 
 #define POST_ERROR_SAMPLES 		LOGLENGTH/2
 
-void TASK_CAN_aux_data(TASK_CAN_handle * handle){
+void TASK_CAN_aux_data(TASK_CAN_handle* handle)
+{
 	static int samples_sent=-1;
 	static int current_pos=0;
 	static float timestamp;
 
-	MESC_motor_typedef * motor_curr = &mtr[0];
+	MESC_motor* motor_curr = &mtr[0];
 
 	if(print_samples_now && motor_curr->sample_no_auto_send == false){
 		if(samples_sent == -1){
@@ -593,11 +598,10 @@ void TASK_CAN_aux_data(TASK_CAN_handle * handle){
 }
 #endif
 
-
-void MESCinterface_init(TERMINAL_HANDLE * handle){
+void MESCinterface_init(TERMINAL_HANDLE* handle)
+{
 	static bool is_init=false;
 	if(is_init) return;
-
 
 	populate_vars();
 

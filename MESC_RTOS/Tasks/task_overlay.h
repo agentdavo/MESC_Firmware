@@ -29,12 +29,9 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#if !defined(overlay_TASK_H)
-#define overlay_TASK_H
-
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
-
 
 typedef struct{
 	TaskHandle_t task_handle;
@@ -58,7 +55,6 @@ void stop_overlay_task(TERMINAL_HANDLE * handle);
 uint8_t CMD_status(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args);
 uint8_t CMD_log(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args);
 
-
 /*
  * Add user function prototypes in the below merge region to add user
  * functionality to the task definition.
@@ -66,7 +62,3 @@ uint8_t CMD_log(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args);
 /* `#START USER_TASK_PROTOS` */
 
 /* `#END` */
-
-/* ------------------------------------------------------------------------ */
-#endif
-/* [] END OF FILE */

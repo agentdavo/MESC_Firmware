@@ -76,4 +76,4 @@ enum
   ERROR_INPUT_OOR
 };
 
-void handleError(MESC_motor_typedef* _motor, uint32_t error_code);
+void handleError(MESC_motor* _motor, uint32_t error_code);

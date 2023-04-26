@@ -29,11 +29,9 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#if !defined(app_can_H)
-#define app_can_H
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
 
 uint8_t REGISTER_can(TermCommandDescriptor * desc);
 
-#endif

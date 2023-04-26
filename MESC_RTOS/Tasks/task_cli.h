@@ -29,8 +29,7 @@
  *warranties can reasonably be honoured.
  ******************************************************************************/
 
-#ifndef TASK_CLI_H_
-#define TASK_CLI_H_
+#pragma once
 
 #include "FreeRTOS.h"
 #include "stream_buffer.h"
@@ -71,5 +70,4 @@ void task_cli_kill(port_str * port);
 
 void putbuffer_can(unsigned char *buf, unsigned int len, port_str * port);
 
-#endif /* TASK_LED_H_ */
 

@@ -3,6 +3,10 @@
 #include "adc_hal.h"
 #include "MESCerror.h"
 #include "MESCfoc.h"
+
+#include "stdio.h"
+#define APP_ERR_PRINT printf
+
 volatile bool g_adc0_err_flag = false;
 volatile bool g_adc0_scan_complete_flag = false;
 

@@ -21,11 +21,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if !defined(app_template_H)
-#define app_template_H
+#pragma once
 
 #include "TTerm/Core/include/TTerm.h"
 
 uint8_t REGISTER_app_template(TermCommandDescriptor * desc);
 
-#endif

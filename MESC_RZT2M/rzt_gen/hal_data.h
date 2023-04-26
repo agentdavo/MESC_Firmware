@@ -108,11 +108,11 @@ extern const adc_channel_cfg_t g_adc0_channel_cfg;
 void adc0_sample_callback(adc_callback_args_t * p_args);
 #endif
 /** POE3 Instance. */
-extern const poe3_instance_t g_mtu3_three_phase_poe_ctrl;
+extern const poe3_instance_t g_mtu3_three_phase_poe;
 
 /** Access the POE3 instance using these structures when calling API functions directly (::p_api is not used). */
-extern poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl_ctrl;
-extern const poe3_cfg_t g_mtu3_three_phase_poe_ctrl_cfg;
+extern poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl;
+extern const poe3_cfg_t g_mtu3_three_phase_poe_cfg;
 /** Timer on MTU3 Instance. */
 extern const timer_instance_t g_timer6;
 
@@ -134,11 +134,11 @@ extern const timer_cfg_t g_timer5_cfg;
 void NULL(timer_callback_args_t * p_args);
 #endif
 /** MTU3 Three-Phase Instance. */
-extern const three_phase_instance_t g_mtu3_m1_3ph_drv_ctrl;
+extern const three_phase_instance_t g_mtu3_m1_3ph_drv;
 
 /** Access the MTU3 Three-Phase instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_three_phase_instance_ctrl_t g_mtu3_m1_3ph_drv_ctrl_ctrl;
-extern const three_phase_cfg_t g_mtu3_m1_3ph_drv_ctrl_cfg;
+extern mtu3_three_phase_instance_ctrl_t g_mtu3_m1_3ph_drv_ctrl;
+extern const three_phase_cfg_t g_mtu3_m1_3ph_drv_cfg;
 /** Timer on MTU3 Instance. */
 extern const timer_instance_t g_timer4;
 
@@ -160,37 +160,37 @@ extern const timer_cfg_t g_timer3_cfg;
 void NULL(timer_callback_args_t * p_args);
 #endif
 /** MTU3 Three-Phase Instance. */
-extern const three_phase_instance_t g_mtu3_m0_3ph_drv_ctrl;
+extern const three_phase_instance_t g_mtu3_m0_3ph_drv;
 
 /** Access the MTU3 Three-Phase instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_three_phase_instance_ctrl_t g_mtu3_m0_3ph_drv_ctrl_ctrl;
-extern const three_phase_cfg_t g_mtu3_m0_3ph_drv_ctrl_cfg;
+extern mtu3_three_phase_instance_ctrl_t g_mtu3_m0_3ph_drv_ctrl;
+extern const three_phase_cfg_t g_mtu3_m0_3ph_drv_cfg;
 /** Timer on GPT Instance. */
-extern const timer_instance_t g_gpt2_slowLoop_ctrl;
+extern const timer_instance_t g_gpt2_slowLoop;
 
 /** Access the GPT instance using these structures when calling API functions directly (::p_api is not used). */
-extern gpt_instance_ctrl_t g_gpt2_slowLoop_ctrl_ctrl;
-extern const timer_cfg_t g_gpt2_slowLoop_ctrl_cfg;
+extern gpt_instance_ctrl_t g_gpt2_slowLoop_ctrl;
+extern const timer_cfg_t g_gpt2_slowLoop_cfg;
 
 #ifndef NULL
 void NULL(timer_callback_args_t * p_args);
 #endif
 /** Timer on GPT Instance. */
-extern const timer_instance_t g_gpt1_fastLoop_ctrl;
+extern const timer_instance_t g_gpt1_fastLoop;
 
 /** Access the GPT instance using these structures when calling API functions directly (::p_api is not used). */
-extern gpt_instance_ctrl_t g_gpt1_fastLoop_ctrl_ctrl;
-extern const timer_cfg_t g_gpt1_fastLoop_ctrl_cfg;
+extern gpt_instance_ctrl_t g_gpt1_fastLoop_ctrl;
+extern const timer_cfg_t g_gpt1_fastLoop_cfg;
 
 #ifndef NULL
 void NULL(timer_callback_args_t * p_args);
 #endif
 /** Timer on GPT Instance. */
-extern const timer_instance_t g_gpt0_hyperLoop_ctrl;
+extern const timer_instance_t g_gpt0_hyperLoop;
 
 /** Access the GPT instance using these structures when calling API functions directly (::p_api is not used). */
-extern gpt_instance_ctrl_t g_gpt0_hyperLoop_ctrl_ctrl;
-extern const timer_cfg_t g_gpt0_hyperLoop_ctrl_cfg;
+extern gpt_instance_ctrl_t g_gpt0_hyperLoop_ctrl;
+extern const timer_cfg_t g_gpt0_hyperLoop_cfg;
 
 #ifndef NULL
 void NULL(timer_callback_args_t * p_args);
