@@ -1531,8 +1531,8 @@ FSP Configuration
       ELC Single Port 3: Output Direction Setting: Output Operation: Low output
       ELC Single Port 3: Input Direction Setting: Edge Detection: Rising edge
       
-    Instance "g_gpt0_hyperLoop_ctrl Timer Driver on r_gpt"
-      General: Name: g_gpt0_hyperLoop_ctrl
+    Instance "g_gpt0_hyperLoop Timer Driver on r_gpt"
+      General: Name: g_gpt0_hyperLoop
       General: Channel: 0
       General: Mode: Periodic
       General: Period: 0x100000000
@@ -1580,8 +1580,8 @@ FSP Configuration
       Interrupts: Dead Time Error Interrupt Priority: Disabled
       Extra Features: Input Capture at Count Stop: Enabled
       
-    Instance "g_gpt1_fastLoop_ctrl Timer Driver on r_gpt"
-      General: Name: g_gpt1_fastLoop_ctrl
+    Instance "g_gpt1_fastLoop Timer Driver on r_gpt"
+      General: Name: g_gpt1_fastLoop
       General: Channel: 1
       General: Mode: Periodic
       General: Period: 0x100000000
@@ -1629,8 +1629,8 @@ FSP Configuration
       Interrupts: Dead Time Error Interrupt Priority: Disabled
       Extra Features: Input Capture at Count Stop: Enabled
       
-    Instance "g_gpt2_slowLoop_ctrl Timer Driver on r_gpt"
-      General: Name: g_gpt2_slowLoop_ctrl
+    Instance "g_gpt2_slowLoop Timer Driver on r_gpt"
+      General: Name: g_gpt2_slowLoop
       General: Channel: 2
       General: Mode: Periodic
       General: Period: 0x100000000
@@ -1679,7 +1679,7 @@ FSP Configuration
       Extra Features: Input Capture at Count Stop: Enabled
       
     Instance "Three-Phase PWM Driver on r_mtu3_three_phase"
-      General: Name: g_mtu3_m0_3ph_drv_ctrl
+      General: Name: g_mtu3_m0_3ph_drv
       General: Channel: MTU3 and MTU4
       General: Mode: Complementary PWM mode 1 (transfer at crest)
       General: Compare match value: Count upper limit: 0x1388
@@ -1785,7 +1785,7 @@ FSP Configuration
         Extra Features: Interrupt Skipping: TRG7AN/TRG7BN Interrupt Skip Count: 0
         
     Instance "Three-Phase PWM Driver on r_mtu3_three_phase"
-      General: Name: g_mtu3_m1_3ph_drv_ctrl
+      General: Name: g_mtu3_m1_3ph_drv
       General: Channel: MTU6 and MTU7
       General: Mode: Complementary PWM mode 1 (transfer at crest)
       General: Compare match value: Count upper limit: 0x1388
@@ -1890,8 +1890,8 @@ FSP Configuration
         Extra Features: Interrupt Skipping: TRG4AN/TRG4BN Interrupt Skip Count: 0
         Extra Features: Interrupt Skipping: TRG7AN/TRG7BN Interrupt Skip Count: 0
         
-    Instance "g_mtu3_three_phase_poe_ctrl Port Output Enable for MTU3 on r_poe3"
-      General: Name: g_mtu3_three_phase_poe_ctrl
+    Instance "g_mtu3_three_phase_poe Port Output Enable for MTU3 on r_poe3"
+      General: Name: g_mtu3_three_phase_poe
       General: Output: Oscillation Stop High-Impedance Enable: Disabled
       General: Output: DSMIF Error Interrupt: Error 0: DSMIF0 Error Interrupt Enable: Disabled
       General: Output: DSMIF Error Interrupt: Error 0: DSMIF1 Error Interrupt Enable: Disabled

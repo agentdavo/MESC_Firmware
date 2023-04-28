@@ -74,6 +74,7 @@ include_directories(
         rzt_cfg/fsp_cfg/bsp
         rzt_gen
         src/fsp
+        src/CMSIS_RTOS_V2
         src)
 
 #        Drivers/STM32F4xx_HAL_Driver/Inc

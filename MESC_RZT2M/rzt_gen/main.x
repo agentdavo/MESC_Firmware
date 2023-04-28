@@ -45,8 +45,7 @@ extern void blinky_thread_create(void);
                 void rtos_startup_common_init(void)
                 {
                     /* First thread will take care of common initialization. */
-                    BaseType_t err;
-                    err = xSemaphoreTake(g_fsp_common_initialized_semaphore, portMAX_DELAY);
+                    BaseType_t err = xSemaphoreTake(g_fsp_common_initialized_semaphore, portMAX_DELAY);
                     if (pdPASS != err)
                     {
                         /* Check err, problem occurred. */

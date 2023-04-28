@@ -489,7 +489,7 @@
       <property id="module.driver.ioport.edge_detect_single_output_port3" value="Rising edge"/>
     </module>
     <module id="module.driver.timer_on_gpt.2100970901">
-      <property id="module.driver.timer.name" value="g_gpt0_hyperLoop_ctrl"/>
+      <property id="module.driver.timer.name" value="g_gpt0_hyperLoop"/>
       <property id="module.driver.timer.channel" value="0"/>
       <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
       <property id="module.driver.timer.period" value="0x100000000"/>
@@ -538,7 +538,7 @@
       <property id="module.driver.timer.input_capture" value="module.driver.timer.input_capture.enabled"/>
     </module>
     <module id="module.driver.timer_on_gpt.1315453654">
-      <property id="module.driver.timer.name" value="g_gpt1_fastLoop_ctrl"/>
+      <property id="module.driver.timer.name" value="g_gpt1_fastLoop"/>
       <property id="module.driver.timer.channel" value="1"/>
       <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
       <property id="module.driver.timer.period" value="0x100000000"/>
@@ -587,7 +587,7 @@
       <property id="module.driver.timer.input_capture" value="module.driver.timer.input_capture.enabled"/>
     </module>
     <module id="module.driver.timer_on_gpt.343166678">
-      <property id="module.driver.timer.name" value="g_gpt2_slowLoop_ctrl"/>
+      <property id="module.driver.timer.name" value="g_gpt2_slowLoop"/>
       <property id="module.driver.timer.channel" value="2"/>
       <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
       <property id="module.driver.timer.period" value="0x100000000"/>
@@ -636,7 +636,7 @@
       <property id="module.driver.timer.input_capture" value="module.driver.timer.input_capture.enabled"/>
     </module>
     <module id="module.driver.three_phase_on_mtu3_three_phase.1450458672">
-      <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m0_3ph_drv_ctrl"/>
+      <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m0_3ph_drv"/>
       <property id="module.driver.mtu3_three_phase.channel" value="module.driver.mtu3_three_phase.channel.3"/>
       <property id="module.driver.mtu3_three_phase.mode" value="module.driver.mtu3_three_phase.mode.1"/>
       <property id="module.driver.mtu3_three_phase.compare.limit" value="0x1388"/>
@@ -742,7 +742,7 @@
       <property id="module.driver.timer.interrupt_skip_tgr7an_bn.count" value="module.driver.timer.interrupt_skip_tgr7an_bn.count.count_0"/>
     </module>
     <module id="module.driver.three_phase_on_mtu3_three_phase.444668874">
-      <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m1_3ph_drv_ctrl"/>
+      <property id="module.driver.mtu3_three_phase.name" value="g_mtu3_m1_3ph_drv"/>
       <property id="module.driver.mtu3_three_phase.channel" value="module.driver.mtu3_three_phase.channel.6"/>
       <property id="module.driver.mtu3_three_phase.mode" value="module.driver.mtu3_three_phase.mode.1"/>
       <property id="module.driver.mtu3_three_phase.compare.limit" value="0x1388"/>
@@ -848,7 +848,7 @@
       <property id="module.driver.timer.interrupt_skip_tgr7an_bn.count" value="module.driver.timer.interrupt_skip_tgr7an_bn.count.count_0"/>
     </module>
     <module id="module.driver.poe3_on_poe3.716693690">
-      <property id="module.driver.poe3.name" value="g_mtu3_three_phase_poe_ctrl"/>
+      <property id="module.driver.poe3.name" value="g_mtu3_three_phase_poe"/>
       <property id="module.driver.poe3.osc_stop" value="module.driver.poe3.osc_stop.disabled"/>
       <property id="module.driver.poe3.dsmif0_err0" value="module.driver.poe3.dsmif0_err0.disabled"/>
       <property id="module.driver.poe3.dsmif1_err0" value="module.driver.poe3.dsmif1_err0.disabled"/>
