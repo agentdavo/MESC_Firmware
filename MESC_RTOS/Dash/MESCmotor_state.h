@@ -22,10 +22,7 @@
  *      Author: David Molony
  */
 
-#ifndef MESC_MOTOR_STATE_H
-#define MESC_MOTOR_STATE_H
-
-#include "rzt_hal.h"
+#pragma once
 
 typedef enum {
   MOTOR_STATE_INITIALISING = 0,
@@ -153,4 +150,3 @@ void MESC_Init();
 
 void MESCmotor_state_set(motor_state_e mState);
 
-#endif

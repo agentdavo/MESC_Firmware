@@ -34,7 +34,7 @@
 
 #include <MESC_MOTOR_DEFAULTS.h>
 
-#include <HAL/MESC_HAL.h>
+#include <MESC_HAL_Config.h>
 
 #include <math.h>
 #include <stdint.h>

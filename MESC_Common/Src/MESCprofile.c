@@ -27,12 +27,12 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "MESCprofile.h"
+#include <MESCprofile.h>
 
-#include "MESCcli.h"
-#include "MESCfnv.h"
+#include <MESCcli.h>
+#include <MESCfnv.h>
 
-#include "bit_op.h"
+#include <bit_op.h>
 
 #include <inttypes.h>
 #include <stdbool.h>

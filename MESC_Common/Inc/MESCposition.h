@@ -7,6 +7,6 @@
 
 #pragma once
 
-#include "MESCfoc.h"
+#include <MESCfoc.h>
 
 void RunPosControl(MESC_motor* _motor);

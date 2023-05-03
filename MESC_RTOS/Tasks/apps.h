@@ -23,14 +23,7 @@
 
 #pragma once
 
-#include <MESC/calibrate.h>
-#include <MESC/hfi.h>
-
 #include "TTerm/Core/include/TTerm.h"
 
-#include "top.h"
-#include "app_template.h"
-#include "cana.h"
-
-uint8_t REGISTER_apps(TermCommandDescriptor * desc);
+uint8_t REGISTER_apps(TermCommandDescriptor* desc);
 

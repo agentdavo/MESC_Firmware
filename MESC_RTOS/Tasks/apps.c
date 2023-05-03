@@ -21,9 +21,17 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #include "apps.h"
-#include "main.h"
+//OI #include "main.h"
 
-uint8_t REGISTER_apps(TermCommandDescriptor * desc){
+#include <MESC/calibrate.h>
+#include <MESC/hfi.h>
+
+#include "top.h"
+#include "app_template.h"
+//OI #include "cana.h"
+
+uint8_t REGISTER_apps(TermCommandDescriptor* desc)
+{
     REGISTER_top(desc);
 #ifndef DASH
     REGISTER_calibrate(desc);

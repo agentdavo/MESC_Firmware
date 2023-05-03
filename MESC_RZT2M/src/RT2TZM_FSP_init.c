@@ -5,11 +5,11 @@ fsp_err_t rzt2m_fsp_init(void)
 {
   fsp_err_t status = FSP_SUCCESS;
 
-  status = usb_hal_init();
-  if (FSP_SUCCESS != status)
-    {
-      usb_hal_deinit();
-    }
+  //OI status = usb_hal_init();
+  //OI if (FSP_SUCCESS != status)
+  //OI   {
+  //OI     usb_hal_deinit();
+  //OI   }
 
   status = elc_hal_init();
   if (FSP_SUCCESS != status)

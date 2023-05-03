@@ -12,12 +12,6 @@ bool flash_Program(uint32_t addr, const char* src);
 
 void adc1_start();
 
-void mpu6050_Write(uint16_t devAddress, uint16_t memAddress, uint16_t memAddSize, uint8_t* data, uint16_t size, uint32_t timeout);
-//HAL_I2C_Mem_Write(MPU_instance->MPU6050_I2Ca
-
-void mpu6050_Read(uint16_t devAddress, uint16_t memAddress, uint16_t memAddSize, uint8_t* data, uint16_t size, uint32_t timeout);
-//HAL_I2C_Mem_Read(MPU_instance->MPU6050_I2C
-
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size);
 //{
 //  HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
@@ -27,6 +21,12 @@ uint8_t ssd1306_WriteCommand(uint8_t command);
 //{
 //  return HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &command, 1, 10);
 //}
+
+
+
+
+void UsbDeviceInit();
+//OI MX_USB_DEVICE_Init(); // TODO: Should be implemented for RZT
 
 void Delay(uint32_t ms);
 
@@ -71,7 +71,7 @@ DEMCR |= DEMCR_TRCENA;
 DWT_CTRL |= CYCCNTENA;
 #endif
 
-void SystemConfigureDeadTimes();
+//void SystemConfigureDeadTimes();
 ////Reconfigure dead times
 ////This is only useful up to 1500ns for 168MHz clock, 3us for an 84MHz clock
 //#ifdef CUSTOM_DEADTIME
@@ -96,7 +96,7 @@ void SystemConfigureDeadTimes();
 //#endif
 //#endif
 
-void SystemStartSlowdownTimer();
+//void SystemStartSlowdownTimer();
 ////Start the slowloop timer
 //HAL_TIM_Base_Start(_motor->stimer);
 //// Here we can auto set the prescaler to get the us input regardless of the main clock
@@ -106,21 +106,24 @@ void SystemStartSlowdownTimer();
 
 uint32_t SystemHCLKFreq();
 
-void tim1_enable();
-void tim1_disable();
-void tim1_duty_1(int duty);
-void tim1_duty_2(int duty);
-void tim1_duty_3(int duty);
-void tim1_duty_4(int duty);
-uint32_t tim1_get_prescaller();
-uint32_t tim1_get_autoreload();
-void tim1_set_autoreload(uint32_t);
-void tim1_enable_main_output();
+//void tim1_enable();
+//OI htim1.Instance->BDTR |= (0b01);
+
+//void tim1_duty_1(int duty);
+//void tim1_duty_2(int duty);
+//void tim1_duty_3(int duty);
+//void tim1_duty_4(int duty);
+//uint32_t tim1_get_prescaller();
+//uint32_t tim1_get_autoreload();
+//void tim1_set_autoreload(uint32_t);
+//void tim1_enable_main_output();
+// htim1.Instance->BDTR |= TIM_BDTR_MOE;
+
 void tim1_setup_deadtime();
 
 // Turn all phase U FETs off, Tristate the HBridge output - For BLDC mode
 // mainly, but also used for measuring, software fault detection and recovery
-void phU_Break();
+//void phU_Break();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR1;
 //  tmpccmrx &= ~TIM_CCMR1_OC1M;
@@ -132,7 +135,7 @@ void phU_Break();
 //}
 
 // Basically un-break phase U, opposite of above...
-void phU_Enable();
+//void phU_Enable();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR1;
 //  tmpccmrx &= ~TIM_CCMR1_OC1M;
@@ -143,7 +146,7 @@ void phU_Enable();
 //  htim1.Instance->CCER |= TIM_CCER_CC1NE;  // enable
 //}
 
-void phV_Break();
+//void phV_Break();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR1;
 //  tmpccmrx &= ~TIM_CCMR1_OC2M;
@@ -154,7 +157,7 @@ void phV_Break();
 //  htim1.Instance->CCER &= ~TIM_CCER_CC2NE;  // disable
 //}
 
-void phV_Enable();
+//void phV_Enable();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR1;
 //  tmpccmrx &= ~TIM_CCMR1_OC2M;
@@ -165,7 +168,7 @@ void phV_Enable();
 //  htim1.Instance->CCER |= TIM_CCER_CC2NE;  // enable
 //}
 
-void phW_Break();
+//void phW_Break();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR2;
 //  tmpccmrx &= ~TIM_CCMR2_OC3M;
@@ -176,7 +179,7 @@ void phW_Break();
 //  htim1.Instance->CCER &= ~TIM_CCER_CC3NE;  // disable
 //}
 
-void phW_Enable();
+//void phW_Enable();
 //{
 //  uint32_t tmpccmrx = htim1.Instance->CCMR2;
 //  tmpccmrx &= ~TIM_CCMR2_OC3M;
@@ -187,20 +190,20 @@ void phW_Enable();
 //  htim1.Instance->CCER |= TIM_CCER_CC3NE;  // enable
 //}
 
-void invEnableM1();
+//void invEnableM1();
 //#ifdef INV_ENABLE_M1
 //INV_ENABLE_M1->BSRR = INV_ENABLE_M1_IO;  //Write the inverter enable pin high
 //#endif
-void invEnableM2();
+//void invEnableM2();
 //#ifdef INV_ENABLE_M2
 //INV_ENABLE_M2->BSRR = INV_ENABLE_M2_IO;  //Write the inverter enable pin high
 //#endif
 
-void invDisableM1();
+//void invDisableM1();
 //#ifdef INV_ENABLE_M1
 //INV_ENABLE_M1->BSRR = INV_ENABLE_M1_IO << 16U;  //Write the inverter enable pin low
 //#endif
-void invDisableM2();
+//void invDisableM2();
 //#ifdef INV_ENABLE_M2
 //INV_ENABLE_M2->BSRR = INV_ENABLE_M2_IO << 16U;  //Write the inverter enable pin low
 //#endif
@@ -225,8 +228,11 @@ void uart_transmit(const char*, uint32_t);
 //}
 //#endif
 
-void fastled(bool enable);
-void slowled(bool enable);
+//void fastled(bool enable);
+//void slowled(bool enable);
+//void ToggleLed();
+//OI HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin); // TODO: Should be implemented for RZT
+
 bool tim1_is_downcounting();
 
 bool isKillSwitch();
@@ -365,13 +371,13 @@ void setAWDVals();
  *
  * @param _motor
  */
-void getRawADC(MESC_motor* _motor);
+//void getRawADC(MESC_motor* _motor);
 
 /**
  *
  * @param _motor
  */
-void getRawADCVph(MESC_motor* _motor);
+//void getRawADCVph(MESC_motor* _motor);
 
 /**
  *

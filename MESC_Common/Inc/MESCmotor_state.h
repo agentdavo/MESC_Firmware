@@ -163,5 +163,5 @@ typedef enum
 #define KILLSWITCH_KEY 2
 #define SAFESTART_KEY 4
 
-void MESC_Init();
-void MESCmotor_state_set(motor_state_e mState);
+//OI void MESC_Init();
+//OI void MESCmotor_state_set(motor_state_e mState);

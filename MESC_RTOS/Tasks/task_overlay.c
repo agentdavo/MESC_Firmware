@@ -35,10 +35,10 @@
 //OI #include "cmsis_os.h"
 
 /* RTOS includes. */
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semphr.h"
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
+#include <semphr.h>
 
 #include <stdlib.h>
 #include <string.h>

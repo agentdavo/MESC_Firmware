@@ -109,31 +109,7 @@ void SystemMCInit()
 //  DWT_CTRL |= CYCCNTENA;
 }
 
-void SystemConfigureDeadTimes()
-{
-//Reconfigure dead times
-//This is only useful up to 1500ns for 168MHz clock, 3us for an 84MHz clock
-#ifdef CUSTOM_DEADTIME
-  uint32_t tempDT;
-  uint32_t tmpbdtr = 0U;
-  tmpbdtr = htim1.Instance->BDTR;
-  tempDT = (uint32_t)(((float)CUSTOM_DEADTIME * (float)HAL_RCC_GetHCLKFreq())/(float)1000000000.0f);
-  if(tempDT < 128)
-  {
-    MODIFY_REG(tmpbdtr, TIM_BDTR_DTG, tempDT);
-  }
-  else
-  {
-    uint32_t deadtime = CUSTOM_DEADTIME;
-    deadtime = deadtime-(uint32_t)(127.0f*1000000000.0f/(float)HAL_RCC_GetHCLKFreq());
-    tempDT = 0b10000000 + (uint32_t)(((float)deadtime * (float)HAL_RCC_GetHCLKFreq())/(float)2000000000.0f);
-    MODIFY_REG(tmpbdtr, TIM_BDTR_DTG, tempDT);
-  }
-  htim1.Instance->BDTR = tmpbdtr;
-#endif
-}
-
-void SystemStartSlowdownTimer()
+void SlowTimerStart()
 {
   //Start the slowloop timer
   HAL_TIM_Base_Start(&htim2);
@@ -151,11 +127,6 @@ uint32_t SystemHCLKFreq()
 void tim1_enable()
 {
   htim1.Instance->BDTR |= (0b01);
-}
-
-void tim1_disable()
-{
-
 }
 
 void tim1_duty_1(int duty)
@@ -530,8 +501,33 @@ void mesc_init_2(MESC_motor* _motor)
   // Do nothing
 }
 
+void SystemConfigureDeadTimes()
+{
+//Reconfigure dead times
+//This is only useful up to 1500ns for 168MHz clock, 3us for an 84MHz clock
+#ifdef CUSTOM_DEADTIME
+  uint32_t tempDT;
+  uint32_t tmpbdtr = 0U;
+  tmpbdtr = htim1.Instance->BDTR;
+  tempDT = (uint32_t)(((float)CUSTOM_DEADTIME * (float)HAL_RCC_GetHCLKFreq())/(float)1000000000.0f);
+  if(tempDT < 128)
+    {
+      MODIFY_REG(tmpbdtr, TIM_BDTR_DTG, tempDT);
+    }
+  else
+    {
+      uint32_t deadtime = CUSTOM_DEADTIME;
+      deadtime = deadtime-(uint32_t)(127.0f*1000000000.0f/(float)HAL_RCC_GetHCLKFreq());
+      tempDT = 0b10000000 + (uint32_t)(((float)deadtime * (float)HAL_RCC_GetHCLKFreq())/(float)2000000000.0f);
+      MODIFY_REG(tmpbdtr, TIM_BDTR_DTG, tempDT);
+    }
+  htim1.Instance->BDTR = tmpbdtr;
+#endif
+}
+
 void mesc_init_3(MESC_motor* _motor)
 {
+  SystemConfigureDeadTimes();
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&ADC1_buffer, 5);
   HAL_ADC_Start_DMA(&hadc2, (uint32_t *)&ADC2_buffer, 4);
 

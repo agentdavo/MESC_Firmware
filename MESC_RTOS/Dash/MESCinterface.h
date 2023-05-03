@@ -30,15 +30,12 @@
  ******************************************************************************/
 
 
-#ifndef INC_MESC_INTERFACE_H_
-#define INC_MESC_INTERFACE_H_
+#pragma once
 
 #include "Tasks/task_cli.h"
 #include "Tasks/task_can.h"
 
-
 #define CAN_NAME "DASHF407"
-
 
 typedef struct{
 	uint8_t id_speed;
@@ -68,10 +65,5 @@ typedef struct{
 	uint32_t cycles_hyperloop;
 } esc_data;
 
+void MESCinterface_init(TERMINAL_HANDLE* handle);
 
-
-
-void MESCinterface_init(TERMINAL_HANDLE * handle);
-
-
-#endif /* INC_MESC_INTERFACE_H_ */

@@ -41,7 +41,7 @@
 
 //OI #include "Common/RTOS_flash.h"
 #include "HAL/MESC_HAL.h"
-#include "main.h"
+//OI #include "main.h"
 #include "task_cli.h"
 //OI #include "cmsis_os.h"
 #include "TTerm/Core/include/TTerm.h"

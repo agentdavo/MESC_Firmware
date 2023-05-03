@@ -97,17 +97,17 @@ file(GLOB_RECURSE PLATFORM_SOURCES *.c *.cpp)
 add_executable(${PROJECT_NAME}.elf
         ${PLATFORM_SOURCES}
         ../MESC_Common/Src/fonts.c
-        ../MESC_Common/Src/MESC_BLDC.c
-        ../MESC_Common/Src/MESC_Comms.c
+#        ../MESC_Common/Src/MESC_BLDC.c
+#        ../MESC_Common/Src/MESC_Comms.c
         ../MESC_Common/Src/MESCbat.c
-        ../MESC_Common/Src/MESCBLDC.c
+#        ../MESC_Common/Src/MESCBLDC.c
         ../MESC_Common/Src/MESCcli.c
         ../MESC_Common/Src/MESCerror.c
         ../MESC_Common/Src/MESCflash.c
         ../MESC_Common/Src/MESCfnv.c
         ../MESC_Common/Src/MESCfoc.c
         ../MESC_Common/Src/MESCmotor.c
-        ../MESC_Common/Src/MESCmotor_state.c
+#        ../MESC_Common/Src/MESCmotor_state.c
         ../MESC_Common/Src/MESCposition.c
         ../MESC_Common/Src/MESCprofile.c
         ../MESC_Common/Src/MESCsin_lut.c
@@ -115,8 +115,8 @@ add_executable(${PROJECT_NAME}.elf
         ../MESC_Common/Src/MESCtemp.c
         ../MESC_Common/Src/MESCuart.c
         ../MESC_Common/Src/MESCui.c
-        ../MESC_Common/Src/MPU6050.c
-        ../MESC_Common/Src/Simple_coms.c
+#        ../MESC_Common/Src/MPU6050.c
+#        ../MESC_Common/Src/Simple_coms.c
         ../MESC_Common/Src/ssd1306.c
 
         ../MESC_RTOS/Tasks/app_template.c

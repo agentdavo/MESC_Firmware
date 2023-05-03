@@ -25,5 +25,5 @@
 
 #include "TTerm/Core/include/TTerm.h"
 
-uint8_t REGISTER_app_template(TermCommandDescriptor * desc);
+uint8_t REGISTER_app_template(TermCommandDescriptor* desc);
 

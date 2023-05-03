@@ -29,15 +29,14 @@
 
 #pragma once
 
+#include <bit_op.h>
+#include <string_op.h>
+#include <fingerprint.h>
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-
-#include "bit_op.h"
-#include "string_op.h"
-
-#include "fingerprint.h"
 
 #define PROFILE_SIGNATURE MAKE_UINT32_STRING('M', 'E', 'S', 'C')
 

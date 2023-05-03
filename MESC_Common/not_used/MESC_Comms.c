@@ -26,7 +26,6 @@
 
 #include <MESC_Comms.h>
 
-#include <MESCBLDC.h>
 #include <MESCfoc.h>
 #include <MESCmotor_state.h>
 

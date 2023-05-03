@@ -33,5 +33,5 @@
 
 #include "TTerm/Core/include/TTerm.h"
 
-uint8_t REGISTER_can(TermCommandDescriptor * desc);
+uint8_t REGISTER_can(TermCommandDescriptor* desc);
 

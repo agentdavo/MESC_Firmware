@@ -8,23 +8,21 @@
 
 #include <Tasks/init.h>
 #include <bsp_api.h>
-#include <cmsis_os.h>
 #include <hal_data.h>
 
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
+TaskHandle_t defaultTaskHandle = NULL;
 
-void StartDefaultTask(void *argument)
+extern MESC_hal* getHalForMotor0();
+extern MESC_hal* getHalForMotor1();
+
+void StartDefaultTask(void* argument)
 {
-  //MX_USB_DEVICE_Init(); // TODO: Should be implemented for RZT
+  (void)argument;
+  UsbDeviceInit();
   while(true)
   {
-    //HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin); // TODO: Should be implemented for RZT
-    osDelay(200);
+    //ToggleLed();
+    vTaskDelay(200);
   }
 }
 
@@ -37,30 +35,31 @@ int main(void)
 #endif
 
 #ifdef USE_ENCODER
-  HAL_SPI_Init(&hspi3);
+  EncoderInit(); //OI HAL_SPI_Init(&hspi3);
 #endif
 
   bat_init(PROFILE_DEFAULT);
   speed_init(PROFILE_DEFAULT);
+  temp_init(PROFILE_DEFAULT);
+  motor_init(PROFILE_DEFAULT);
   // Initialise user Interface
-  //ui_init( PROFILE_DEFAULT );
+  //ui_init(PROFILE_DEFAULT);
 
   Delay(1);
 
-  mtr[0].mtimer = &htim1;
-  mtr[0].stimer = &htim2;
-  temp_init(PROFILE_DEFAULT);
-  motor_init(PROFILE_DEFAULT);
-  MESCInit(&mtr[0]);
+  MESCInit(&mtr[0], getHalForMotor0());
+  MESCInit(&mtr[1], getHalForMotor1());
 
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  uint8_t returnCode = xTaskCreate(StartDefaultTask, "defaultTask", 256 * 4, NULL, tskIDLE_PRIORITY, defaultTaskHandle);
 
   init_system();
 
-  osKernelStart();
+  vTaskStartScheduler();
 
+  // TODO: Tjis task can be suppressed by config freertos special idle hook
   while (1)
   {
+    vTaskDelay(configTICK_RATE_HZ);
   }
   return 0;
 }

@@ -37,7 +37,6 @@
 
 #pragma once
 
-#include <MESC_BLDC.h>
 #include <MESCmotor.h>
 #include <MESCmotor_state.h>
 
@@ -472,10 +471,52 @@ typedef struct
 ///////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////Main typedef for starting a motor instance////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
+struct MESC_motor_;
+struct MESC_hal_
+{
+  void (*MotorInitStage0)(struct MESC_motor_* _motor);
+  void (*MotorInitStage1)(struct MESC_motor_* _motor);
+  void (*MotorInitStage2)(struct MESC_motor_* _motor);
+  void (*MotorInitStage3)(struct MESC_motor_* _motor);
+  void (*FastLed)(bool enabled);
+  void (*SlowLed)(bool enabled);
+  void (*SlowTimerStart)(void);
+  void (*EncoderInit)(void);
+  uint16_t (*EncoderAngle)(void);
+  //void (*MotorTimerInit)(void);
+  void (*MotorTimerEnable)(void);
+  void (*MotorTimerDisable)(void);
+  void (*MotorTimerDuty1)(int32_t duty);
+  void (*MotorTimerDuty2)(int32_t duty);
+  void (*MotorTimerDuty3)(int32_t duty);
+  void (*MotorTimerDuty4)(int32_t duty);
+  void (*MotorTimerDutyAdd1)(int32_t duty);
+  void (*MotorTimerDutyAdd2)(int32_t duty);
+  void (*MotorTimerDutyAdd3)(int32_t duty);
+  void (*MotorTimerDutyAdd4)(int32_t duty);
+  uint32_t (*MotorTimerGetPrescaller)(void);
+  uint32_t (*MotorTimerGetAutoreload)(void);
+  void (*MotorTimerSetAutoreload)(uint32_t);
+  void (*MotorTimerEnableMainOutput)(void);
+  void (*MotorTimerSetupDeadtime)(void);
+  void (*phU_Break)(void);
+  void (*phV_Break)(void);
+  void (*phW_Break)(void);
+  void (*phU_Enable)(void);
+  void (*phV_Enable)(void);
+  void (*phW_Enable)(void);
+  //void (*invDisable)(void);
+  void (*invEnable)(bool isEnabled);
+  void (*getRawADC)(struct MESC_motor_* _motor);
+  void (*getRawADCVph)(struct MESC_motor_* _motor);
+};
+typedef struct MESC_hal_ MESC_hal;
+
 struct MESC_motor_
 {
-  void* mtimer;  // 3 phase PWM timer
-  void* stimer;  // Timer that services the slowloop
+  MESC_hal* hal;
+  //void* mtimer;  // 3 phase PWM timer
+  //void* stimer;  // Timer that services the slowloop
 #if 0 //OI       //TODO: Get rid of this dependency on stm specific
 	TIM_HandleTypeDef *mtimer; //3 phase PWM timer
 	TIM_HandleTypeDef *stimer; //Timer that services the slowloop
@@ -625,7 +666,7 @@ extern "C"
  *
  * @param _motor
  */
-  void MESCInit(MESC_motor* _motor);
+  void MESCInit(MESC_motor* _motor, MESC_hal* _hal);
 
   void InputInit();
 
@@ -674,9 +715,9 @@ extern "C"
   // SVPWM
   // write CCR registers
 
-  void generateBreak(uint32_t index);//OI MESC_motor_typedef* _motor);  // Software break that does not stop the PWM timer but
+  void generateBreak(MESC_motor* _motor);  // Software break that does not stop the PWM timer but
   // disables the outputs, sum of phU,V,W_Break();
-  void generateEnable();//OI MESC_motor_typedef* _motor);  // Opposite of generateBreak
+  void generateEnable(MESC_motor* _motor);  // Opposite of generateBreak
   void generateBreakAll();                          //Disables all drives
 
   void measureResistance(MESC_motor* _motor);
@@ -713,8 +754,6 @@ extern "C"
   void MESCTrack(MESC_motor* _motor);
 
   void deadshort(MESC_motor* _motor);
-
-  void tle5012(MESC_motor* _motor);
 
   void getDeadtime(MESC_motor* _motor);
 

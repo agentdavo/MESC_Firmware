@@ -197,11 +197,11 @@ HAL_Delay(1);
   //mtr[0].encspi = &hspi3;
   temp_init( PROFILE_DEFAULT );
   motor_init( PROFILE_DEFAULT );
-  MESCInit(&mtr[0]);
+  MESCInit(&mtr[0], getHalForMotor0());
 
   mtr[1].mtimer = &htim8;
   mtr[1].stimer = &htim2;
-  MESCInit(&mtr[1]);
+  MESCInit(&mtr[1], getHalForMotor1());
   __HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 
 

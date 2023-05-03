@@ -31,8 +31,6 @@
 #include <MESCfoc.h>
 #include <MESCmotor_state.h>
 
-#include <HAL/MESC_HAL.h>
-
 struct MESC_log_vars error_log;
 uint32_t MESC_errors;  //This is a bitwise uint32_t representation of the errors that have occurred.
 
@@ -69,7 +67,7 @@ void clearBRK(MESC_motor* _motor)
       //Generate a break, and set the mode to tracking to enable a chance of safe restart and recovery
       generateBreak(_motor);
       //Need to set the MOE bit high to re-enable the timer
-      tim1_enable();  //OI htim1.Instance->BDTR |= (0b01);
+      _motor->hal->MotorTimerEnable(); //tim1_enable();  //OI htim1.Instance->BDTR |= (0b01);
       _motor->MotorState = MOTOR_STATE_TRACKING;
     }
 }

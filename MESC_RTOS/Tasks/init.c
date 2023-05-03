@@ -31,8 +31,12 @@
 
 #include "init.h"
 #include "task_cli.h"
-#include "main.h"
-#include "stdarg.h"
+//OI #include "main.h"
+#include <stdarg.h>
+
+#ifdef MESC_UART_USB
+#include "usbd_cdc_if.h"
+#endif
 
 #ifdef DASH
 #include "MESChw_setup.h"

@@ -29,7 +29,7 @@
 
 #pragma once
 
-#include "string_op.h"
+#include <string_op.h>
 
 #define MESC_TIMESTAMP_YEAR MAKE_UINT32_STRING('2', '0', '2', '2')
 #define MESC_TIMESTAMP_MONTH MAKE_UINT16_STRING('0', '2')

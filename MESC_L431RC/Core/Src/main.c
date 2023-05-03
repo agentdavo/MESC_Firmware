@@ -127,7 +127,7 @@ int main(void)
   mtr[0].stimer = &htim2;
   temp_init(PROFILE_DEFAULT);
   motor_init(NULL);
-  MESCInit(&mtr[0]);
+  MESCInit(&mtr[0], getHalForMotor0());
 
   /* USER CODE END 2 */
 

@@ -176,11 +176,15 @@ uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args)
 		motor_curr->FOC.openloop_step = 0;
 
 		ttprintf("Measuring resistance \r\nWaiting for result");
-		int a=200;
-		float Itop, Ibot, Vtop, Vbot;
+		float Itop = 0;
+    float Ibot = 0;
+    float Vtop = 0;
+    float Vbot = 0;
 		input_vars.UART_req = 0.45f*motor_curr->m.Imax;
 
-		while(a){
+    int a=200;
+		while(a)
+    {
 			xSemaphoreGive(port->term_block);
 			vTaskDelay(5);
 			xQueueSemaphoreTake(port->term_block, portMAX_DELAY);
@@ -192,7 +196,8 @@ uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args)
 		}
 		a=200;
 		input_vars.UART_req = 0.55f*motor_curr->m.Imax;
-		while(a){
+		while(a)
+    {
 			xSemaphoreGive(port->term_block);
 			vTaskDelay(5);
 			xQueueSemaphoreTake(port->term_block, portMAX_DELAY);

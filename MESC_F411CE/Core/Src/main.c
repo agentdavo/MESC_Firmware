@@ -142,7 +142,7 @@ int main(void)
     mtr[0].stimer = &htim2;
 motor_init(NULL);
 	//Initialise MESC
-	MESCInit(&mtr[0]);
+	MESCInit(&mtr[0], getHalForMotor0());
 	//motor.Rphase = motor_profile->R;
 	//motor.Lphase = motor_profile->L_D;
 	//motor.Lqphase = motor_profile->L_Q;

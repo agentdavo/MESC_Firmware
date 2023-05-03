@@ -30,32 +30,36 @@
  ******************************************************************************/
 
 #include "cana.h"
-#include "string.h"
+
 #include "task_cli.h"
-#include "init.h"
+//OI #include "init.h"
+
+#include <string.h>
 
 #define APP_NAME "can"
 #define APP_DESCRIPTION "CAN test"
 #define APP_STACK 512
 #define RAW_INPUT 1
 
-static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args);
-static void TASK_main(void *pvParameters);
-static uint8_t INPUT_handler(TERMINAL_HANDLE * handle, uint16_t c);
+static uint8_t CMD_main(TERMINAL_HANDLE* handle, uint8_t argCount, char** args);
+static void TASK_main(void* pvParameters);
+static uint8_t INPUT_handler(TERMINAL_HANDLE* handle, uint16_t c);
 
 
-uint8_t REGISTER_can(TermCommandDescriptor * desc){
+uint8_t REGISTER_can(TermCommandDescriptor* desc)
+{
     TERM_addCommand(CMD_main, APP_NAME, APP_DESCRIPTION, 0, desc); 
     return pdTRUE;
 }
 
-static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
-    
+static uint8_t CMD_main(TERMINAL_HANDLE* handle, uint8_t argCount, char** args)
+{
     uint8_t currArg = 0;
     uint8_t returnCode = TERM_CMD_EXIT_SUCCESS;
     char ** cpy_args=NULL;
     argCount++;
-    if(argCount){
+    if(argCount)
+    {
         cpy_args = pvPortMalloc(sizeof(char*)*argCount);
         cpy_args[0] = pvPortMalloc(sizeof(APP_NAME));
         cpy_args[0]=memcpy(cpy_args[0], APP_NAME, sizeof(APP_NAME));
@@ -76,20 +80,16 @@ static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args
     return returnCode;
 }
 
-
-
 extern port_str main_can;
 
 const char reset[] = "\r\ncls\r\n";
 const char ctrl_text[] = "Press CTRL+C again to exit";
 
-static void TASK_main(void *pvParameters){
-
-
+static void TASK_main(void* pvParameters)
+{
     TERMINAL_HANDLE * handle = (TERMINAL_HANDLE*)pvParameters;
     port_str * port = handle->port;
 #ifdef HAL_CAN_MODULE_ENABLED
-
     xSemaphoreTake(main_can.term_block, portMAX_DELAY);
     uint8_t c=0;
     uint32_t id=0;
@@ -164,7 +164,8 @@ static void TASK_main(void *pvParameters){
     TERM_killProgramm(handle);
 }
 
-static uint8_t INPUT_handler(TERMINAL_HANDLE * handle, uint16_t c){
+static uint8_t INPUT_handler(TERMINAL_HANDLE* handle, uint16_t c)
+{
     if(handle->currProgram->inputStream==NULL) return TERM_CMD_EXIT_SUCCESS;
 #if RAW_INPUT==1
     uint8_t s_c = c;

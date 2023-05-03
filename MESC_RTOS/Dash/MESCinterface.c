@@ -30,19 +30,16 @@
  ******************************************************************************/
 
 #include "MESCinterface.h"
-#include "main.h"
-#include "Tasks/init.h"
+//OI #include "main.h"
+
 #include "TTerm/Core/include/TTerm.h"
+#include "TTerm/Core/include/TTerm_cwd.h"
+
+#include "Tasks/init.h"
 #include "Tasks/task_cli.h"
 #include "Tasks/task_can.h"
 #include "Tasks/task_overlay.h"
 #include "Dash/MESCmotor_state.h"
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
-#include "TTerm/Core/include/TTerm_cwd.h"
-
 
 #include "fatfs.h"
 #include "tcp_serv.h"
@@ -50,11 +47,12 @@
 #include "ssd1306.h"
 #include "ssd1306_tests.h"
 
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include <stdio.h>
 
-
 dash_data dash;
-
 
 #define N_COLS 8
 #define N_ROWS 1000
@@ -69,8 +67,10 @@ __attribute__((section (".ccmram")))
 #endif
 uint32_t n_rows;
 
-void * TASK_CAN_allocate_node(TASK_CAN_handle * handle, TASK_CAN_node * node){
-	if(memcmp(node->short_name, "ESC", 3)==0){
+void* TASK_CAN_allocate_node(TASK_CAN_handle* handle, TASK_CAN_node* node)
+{
+	if(memcmp(node->short_name, "ESC", 3)==0)
+  {
 		node->type = NODE_TYPE_ESC;
 		node->data = pvPortMalloc(sizeof(esc_data));
 		((esc_data*)node->data)->node = node;
@@ -78,7 +78,8 @@ void * TASK_CAN_allocate_node(TASK_CAN_handle * handle, TASK_CAN_node * node){
 	return NULL;
 }
 
-void * TASK_CAN_free_node(TASK_CAN_handle * handle, TASK_CAN_node * node){
+void* TASK_CAN_free_node(TASK_CAN_handle* handle, TASK_CAN_node* node)
+{
 	vPortFree(node->data);
 	return NULL;
 }
@@ -88,69 +89,74 @@ char sl_file_prefix[64] = "sl";
 bool enable_display = false;
 volatile bool enable_slow_log = false;
 
-void populate_vars(){
+void populate_vars()
+{
 	can1.node_id = 255;
 
-	//		   | Variable							| MIN		| MAX		| NAME			| DESCRIPTION							| RW			| CALLBACK	| VAR LIST HANDLE
-	TERM_addVar(can1.node_id						, 1			, 254		, "node_id"		, "Node ID"								, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(dash.id_speed						, 1			, 254		, "id_speed"	, "Obtain speed from ID"				, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(dash.id_voltage						, 1			, 254		, "id_voltage"	, "Obtain bus voltage from ID"			, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(fl_file_prefix						, 0			, 0			, "fl_file"		, "Fastloop file template"				, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(sl_file_prefix						, 0			, 0			, "sl_file"		, "Slowloop file template"				, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(enable_display						, 0			, 1			, "ena_disp"	, "Enable OLED"							, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-	TERM_addVar(enable_slow_log						, 0			, 1			, "ena_log"		, "Enable slow log"						, VAR_ACCESS_RW	, NULL		, &TERM_varList);
-
+	//        | Variable		| MIN | MAX	| NAME		    | DESCRIPTION                | RW           | CALLBACK	| VAR LIST HANDLE
+	TERM_addVar(can1.node_id,    1, 254, "node_id",    "Node ID",                    VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(dash.id_speed,   1, 254, "id_speed",   "Obtain speed from ID",       VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(dash.id_voltage, 1, 254, "id_voltage", "Obtain bus voltage from ID", VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(fl_file_prefix,  0, 0,   "fl_file",    "Fastloop file template",     VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(sl_file_prefix,  0, 0,   "sl_file",    "Slowloop file template",     VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(enable_display,  0, 1,   "ena_disp",   "Enable OLED",                VAR_ACCESS_RW, NULL,      &TERM_varList);
+	TERM_addVar(enable_slow_log, 0, 1,   "ena_log",    "Enable slow log",            VAR_ACCESS_RW, NULL,      &TERM_varList);
 }
 
 typedef struct{
 	uint16_t rows;
 	uint16_t start;
-	esc_data * esc;
+	esc_data* esc;
 } save_arg;
 
 volatile TaskHandle_t save_fastloop_handle;
 
-void TASK_CAN_save_fastloop_data(void * argument){
+void TASK_CAN_save_fastloop_data(void* argument)
+{
+	save_arg* arg = argument;
 
-	save_arg * arg = argument;
-
-	TASK_CAN_node * node = arg->esc->node;
+	TASK_CAN_node* node = arg->esc->node;
 
     FIL out;
     char timecode[90];
     snprintf(timecode, sizeof(timecode), "%s_%u_%u.csv", fl_file_prefix, node->id, (uint32_t)xTaskGetTickCount());
-
 
     FRESULT res = f_open(&out,timecode,FA_WRITE | FA_CREATE_ALWAYS);
     if(res != FR_OK){
     	goto CLEANUP;
     }
 
-
     char buffer[200];
     uint32_t len;
     unsigned int written=0;
     len = sprintf(buffer, "timestamp,Vbus,Iu,Iv,Iw,Vd,Vq,angle\r\n");
     f_write(&out, buffer, len, &written);
-    for(uint8_t i=0;i<arg->rows;i++){
-
-    	len = snprintf(buffer, sizeof(buffer), "%f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.0f\r\n", sample_data[0][i], sample_data[1][i], sample_data[2][i], sample_data[3][i],
-																							sample_data[4][i], sample_data[5][i], sample_data[6][i], sample_data[7][i]);
-		f_write(&out, buffer, len, &written);
-
+    for(uint8_t i=0;i<arg->rows;i++)
+    {
+      len = snprintf(buffer,
+                     sizeof(buffer),
+                     "%f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.0f\r\n",
+                     sample_data[0][i],
+                     sample_data[1][i],
+                     sample_data[2][i],
+                     sample_data[3][i],
+                     sample_data[4][i],
+                     sample_data[5][i],
+                     sample_data[6][i],
+                     sample_data[7][i]);
+      f_write(&out, buffer, len, &written);
     }
 
     f_close(&out);
 
-
-    CLEANUP:
-	vPortFree(arg);
-	save_fastloop_handle = NULL;
+CLEANUP:
+    vPortFree(arg);
+    save_fastloop_handle = NULL;
     vTaskDelete(NULL);
     vTaskDelay(portMAX_DELAY);
 }
 
-extern volatile TERMINAL_HANDLE * debug;
+extern volatile TERMINAL_HANDLE* debug;
 uint32_t count=0;
 
 void TASK_CAN_packet_esc(esc_data * esc, uint32_t id, uint8_t* data, uint32_t len){
@@ -217,15 +223,9 @@ void TASK_CAN_packet_esc(esc_data * esc, uint32_t id, uint8_t* data, uint32_t le
 					n_rows = row + 1;
 				}
 			}
-
-
-
 		}
 	}
-
 }
-
-
 
 void TASK_CAN_packet_cb(TASK_CAN_handle * handle, uint32_t id, uint8_t sender, uint8_t receiver, uint8_t* data, uint32_t len){
 	TASK_CAN_node * node = TASK_CAN_get_node_from_id(sender);
@@ -237,7 +237,6 @@ void TASK_CAN_packet_cb(TASK_CAN_handle * handle, uint32_t id, uint8_t sender, u
 	}
 
 	switch(id){
-
 		default:
 			break;
 	}

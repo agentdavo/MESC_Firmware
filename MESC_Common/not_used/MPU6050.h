@@ -25,6 +25,12 @@ extern "C"
 {
 #endif
 
+  void mpu6050_Write(uint16_t devAddress, uint16_t memAddress, uint16_t memAddSize, uint8_t* data, uint16_t size, uint32_t timeout);
+  //HAL_I2C_Mem_Write(MPU_instance->MPU6050_I2Ca
+
+  void mpu6050_Read(uint16_t devAddress, uint16_t memAddress, uint16_t memAddSize, uint8_t* data, uint16_t size, uint32_t timeout);
+  //HAL_I2C_Mem_Read(MPU_instance->MPU6050_I2C
+
   int MPU6050Init(uint16_t address, MPU6050_data_t* MPU_instance);
   int MPU6050GetData(MPU6050_data_t* MPU_instance);
 

@@ -195,7 +195,7 @@ HAL_Delay(1);
   //mtr[0].encspi = &hspi3;
   temp_init( PROFILE_DEFAULT );
   motor_init( PROFILE_DEFAULT );
-  MESCInit(&mtr[0]);
+  MESCInit(&mtr[0], getHalForMotor0());
 
   /* USER CODE END 2 */
 

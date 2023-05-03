@@ -31,15 +31,16 @@
 
 #pragma once
 
-#include "FreeRTOS.h"
-#include "stream_buffer.h"
-#include "main.h"
-#include "task.h"
-#include "stdbool.h"
-#include "semphr.h"
+#include <FreeRTOS.h>
+#include <stream_buffer.h>
+#include <semphr.h>
+#include <task.h>
+//OI #include "main.h"
 
 #include "task_cli.h"
 #include "can_ids.h"
+
+#include <stdbool.h>
 
 #ifdef HAL_CAN_MODULE_ENABLED
 typedef struct {

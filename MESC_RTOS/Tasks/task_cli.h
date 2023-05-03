@@ -31,15 +31,15 @@
 
 #pragma once
 
-#include "FreeRTOS.h"
-#include "stream_buffer.h"
-#include "main.h"
-#include "task.h"
-#include "stdbool.h"
-#include "semphr.h"
+#include <FreeRTOS.h>
+#include <stream_buffer.h>
+#include <task.h>
+#include <semphr.h>
+//OI #include "main.h"
 
 #include "task_overlay.h"
 
+#include <stdbool.h>
 
 void cli_start_console();
 
@@ -47,8 +47,6 @@ void cli_start_console();
 #define HW_TYPE_UART 	1
 #define HW_TYPE_USB 	2
 #define HW_TYPE_CAN 	3
-
-
 
 typedef struct{
 	void * hw;

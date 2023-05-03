@@ -166,7 +166,7 @@ void adc_window_compare_isr (void)
     FSP_CONTEXT_SAVE;
 
     IRQn_Type irq = R_FSP_CurrentIrqGet();
-
+    (void)irq;
     //adc_instance_ctrl_t * p_instance_ctrl = (adc_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
     //adc_extended_cfg_t  * p_extend        = (adc_extended_cfg_t *) p_instance_ctrl->p_cfg->p_extend;
     uint8_t adc_unit=(uint8_t) 0x00;

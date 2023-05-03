@@ -34,11 +34,11 @@
 #define configUSE_TICK_HOOK                      0
 #define configCPU_CLOCK_HZ                       ( SystemCoreClock )
 #define configTICK_RATE_HZ                       (1000)
-#define configMAX_PRIORITIES                     ( 5 )
+#define configMAX_PRIORITIES                     ( 56 )
 #define configMINIMAL_STACK_SIZE                 (256)
 #define configTOTAL_HEAP_SIZE                    (0x30000)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
-#define configUSE_TRACE_FACILITY                 0
+#define configUSE_TRACE_FACILITY                 1
 #define configUSE_16_BIT_TICKS                   0
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
@@ -76,11 +76,11 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil              1
 #define INCLUDE_vTaskDelay                   1
 #define INCLUDE_xTaskGetSchedulerState       1
-#define INCLUDE_xTimerPendFunctionCall       0
-//#define INCLUDE_xQueueGetMutexHolder         1
-#define INCLUDE_uxTaskGetStackHighWaterMark  0
+#define INCLUDE_xTimerPendFunctionCall       1
+#define INCLUDE_xQueueGetMutexHolder         1
+#define INCLUDE_uxTaskGetStackHighWaterMark  1
 #define INCLUDE_xTaskGetCurrentTaskHandle    1
-#define INCLUDE_eTaskGetState                0
+#define INCLUDE_eTaskGetState                1
 #define INCLUDE_xTaskGetIdleTaskHandle       0
 #define INCLUDE_xEventGroupSetBitFromISR     1
 #define INCLUDE_xTaskAbortDelay              1
@@ -113,3 +113,5 @@ to exclude the API function. */
 #define configLOGGING_INCLUDE_TIME_AND_TASK_NAME   (0)
 #define configLOGGING_MAX_MESSAGE_LENGTH           (192)
 #define configUNIQUE_INTERRUPT_PRIORITIES          (32)
+
+#define USE_CUSTOM_SYSTICK_HANDLER_IMPLEMENTATION 0

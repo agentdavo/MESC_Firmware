@@ -22,7 +22,10 @@
 */
 
 #include "top.h"
-#include "string.h"
+
+#include <HAL/MESC_HAL.h>
+
+#include <string.h>
 
 #ifndef DASH
 #include "MESCfoc.h"
@@ -32,29 +35,32 @@
 #define APP_DESCRIPTION "shows performance stats"
 #define APP_STACK 400
 
-static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args);
-static void TASK_main(void *pvParameters);
-static uint8_t INPUT_handler(TERMINAL_HANDLE * handle, uint16_t c);
+static uint8_t CMD_main(TERMINAL_HANDLE* handle, uint8_t argCount, char** args);
+static void TASK_main(void* pvParameters);
+static uint8_t INPUT_handler(TERMINAL_HANDLE* handle, uint16_t c);
 
-static uint32_t SYS_getCPULoadFine(TaskStatus_t * taskStats, uint32_t taskCount, uint32_t sysTime);
-static const char * SYS_getTaskStateString(eTaskState state);
+static uint32_t SYS_getCPULoadFine(TaskStatus_t* taskStats, uint32_t taskCount, uint32_t sysTime);
+static const char* SYS_getTaskStateString(eTaskState state);
 
-uint8_t REGISTER_top(TermCommandDescriptor * desc){
+uint8_t REGISTER_top(TermCommandDescriptor* desc)
+{
     TERM_addCommand(CMD_main, APP_NAME, APP_DESCRIPTION, 0, desc); 
     return pdTRUE;
 }
 
-static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
-    
+static uint8_t CMD_main(TERMINAL_HANDLE* handle, uint8_t argCount, char** args)
+{
     uint8_t currArg = 0;
     uint8_t returnCode = TERM_CMD_EXIT_SUCCESS;
     char ** cpy_args=NULL;
     argCount++;
-    if(argCount){
+    if(argCount)
+    {
         cpy_args = pvPortMalloc(sizeof(char*)*argCount);
         cpy_args[0] = pvPortMalloc(sizeof(APP_NAME));
         cpy_args[0]=memcpy(cpy_args[0], APP_NAME, sizeof(APP_NAME));
-        for(;currArg<argCount-1; currArg++){
+        for(;currArg<argCount-1; currArg++)
+        {
             uint16_t len = strlen(args[currArg])+1;
             cpy_args[currArg+1] = pvPortMalloc(len);
             memcpy(cpy_args[currArg+1], args[currArg], len);
@@ -64,85 +70,142 @@ static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args
     prog->inputHandler = INPUT_handler;
     prog->args = cpy_args;
     prog->argCount = argCount;
-    TERM_sendVT100Code(handle, _VT100_RESET, 0); TERM_sendVT100Code(handle, _VT100_CURSOR_POS1, 0);
+    TERM_sendVT100Code(handle, _VT100_RESET, 0);
+    TERM_sendVT100Code(handle, _VT100_CURSOR_POS1, 0);
     returnCode = xTaskCreate(TASK_main, APP_NAME, APP_STACK, handle, tskIDLE_PRIORITY + 1, &prog->task) ? TERM_CMD_EXIT_PROC_STARTED : TERM_CMD_EXIT_ERROR;
-    if(returnCode == TERM_CMD_EXIT_PROC_STARTED) TERM_attachProgramm(handle, prog);
+    if(returnCode == TERM_CMD_EXIT_PROC_STARTED)
+    {
+        TERM_attachProgramm(handle, prog);
+    }
     return returnCode;
 }
 
-static void TASK_main(void *pvParameters){
-    TERMINAL_HANDLE * handle = (TERMINAL_HANDLE*)pvParameters;
+static void TASK_main(void* pvParameters)
+{
+    TERMINAL_HANDLE* handle = (TERMINAL_HANDLE*)pvParameters;
 
     char c=0;
-    do{
-        
-        TaskStatus_t * taskStats;
+    do
+    {
+        TaskStatus_t* taskStats;
         uint32_t taskCount = uxTaskGetNumberOfTasks();
         uint32_t sysTime;
                 
         taskStats = pvPortMalloc( taskCount * sizeof( TaskStatus_t ) );
-        if(taskStats){
+        if(taskStats)
+        {
             taskCount = uxTaskGetSystemState(taskStats, taskCount, &sysTime);
             
             TERM_sendVT100Code(handle, _VT100_CURSOR_POS1, 0);
         
             uint32_t cpuLoad = SYS_getCPULoadFine(taskStats, taskCount, sysTime);
-            ttprintf("%sbottom - %d\r\n%sTasks: \t%d\r\n%sCPU: \t%d,%d%%\r\n", TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), xTaskGetTickCount(), TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), taskCount, TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), cpuLoad / 10, cpuLoad % 10);
+            ttprintf("%sbottom - %d\r\n%sTasks: \t%d\r\n%sCPU: \t%d,%d%%\r\n",
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     xTaskGetTickCount(),
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     taskCount,
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     cpuLoad / 10,
+                     cpuLoad % 10);
             
 #ifndef DASH
             uint32_t sum_fastloop=0;
             uint32_t sum_hyperloop=0;
             uint32_t max_pwm=0;
 
-            for(int i=0;i<NUM_MOTORS;i++){
+            for(int i=0;i<NUM_MOTORS;i++)
+            {
             	sum_fastloop += mtr[i].FOC.cycles_fastloop;
             	sum_hyperloop += mtr[i].FOC.cycles_hyperloop;
-            	if(max_pwm < mtr[i].FOC.pwm_frequency){
+            	if(max_pwm < mtr[i].FOC.pwm_frequency)
+              {
             		max_pwm = mtr[i].FOC.pwm_frequency;
             	}
             }
 
             uint32_t max_cycles= sum_fastloop > sum_hyperloop ? sum_fastloop : sum_hyperloop;
-            uint32_t cycles_available = HAL_RCC_GetHCLKFreq() / max_pwm;
+            uint32_t cycles_available = SystemHCLKFreq() / max_pwm; //OI HAL_RCC_GetHCLKFreq() / max_pwm;
 
             uint32_t cycles_left = cycles_available - max_cycles;
             float foc_load = 100.0f / cycles_available * max_cycles;
-            ttprintf("%sFOC load %3.0f%% - Hyperloop: %5d Fastloop: %5d Cycles to overrun: %5d\r\n", TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),foc_load , sum_hyperloop, sum_fastloop, cycles_left);
+            ttprintf("%sFOC load %3.0f%% - Hyperloop: %5d Fastloop: %5d Cycles to overrun: %5d\r\n",
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     foc_load,
+                     sum_hyperloop,
+                     sum_fastloop,
+                     cycles_left);
 #endif
             uint32_t heapRemaining = xPortGetFreeHeapSize();
-            ttprintf("%sMem: \t%db total,\t %db free,\t %db used (%d%%)\r\n", TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), configTOTAL_HEAP_SIZE, heapRemaining, configTOTAL_HEAP_SIZE - heapRemaining, ((configTOTAL_HEAP_SIZE - heapRemaining) * 100) / configTOTAL_HEAP_SIZE);
+            ttprintf("%sMem: \t%db total,\t %db free,\t %db used (%d%%)\r\n",
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     configTOTAL_HEAP_SIZE,
+                     heapRemaining,
+                     configTOTAL_HEAP_SIZE - heapRemaining,
+                     ((configTOTAL_HEAP_SIZE - heapRemaining) * 100) / configTOTAL_HEAP_SIZE);
             //taskStats[0].
-            ttprintf("%s%s%s", TERM_getVT100Code(_VT100_BACKGROUND_COLOR, _VT100_WHITE), TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), TERM_getVT100Code(_VT100_FOREGROUND_COLOR, _VT100_BLACK));
-            ttprintf("PID \r\x1b[%dCName \r\x1b[%dCstate \r\x1b[%dC%%Cpu \r\x1b[%dCtime  \r\x1b[%dCStack \r\x1b[%dCHeap\r\n", 6, 7 + configMAX_TASK_NAME_LEN, 20 + configMAX_TASK_NAME_LEN, 27 + configMAX_TASK_NAME_LEN, 38 + configMAX_TASK_NAME_LEN, 45 + configMAX_TASK_NAME_LEN);
+            ttprintf("%s%s%s",
+                     TERM_getVT100Code(_VT100_BACKGROUND_COLOR, _VT100_WHITE),
+                     TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                     TERM_getVT100Code(_VT100_FOREGROUND_COLOR, _VT100_BLACK));
+            ttprintf("PID \r\x1b[%dCName \r\x1b[%dCstate \r\x1b[%dC%%Cpu \r\x1b[%dCtime  \r\x1b[%dCStack \r\x1b[%dCHeap\r\n",
+                     6,
+                     7 + configMAX_TASK_NAME_LEN,
+                     20 + configMAX_TASK_NAME_LEN,
+                     27 + configMAX_TASK_NAME_LEN,
+                     38 + configMAX_TASK_NAME_LEN,
+                     45 + configMAX_TASK_NAME_LEN);
             ttprintf("%s", TERM_getVT100Code(_VT100_RESET_ATTRIB, 0));
             
             uint32_t currTask = 0;
-            for(;currTask < taskCount; currTask++){
-                if(strlen(taskStats[currTask].pcTaskName) != 4 || strcmp(taskStats[currTask].pcTaskName, "IDLE") != 0){
+            for(;currTask < taskCount; currTask++)
+            {
+                if(strlen(taskStats[currTask].pcTaskName) != 4 ||
+                   strcmp(taskStats[currTask].pcTaskName, "IDLE") != 0)
+                {
                     char name[configMAX_TASK_NAME_LEN+1];
                     strncpy(name, taskStats[currTask].pcTaskName, configMAX_TASK_NAME_LEN);
-                     uint32_t load=0;
-                    if(sysTime>1000){
+                    uint32_t load=0;
+                    if(sysTime>1000)
+                    {
                         load = (taskStats[currTask].ulRunTimeCounter) / (sysTime/configTICK_RATE_HZ);
                     }
-                    ttprintf("%s%d\r\x1b[%dC%s\r\x1b[%dC%s\r\x1b[%dC%d,%d\r\x1b[%dC%d\r\x1b[%dC%u\r\x1b[%dC%d\r\n", TERM_getVT100Code(_VT100_ERASE_LINE_END, 0), taskStats[currTask].xTaskNumber, 6, name, 7 + configMAX_TASK_NAME_LEN
-                            , SYS_getTaskStateString(taskStats[currTask].eCurrentState), 20 + configMAX_TASK_NAME_LEN, load / 10, load % 10, 27 + configMAX_TASK_NAME_LEN, taskStats[currTask].ulRunTimeCounter
-                            , 38 + configMAX_TASK_NAME_LEN, taskStats[currTask].usStackHighWaterMark, 45 + configMAX_TASK_NAME_LEN, 0);
+                    ttprintf("%s%d\r\x1b[%dC%s\r\x1b[%dC%s\r\x1b[%dC%d,%d\r\x1b[%dC%d\r\x1b[%dC%u\r\x1b[%dC%d\r\n",
+                             TERM_getVT100Code(_VT100_ERASE_LINE_END, 0),
+                             taskStats[currTask].xTaskNumber,
+                             6,
+                             name,
+                             7 + configMAX_TASK_NAME_LEN,
+                             SYS_getTaskStateString(taskStats[currTask].eCurrentState),
+                             20 + configMAX_TASK_NAME_LEN,
+                             load / 10,
+                             load % 10,
+                             27 + configMAX_TASK_NAME_LEN,
+                             taskStats[currTask].ulRunTimeCounter,
+                             38 + configMAX_TASK_NAME_LEN,
+                             taskStats[currTask].usStackHighWaterMark,
+                             45 + configMAX_TASK_NAME_LEN,
+                             0);
                 }
             }
             vPortFree(taskStats);
-        }else{
+        }
+        else
+        {
             ttprintf("Malloc failed\r\n");
         }
-        
         xStreamBufferReceive(handle->currProgram->inputStream,&c,sizeof(c),pdMS_TO_TICKS(1000));
     }while(c!=CTRL_C);
     TERM_killProgramm(handle);
 }
 
-static uint8_t INPUT_handler(TERMINAL_HANDLE * handle, uint16_t c){
-    if(handle->currProgram->inputStream==NULL) return TERM_CMD_EXIT_SUCCESS;
-    switch(c){
+static uint8_t INPUT_handler(TERMINAL_HANDLE* handle, uint16_t c)
+{
+    if(handle->currProgram->inputStream==NULL)
+    {
+        return TERM_CMD_EXIT_SUCCESS;
+    }
+    switch(c)
+    {
         case 'q':
         case CTRL_C:
             c=CTRL_C;
@@ -164,8 +227,10 @@ static uint32_t SYS_getCPULoadFine(TaskStatus_t * taskStats, uint32_t taskCount,
     return -1;
 }
 
-static const char * SYS_getTaskStateString(eTaskState state){
-    switch(state){
+static const char* SYS_getTaskStateString(eTaskState state)
+{
+    switch(state)
+    {
         case eRunning:
             return "running";
         case eReady:
