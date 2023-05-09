@@ -17,10 +17,10 @@
         void m_sci0_rxi_interrupt(void);
         void m_sci0_txi_interrupt(void);
         void m_sci0_tei_interrupt(void);
-        void m_i2c1_eei_interrupt(void);
-        void m_i2c1_rxi_interrupt(void);
-        void m_i2c1_txi_interrupt(void);
-        void m_i2c1_tei_interrupt(void);
+        void iic_master_eri_isr(void);
+        void iic_master_rxi_isr(void);
+        void iic_master_txi_isr(void);
+        void iic_master_tei_isr(void);
         void canfd_rx_fifo_isr(void);
         void canfd_error_isr(void);
         void canfd_channel_tx_isr(void);

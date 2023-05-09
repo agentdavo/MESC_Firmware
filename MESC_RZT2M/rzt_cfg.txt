@@ -1233,10 +1233,6 @@ FSP Configuration
     ENCIF_INT4 (ENCIF CH1 Interrupt A): r_enc_ch1_int_isr
     ENCIF_INT1 (ENCIF CH0 Interrupt B): r_enc_ch0_err_int_isr
     ENCIF_INT5 (ENCIF CH1 Interrupt B): r_enc_ch1_err_int_isr
-    IIC1_EEI (IIC1 Transfer error or event generation): m_i2c1_eei_interrupt
-    IIC1_RXI (IIC1 Receive data full): m_i2c1_rxi_interrupt
-    IIC1_TXI (IIC1 Transmit data empty): m_i2c1_txi_interrupt
-    IIC1_TEI (IIC1 Transmit end): m_i2c1_tei_interrupt
     
   User Event Links
     

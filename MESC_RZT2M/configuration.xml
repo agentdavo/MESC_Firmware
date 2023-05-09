@@ -431,10 +431,6 @@
     <interrupt event="event.encif.ch1.encif_int4" isr="r_enc_ch1_int_isr"/>
     <interrupt event="event.encif.ch0.encif_int1" isr="r_enc_ch0_err_int_isr"/>
     <interrupt event="event.encif.ch1.encif_int5" isr="r_enc_ch1_err_int_isr"/>
-    <interrupt event="event.iic.ch1.iic1_eei" isr="m_i2c1_eei_interrupt"/>
-    <interrupt event="event.iic.ch1.iic1_rxi" isr="m_i2c1_rxi_interrupt"/>
-    <interrupt event="event.iic.ch1.iic1_txi" isr="m_i2c1_txi_interrupt"/>
-    <interrupt event="event.iic.ch1.iic1_tei" isr="m_i2c1_tei_interrupt"/>
   </raIcuConfiguration>
   <raModuleConfiguration>
     <module id="module.driver.ioport_on_ioport.0">
