@@ -211,9 +211,9 @@
       <configSetting altId="p02_4.input" configurationId="p02_4"/>
       <configSetting altId="p02_5.input" configurationId="p02_5"/>
       <configSetting altId="p03_2.input" configurationId="p03_2"/>
-      <configSetting altId="p04_0.input" configurationId="p04_0"/>
-      <configSetting altId="p04_1.input" configurationId="p04_1"/>
-      <configSetting altId="p04_2.input" configurationId="p04_2"/>
+      <configSetting altId="p04_0.output.low" configurationId="p04_0"/>
+      <configSetting altId="p04_1.output.low" configurationId="p04_1"/>
+      <configSetting altId="p04_2.output.low" configurationId="p04_2"/>
       <configSetting altId="p04_5.input" configurationId="p04_5"/>
       <configSetting altId="p07_5.input" configurationId="p07_5"/>
       <configSetting altId="p07_6.input" configurationId="p07_6"/>
@@ -231,14 +231,14 @@
       <configSetting altId="p17_0.input" configurationId="p17_0"/>
       <configSetting altId="p17_1.input" configurationId="p17_1"/>
       <configSetting altId="p19_0.input" configurationId="p19_0"/>
-      <configSetting altId="p20_1.input" configurationId="p20_1"/>
-      <configSetting altId="p20_2.input" configurationId="p20_2"/>
-      <configSetting altId="p20_3.input" configurationId="p20_3"/>
+      <configSetting altId="p20_1.output.low" configurationId="p20_1"/>
+      <configSetting altId="p20_2.output.low" configurationId="p20_2"/>
+      <configSetting altId="p20_3.output.low" configurationId="p20_3"/>
       <configSetting altId="p20_4.input" configurationId="p20_4"/>
       <configSetting altId="p21_6.input" configurationId="p21_6"/>
-      <configSetting altId="p22_3.input" configurationId="p22_3"/>
-      <configSetting altId="p22_4.input" configurationId="p22_4"/>
-      <configSetting altId="p22_5.input" configurationId="p22_5"/>
+      <configSetting altId="p22_3.output.low" configurationId="p22_3"/>
+      <configSetting altId="p22_4.output.low" configurationId="p22_4"/>
+      <configSetting altId="p22_5.output.low" configurationId="p22_5"/>
       <configSetting altId="sci0.rxd_miso0.p16_6" configurationId="sci0.rxd_miso0" isUsedByDriver="true"/>
       <configSetting altId="sci0.txd_mosi0.p16_0" configurationId="sci0.txd_mosi0" isUsedByDriver="true"/>
       <configSetting altId="spi0.spi_miso0.p13_2" configurationId="spi0.spi_miso0" isUsedByDriver="true"/>

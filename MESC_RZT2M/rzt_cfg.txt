@@ -320,9 +320,9 @@ FSP Configuration
       P03_5 K2 MTU33_MTIOC3A MTU33_MTIOC3A Middle - "Peripheral mode" - - "BSC: A12; DSMIF2: MCLK2; ETHER_ETH2: ETH2_CRS; GPT4: GTIOC4A; IRQ: IRQ5; MTU33: MTIOC3A; SCI2: RXD_MISO2; SCI2: SCL2" - IO - - 
       P03_6 L3 IRQ_IRQ8 IRQ_IRQ8 Low - "Peripheral mode" - - "BSC: A11; DSMIF2: MDAT2; ETHER_ETH2: ETH2_COL; GPT4: GTIOC4B; IRQ: IRQ8; MTU33: MTIOC3B; SCI2: SDA2; SCI2: TXD_MOSI2; SPI1: SPI_SSL13; TRACE: TRACEDATA4" - I - - 
       P03_7 K1 MTU33_MTIOC3C MTU33_MTIOC3C Middle - "Peripheral mode" - - "BSC: A10; ETHER_ETH2: ETH2_TXER; GPT5: GTIOC5A; IRQ: IRQ9; MTU33: MTIOC3C; SCI3: SCK3; TRACE: TRACEDATA5" - IO - - 
-      P04_0 L2 GPIO GPIO_4 - - "Input mode" - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
-      P04_1 M1 GPIO GPIO_5 - - "Input mode" - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
-      P04_2 M2 GPIO GPIO_6 - - "Input mode" - - "BSC: CS0#" - IO - - 
+      P04_0 L2 GPIO M2_OT_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
+      P04_1 M1 GPIO M2_OC_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
+      P04_2 M2 GPIO M2_OV_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: CS0#" - IO - - 
       P04_3 M3 SPI0_SPI_RSPCK0 SPI0_SPI_RSPCK0 High - "Peripheral mode" - - "BSC: RD#; IIC2: IIC_SCL2; SCI3: CTS_RTS_SS3#; SPI0: SPI_RSPCK0; USB_HS: USB_OVRCUR" - IO - - 
       P04_4 L5 MTU_POE3_POE10# MTU_POE3_POE10 Low - "Peripheral mode" - - "BSC: A8; ENCIF: ENCIF10; GPT: GTADSMP0; IRQ: IRQ10; MTU_POE3: POE10#; SCI3: CTS3#; SPI1: SPI_RSPCK1; TRACE: TRACEDATA7" - I - - 
       P04_5 N1 GPIO GPIO_7 - - "Input mode" - - "BSC: A7; SCI3: DE3" - IO - - 
@@ -449,9 +449,9 @@ FSP Configuration
       P19_6 D18 MTU36_MTIOC6D MTU36_MTIOC6D Middle - "Peripheral mode" - - "GPT5: GTIOC5B; MTU36: MTIOC6D" - IO - - 
       P19_7 G15 MTU37_MTIOC7B MTU37_MTIOC7B Middle - "Peripheral mode" - - "GPT6: GTIOC6B; MTU37: MTIOC7B" - IO - - 
       P20_0 B20 MTU37_MTIOC7D MTU37_MTIOC7D Middle - "Peripheral mode" - - "GPT7: GTIOC7B; MTU37: MTIOC7D" - IO - - 
-      P20_1 C11 GPIO GPIO_24 - - "Input mode" - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
-      P20_2 A10 GPIO GPIO_25 - - "Input mode" - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
-      P20_3 C9 GPIO GPIO_26 - - "Input mode" - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
+      P20_1 C11 GPIO ETH0_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
+      P20_2 A10 GPIO ETH1_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
+      P20_3 C9 GPIO ETH2_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
       P20_4 B10 GPIO GPIO_27 - - "Input mode" - - "ETHER_ESC: ESC_LINKACT1; ETHER_ETHSW: ETHSW_TDMAOUT3" - IO - - 
       P20_5 F10 DSMIF4_MCLK4 DSMIF4_MCLK4 Middle - "Peripheral mode" - - "DSMIF4: MCLK4; ETHER_ESC: ESC_I2CCLK; IIC0: IIC_SCL0; MTU31: MTIOC1A" - IO - - 
       P20_6 C10 DSMIF4_MDAT4 DSMIF4_MDAT4 Middle - "Peripheral mode" - - "DSMIF4: MDAT4; ETHER_ESC: ESC_I2CDATA; IIC0: IIC_SDA0; MTU31: MTIOC1B" - I - - 
@@ -467,9 +467,9 @@ FSP Configuration
       P22_0 B6 DSMIF3_MDAT3 DSMIF3_MDAT3 Middle - "Peripheral mode" - - "BSC: D7; DSMIF3: MDAT3; GPT17: GTIOC17B; IRQ: IRQ15; MTU37: MTIOC7D; SCI5: DE5; TRACE: TRACEDATA7" - I - - 
       P22_1 C7 MTU_POE3_POE4# MTU_POE3_POE4 Low - "Peripheral mode" - - "BSC: D8; ETHER_ESC: ESC_LINKACT2; MTU_POE3: POE4#; SCI4: CTS_RTS_SS4#; TRACE: TRACECTL" - I - - 
       P22_2 F9 IRQ_IRQ4 IRQ_IRQ4 Low - "Peripheral mode" - - "BSC: D9; ENCIF: ENCIF10; GPT_POEG: GTETRGSA; IRQ: IRQ4; MTU38: MTIOC8C; SPI1: SPI_SSL12; TRACE: TRACECLK" - I - - 
-      P22_3 A4 GPIO GPIO_29 - - "Input mode" - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
-      P22_4 E8 GPIO GPIO_30 - - "Input mode" - - "BSC: D11" - IO - - 
-      P22_5 B5 GPIO GPIO_31 - - "Input mode" - - "BSC: D12; SCI4: CTS4#" - IO - - 
+      P22_3 A4 GPIO M1_OT_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
+      P22_4 E8 GPIO M1_OC_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D11" - IO - - 
+      P22_5 B5 GPIO M1_OV_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D12; SCI4: CTS4#" - IO - - 
       P22_6 E7 IIC1_IIC_SCL1 IIC_SCL1 Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
       P22_7 C6 IIC1_IIC_SDA1 IIC_SDA1 Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 SPI2_SPI_MOSI2 SPI2_SPI_MOSI2 High - "Peripheral mode" - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
@@ -641,9 +641,9 @@ FSP Configuration
       P03_5 K2 - MTU33_MTIOC3A Low - Disabled - - "BSC: A12; DSMIF2: MCLK2; ETHER_ETH2: ETH2_CRS; GPT4: GTIOC4A; IRQ: IRQ5; MTU33: MTIOC3A; SCI2: RXD_MISO2; SCI2: SCL2" - IO - - 
       P03_6 L3 - IRQ_IRQ8 Low - Disabled - - "BSC: A11; DSMIF2: MDAT2; ETHER_ETH2: ETH2_COL; GPT4: GTIOC4B; IRQ: IRQ8; MTU33: MTIOC3B; SCI2: SDA2; SCI2: TXD_MOSI2; SPI1: SPI_SSL13; TRACE: TRACEDATA4" - I - - 
       P03_7 K1 TRACE_TRACEDATA5 MTU33_MTIOC3C High - "Peripheral mode" - - "BSC: A10; ETHER_ETH2: ETH2_TXER; GPT5: GTIOC5A; IRQ: IRQ9; MTU33: MTIOC3C; SCI3: SCK3; TRACE: TRACEDATA5" - IO - - 
-      P04_0 L2 - GPIO_4 - - Disabled - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
-      P04_1 M1 - GPIO_5 - - Disabled - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
-      P04_2 M2 GPIO GPIO_6 - - "Input mode" - - "BSC: CS0#" - IO - - 
+      P04_0 L2 - M2_OT_LED Low - Disabled - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
+      P04_1 M1 - M2_OC_LED Low - Disabled - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
+      P04_2 M2 GPIO M2_OV_LED Low - "Input mode" - - "BSC: CS0#" - IO - - 
       P04_3 M3 - SPI0_SPI_RSPCK0 Low - Disabled - - "BSC: RD#; IIC2: IIC_SCL2; SCI3: CTS_RTS_SS3#; SPI0: SPI_RSPCK0; USB_HS: USB_OVRCUR" - IO - - 
       P04_4 L5 - MTU_POE3_POE10 Low - Disabled - - "BSC: A8; ENCIF: ENCIF10; GPT: GTADSMP0; IRQ: IRQ10; MTU_POE3: POE10#; SCI3: CTS3#; SPI1: SPI_RSPCK1; TRACE: TRACEDATA7" - I - - 
       P04_5 N1 - GPIO_7 - - Disabled - - "BSC: A7; SCI3: DE3" - IO - - 
@@ -770,9 +770,9 @@ FSP Configuration
       P19_6 D18 GPIO MTU36_MTIOC6D Low - "Output mode (Low & Not Into Input)" - - "GPT5: GTIOC5B; MTU36: MTIOC6D" - IO - - 
       P19_7 G15 GPIO MTU37_MTIOC7B Low - "Output mode (Low & Not Into Input)" - - "GPT6: GTIOC6B; MTU37: MTIOC7B" - IO - - 
       P20_0 B20 GPIO MTU37_MTIOC7D Low - "Output mode (Low & Not Into Input)" - - "GPT7: GTIOC7B; MTU37: MTIOC7D" - IO - - 
-      P20_1 C11 GPIO GPIO_24 - - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
-      P20_2 A10 GPIO GPIO_25 - - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
-      P20_3 C9 GPIO GPIO_26 - - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
+      P20_1 C11 GPIO ETH0_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
+      P20_2 A10 GPIO ETH1_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
+      P20_3 C9 GPIO ETH2_LINK_LED Low - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
       P20_4 B10 GPIO GPIO_27 - - "Output mode (Low & Not Into Input)" - - "ETHER_ESC: ESC_LINKACT1; ETHER_ETHSW: ETHSW_TDMAOUT3" - IO - - 
       P20_5 F10 IIC0_IIC_SCL0 DSMIF4_MCLK4 Middle - "Peripheral mode" - - "DSMIF4: MCLK4; ETHER_ESC: ESC_I2CCLK; IIC0: IIC_SCL0; MTU31: MTIOC1A" - IO - - 
       P20_6 C10 IIC0_IIC_SDA0 DSMIF4_MDAT4 Middle - "Peripheral mode" - - "DSMIF4: MDAT4; ETHER_ESC: ESC_I2CDATA; IIC0: IIC_SDA0; MTU31: MTIOC1B" - I - - 
@@ -788,9 +788,9 @@ FSP Configuration
       P22_0 B6 TRACE_TRACEDATA7 DSMIF3_MDAT3 High - "Peripheral mode" - - "BSC: D7; DSMIF3: MDAT3; GPT17: GTIOC17B; IRQ: IRQ15; MTU37: MTIOC7D; SCI5: DE5; TRACE: TRACEDATA7" - I - - 
       P22_1 C7 TRACE_TRACECTL MTU_POE3_POE4 High - "Peripheral mode" - - "BSC: D8; ETHER_ESC: ESC_LINKACT2; MTU_POE3: POE4#; SCI4: CTS_RTS_SS4#; TRACE: TRACECTL" - I - - 
       P22_2 F9 TRACE_TRACECLK IRQ_IRQ4 High - "Peripheral mode" - - "BSC: D9; ENCIF: ENCIF10; GPT_POEG: GTETRGSA; IRQ: IRQ4; MTU38: MTIOC8C; SPI1: SPI_SSL12; TRACE: TRACECLK" - I - - 
-      P22_3 A4 - GPIO_29 - - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
-      P22_4 E8 - GPIO_30 - - Disabled - - "BSC: D11" - IO - - 
-      P22_5 B5 - GPIO_31 - - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
+      P22_3 A4 - M1_OT_LED Low - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
+      P22_4 E8 - M1_OC_LED Low - Disabled - - "BSC: D11" - IO - - 
+      P22_5 B5 - M1_OV_LED Low - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
       P22_6 E7 IIC1_IIC_SCL1 IIC_SCL1 Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
       P22_7 C6 IIC1_IIC_SDA1 IIC_SDA1 Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 - SPI2_SPI_MOSI2 Low - Disabled - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
@@ -962,9 +962,9 @@ FSP Configuration
       P03_5 K2 - MTU33_MTIOC3A Low - Disabled - - "BSC: A12; DSMIF2: MCLK2; ETHER_ETH2: ETH2_CRS; GPT4: GTIOC4A; IRQ: IRQ5; MTU33: MTIOC3A; SCI2: RXD_MISO2; SCI2: SCL2" - IO - - 
       P03_6 L3 - IRQ_IRQ8 Low - Disabled - - "BSC: A11; DSMIF2: MDAT2; ETHER_ETH2: ETH2_COL; GPT4: GTIOC4B; IRQ: IRQ8; MTU33: MTIOC3B; SCI2: SDA2; SCI2: TXD_MOSI2; SPI1: SPI_SSL13; TRACE: TRACEDATA4" - I - - 
       P03_7 K1 - MTU33_MTIOC3C Low - Disabled - - "BSC: A10; ETHER_ETH2: ETH2_TXER; GPT5: GTIOC5A; IRQ: IRQ9; MTU33: MTIOC3C; SCI3: SCK3; TRACE: TRACEDATA5" - IO - - 
-      P04_0 L2 - GPIO_4 - - Disabled - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
-      P04_1 M1 - GPIO_5 - - Disabled - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
-      P04_2 M2 - GPIO_6 - - Disabled - - "BSC: CS0#" - IO - - 
+      P04_0 L2 - M2_OT_LED Low - Disabled - - "BSC: A9; GPT5: GTIOC5B; MTU33: MTIOC3D; SCI3: RXD_MISO3; SCI3: SCL3; TRACE: TRACEDATA6" - IO - - 
+      P04_1 M1 - M2_OC_LED Low - Disabled - - "BSC: CKIO; IIC2: IIC_SDA2; SCI3: SDA3; SCI3: TXD_MOSI3; SPI0: SPI_MOSI0" - IO - - 
+      P04_2 M2 - M2_OV_LED Low - Disabled - - "BSC: CS0#" - IO - - 
       P04_3 M3 - SPI0_SPI_RSPCK0 Low - Disabled - - "BSC: RD#; IIC2: IIC_SCL2; SCI3: CTS_RTS_SS3#; SPI0: SPI_RSPCK0; USB_HS: USB_OVRCUR" - IO - - 
       P04_4 L5 - MTU_POE3_POE10 Low - Disabled - - "BSC: A8; ENCIF: ENCIF10; GPT: GTADSMP0; IRQ: IRQ10; MTU_POE3: POE10#; SCI3: CTS3#; SPI1: SPI_RSPCK1; TRACE: TRACEDATA7" - I - - 
       P04_5 N1 - GPIO_7 - - Disabled - - "BSC: A7; SCI3: DE3" - IO - - 
@@ -1091,9 +1091,9 @@ FSP Configuration
       P19_6 D18 - MTU36_MTIOC6D Low - Disabled - - "GPT5: GTIOC5B; MTU36: MTIOC6D" - IO - - 
       P19_7 G15 - MTU37_MTIOC7B Low - Disabled - - "GPT6: GTIOC6B; MTU37: MTIOC7B" - IO - - 
       P20_0 B20 - MTU37_MTIOC7D Low - Disabled - - "GPT7: GTIOC7B; MTU37: MTIOC7D" - IO - - 
-      P20_1 C11 - GPIO_24 - - Disabled - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
-      P20_2 A10 - GPIO_25 - - Disabled - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
-      P20_3 C9 - GPIO_26 - - Disabled - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
+      P20_1 C11 - ETH0_LINK_LED Low - Disabled - - "ETHER_ESC: ESC_LINKACT0; ETHER_ETHSW: ETHSW_TDMAOUT0" - IO - - 
+      P20_2 A10 - ETH1_LINK_LED Low - Disabled - - "ETHER_ESC: ESC_LEDRUN; ETHER_ESC: ESC_LEDSTER; ETHER_ETHSW: ETHSW_TDMAOUT1; SCI3: DE3" - IO - - 
+      P20_3 C9 - ETH2_LINK_LED Low - Disabled - - "ETHER_ESC: ESC_LEDERR; ETHER_ETHSW: ETHSW_TDMAOUT2" - IO - - 
       P20_4 B10 - GPIO_27 - - Disabled - - "ETHER_ESC: ESC_LINKACT1; ETHER_ETHSW: ETHSW_TDMAOUT3" - IO - - 
       P20_5 F10 - DSMIF4_MCLK4 Low - Disabled - - "DSMIF4: MCLK4; ETHER_ESC: ESC_I2CCLK; IIC0: IIC_SCL0; MTU31: MTIOC1A" - IO - - 
       P20_6 C10 - DSMIF4_MDAT4 Low - Disabled - - "DSMIF4: MDAT4; ETHER_ESC: ESC_I2CDATA; IIC0: IIC_SDA0; MTU31: MTIOC1B" - I - - 
@@ -1109,9 +1109,9 @@ FSP Configuration
       P22_0 B6 - DSMIF3_MDAT3 Low - Disabled - - "BSC: D7; DSMIF3: MDAT3; GPT17: GTIOC17B; IRQ: IRQ15; MTU37: MTIOC7D; SCI5: DE5; TRACE: TRACEDATA7" - I - - 
       P22_1 C7 - MTU_POE3_POE4 Low - Disabled - - "BSC: D8; ETHER_ESC: ESC_LINKACT2; MTU_POE3: POE4#; SCI4: CTS_RTS_SS4#; TRACE: TRACECTL" - I - - 
       P22_2 F9 - IRQ_IRQ4 Low - Disabled - - "BSC: D9; ENCIF: ENCIF10; GPT_POEG: GTETRGSA; IRQ: IRQ4; MTU38: MTIOC8C; SPI1: SPI_SSL12; TRACE: TRACECLK" - I - - 
-      P22_3 A4 - GPIO_29 - - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
-      P22_4 E8 - GPIO_30 - - Disabled - - "BSC: D11" - IO - - 
-      P22_5 B5 - GPIO_31 - - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
+      P22_3 A4 - M1_OT_LED Low - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
+      P22_4 E8 - M1_OC_LED Low - Disabled - - "BSC: D11" - IO - - 
+      P22_5 B5 - M1_OV_LED Low - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
       P22_6 E7 - IIC_SCL1 Low - Disabled - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
       P22_7 C6 - IIC_SDA1 Low - Disabled - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 - SPI2_SPI_MOSI2 Low - Disabled - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
@@ -2683,11 +2683,3 @@ FSP Configuration
             
         Instance "Buffer Allocation 2"
     Instance "Heap 4"
-  Thread "Blinky Thread"
-    Symbol: blinky_thread
-    Name: Blinky Thread
-    Stack size (bytes): 1024
-    Priority: 1
-    Thread Context: NULL
-    Memory Allocation: Dynamic
-    

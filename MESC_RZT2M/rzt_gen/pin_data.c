@@ -133,15 +133,15 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_04_PIN_0,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_04_PIN_1,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_04_PIN_2,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_04_PIN_3,
@@ -649,15 +649,15 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_20_PIN_1,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_20_PIN_2,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_20_PIN_3,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_20_PIN_4,
@@ -721,15 +721,15 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_22_PIN_3,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_22_PIN_4,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_22_PIN_5,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_22_PIN_6,

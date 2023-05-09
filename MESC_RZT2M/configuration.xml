@@ -297,10 +297,6 @@
     <node id="board.clock.tclk.freq" option="board.clock.tclk.freq.100m"/>
   </raClockConfiguration>
   <raComponentSelection>
-    <component apiversion="" class="Projects" condition="" group="all" subgroup="freertos_blinky" variant="" vendor="Renesas" version="1.2.0">
-      <description>Simple application that blinks an LED using FreeRTOS.</description>
-      <originalPack>Renesas.RZT_freertos_blinky.1.2.0.pack</originalPack>
-    </component>
     <component apiversion="" class="Common" condition="" group="all" subgroup="fsp_common" variant="" vendor="Renesas" version="1.2.0">
       <description>Board Support Package Common Files</description>
       <originalPack>Renesas.RZT.1.2.0.pack</originalPack>
@@ -1703,14 +1699,6 @@
       </stack>
       <stack module="module.freertos.heap.4.2061220694"/>
     </context>
-    <context id="rtos.awsfreertos.thread.913534069">
-      <property id="_symbol" value="blinky_thread"/>
-      <property id="rtos.awsfreertos.thread.name" value="Blinky Thread"/>
-      <property id="rtos.awsfreertos.thread.stack" value="1024"/>
-      <property id="rtos.awsfreertos.thread.priority" value="1"/>
-      <property id="rtos.awsfreertos.thread.context" value="NULL"/>
-      <property id="rtos.awsfreertos.thread.allocation" value="rtos.awsfreertos.thread.allocation.dynamic"/>
-    </context>
     <config id="config.driver.ether_selector">
       <property id="config.driver.ether_selector.param_checking_enable" value="config.driver.ether_selector.param_checking_enable.bsp"/>
       <property id="config.driver.ether_selector.mode" value="config.driver.ether_selector.mode.0"/>
@@ -1975,9 +1963,9 @@
     <symbolicName propertyId="p03_5.symbolic_name" value="MTU33_MTIOC3A"/>
     <symbolicName propertyId="p03_6.symbolic_name" value="IRQ_IRQ8"/>
     <symbolicName propertyId="p03_7.symbolic_name" value="MTU33_MTIOC3C"/>
-    <symbolicName propertyId="p04_0.symbolic_name" value="GPIO_4"/>
-    <symbolicName propertyId="p04_1.symbolic_name" value="GPIO_5"/>
-    <symbolicName propertyId="p04_2.symbolic_name" value="GPIO_6"/>
+    <symbolicName propertyId="p04_0.symbolic_name" value="M2_OT_LED"/>
+    <symbolicName propertyId="p04_1.symbolic_name" value="M2_OC_LED"/>
+    <symbolicName propertyId="p04_2.symbolic_name" value="M2_OV_LED"/>
     <symbolicName propertyId="p04_3.symbolic_name" value="SPI0_SPI_RSPCK0"/>
     <symbolicName propertyId="p04_4.symbolic_name" value="MTU_POE3_POE10"/>
     <symbolicName propertyId="p04_5.symbolic_name" value="GPIO_7"/>
@@ -2104,9 +2092,9 @@
     <symbolicName propertyId="p19_6.symbolic_name" value="MTU36_MTIOC6D"/>
     <symbolicName propertyId="p19_7.symbolic_name" value="MTU37_MTIOC7B"/>
     <symbolicName propertyId="p20_0.symbolic_name" value="MTU37_MTIOC7D"/>
-    <symbolicName propertyId="p20_1.symbolic_name" value="GPIO_24"/>
-    <symbolicName propertyId="p20_2.symbolic_name" value="GPIO_25"/>
-    <symbolicName propertyId="p20_3.symbolic_name" value="GPIO_26"/>
+    <symbolicName propertyId="p20_1.symbolic_name" value="ETH0_LINK_LED"/>
+    <symbolicName propertyId="p20_2.symbolic_name" value="ETH1_LINK_LED"/>
+    <symbolicName propertyId="p20_3.symbolic_name" value="ETH2_LINK_LED"/>
     <symbolicName propertyId="p20_4.symbolic_name" value="GPIO_27"/>
     <symbolicName propertyId="p20_5.symbolic_name" value="DSMIF4_MCLK4"/>
     <symbolicName propertyId="p20_6.symbolic_name" value="DSMIF4_MDAT4"/>
@@ -2122,9 +2110,9 @@
     <symbolicName propertyId="p22_0.symbolic_name" value="DSMIF3_MDAT3"/>
     <symbolicName propertyId="p22_1.symbolic_name" value="MTU_POE3_POE4"/>
     <symbolicName propertyId="p22_2.symbolic_name" value="IRQ_IRQ4"/>
-    <symbolicName propertyId="p22_3.symbolic_name" value="GPIO_29"/>
-    <symbolicName propertyId="p22_4.symbolic_name" value="GPIO_30"/>
-    <symbolicName propertyId="p22_5.symbolic_name" value="GPIO_31"/>
+    <symbolicName propertyId="p22_3.symbolic_name" value="M1_OT_LED"/>
+    <symbolicName propertyId="p22_4.symbolic_name" value="M1_OC_LED"/>
+    <symbolicName propertyId="p22_5.symbolic_name" value="M1_OV_LED"/>
     <symbolicName propertyId="p22_6.symbolic_name" value="IIC_SCL1"/>
     <symbolicName propertyId="p22_7.symbolic_name" value="IIC_SDA1"/>
     <symbolicName propertyId="p23_0.symbolic_name" value="SPI2_SPI_MOSI2"/>
@@ -2422,14 +2410,14 @@
       <configSetting altId="p03_7.gpio_speed.gpio_speed_middle" configurationId="p03_7.gpio_drivecapacity"/>
       <configSetting altId="p03_7.gpio_mode.gpio_mode_peripheral" configurationId="p03_7.gpio_mode"/>
       <configSetting altId="p03_7.gpio_region.region.nonsafety" configurationId="p03_7.gpio_region"/>
-      <configSetting altId="p04_0.input" configurationId="p04_0"/>
-      <configSetting altId="p04_0.gpio_mode.gpio_mode_in" configurationId="p04_0.gpio_mode"/>
+      <configSetting altId="p04_0.output.low" configurationId="p04_0"/>
+      <configSetting altId="p04_0.gpio_mode.gpio_mode_out.low" configurationId="p04_0.gpio_mode"/>
       <configSetting altId="p04_0.gpio_region.region.nonsafety" configurationId="p04_0.gpio_region"/>
-      <configSetting altId="p04_1.input" configurationId="p04_1"/>
-      <configSetting altId="p04_1.gpio_mode.gpio_mode_in" configurationId="p04_1.gpio_mode"/>
+      <configSetting altId="p04_1.output.low" configurationId="p04_1"/>
+      <configSetting altId="p04_1.gpio_mode.gpio_mode_out.low" configurationId="p04_1.gpio_mode"/>
       <configSetting altId="p04_1.gpio_region.region.nonsafety" configurationId="p04_1.gpio_region"/>
-      <configSetting altId="p04_2.input" configurationId="p04_2"/>
-      <configSetting altId="p04_2.gpio_mode.gpio_mode_in" configurationId="p04_2.gpio_mode"/>
+      <configSetting altId="p04_2.output.low" configurationId="p04_2"/>
+      <configSetting altId="p04_2.gpio_mode.gpio_mode_out.low" configurationId="p04_2.gpio_mode"/>
       <configSetting altId="p04_2.gpio_region.region.nonsafety" configurationId="p04_2.gpio_region"/>
       <configSetting altId="p04_3.spi0.spi_rspck0" configurationId="p04_3"/>
       <configSetting altId="p04_3.gpio_speed.gpio_speed_high" configurationId="p04_3.gpio_drivecapacity"/>
@@ -2909,14 +2897,14 @@
       <configSetting altId="p20_0.gpio_speed.gpio_speed_middle" configurationId="p20_0.gpio_drivecapacity"/>
       <configSetting altId="p20_0.gpio_mode.gpio_mode_peripheral" configurationId="p20_0.gpio_mode"/>
       <configSetting altId="p20_0.gpio_region.region.nonsafety" configurationId="p20_0.gpio_region"/>
-      <configSetting altId="p20_1.input" configurationId="p20_1"/>
-      <configSetting altId="p20_1.gpio_mode.gpio_mode_in" configurationId="p20_1.gpio_mode"/>
+      <configSetting altId="p20_1.output.low" configurationId="p20_1"/>
+      <configSetting altId="p20_1.gpio_mode.gpio_mode_out.low" configurationId="p20_1.gpio_mode"/>
       <configSetting altId="p20_1.gpio_region.region.nonsafety" configurationId="p20_1.gpio_region"/>
-      <configSetting altId="p20_2.input" configurationId="p20_2"/>
-      <configSetting altId="p20_2.gpio_mode.gpio_mode_in" configurationId="p20_2.gpio_mode"/>
+      <configSetting altId="p20_2.output.low" configurationId="p20_2"/>
+      <configSetting altId="p20_2.gpio_mode.gpio_mode_out.low" configurationId="p20_2.gpio_mode"/>
       <configSetting altId="p20_2.gpio_region.region.nonsafety" configurationId="p20_2.gpio_region"/>
-      <configSetting altId="p20_3.input" configurationId="p20_3"/>
-      <configSetting altId="p20_3.gpio_mode.gpio_mode_in" configurationId="p20_3.gpio_mode"/>
+      <configSetting altId="p20_3.output.low" configurationId="p20_3"/>
+      <configSetting altId="p20_3.gpio_mode.gpio_mode_out.low" configurationId="p20_3.gpio_mode"/>
       <configSetting altId="p20_3.gpio_region.region.nonsafety" configurationId="p20_3.gpio_region"/>
       <configSetting altId="p20_4.input" configurationId="p20_4"/>
       <configSetting altId="p20_4.gpio_mode.gpio_mode_in" configurationId="p20_4.gpio_mode"/>
@@ -2974,14 +2962,14 @@
       <configSetting altId="p22_2.irq.irq4" configurationId="p22_2"/>
       <configSetting altId="p22_2.gpio_mode.gpio_mode_peripheral" configurationId="p22_2.gpio_mode"/>
       <configSetting altId="p22_2.gpio_region.region.nonsafety" configurationId="p22_2.gpio_region"/>
-      <configSetting altId="p22_3.input" configurationId="p22_3"/>
-      <configSetting altId="p22_3.gpio_mode.gpio_mode_in" configurationId="p22_3.gpio_mode"/>
+      <configSetting altId="p22_3.output.low" configurationId="p22_3"/>
+      <configSetting altId="p22_3.gpio_mode.gpio_mode_out.low" configurationId="p22_3.gpio_mode"/>
       <configSetting altId="p22_3.gpio_region.region.nonsafety" configurationId="p22_3.gpio_region"/>
-      <configSetting altId="p22_4.input" configurationId="p22_4"/>
-      <configSetting altId="p22_4.gpio_mode.gpio_mode_in" configurationId="p22_4.gpio_mode"/>
+      <configSetting altId="p22_4.output.low" configurationId="p22_4"/>
+      <configSetting altId="p22_4.gpio_mode.gpio_mode_out.low" configurationId="p22_4.gpio_mode"/>
       <configSetting altId="p22_4.gpio_region.region.nonsafety" configurationId="p22_4.gpio_region"/>
-      <configSetting altId="p22_5.input" configurationId="p22_5"/>
-      <configSetting altId="p22_5.gpio_mode.gpio_mode_in" configurationId="p22_5.gpio_mode"/>
+      <configSetting altId="p22_5.output.low" configurationId="p22_5"/>
+      <configSetting altId="p22_5.gpio_mode.gpio_mode_out.low" configurationId="p22_5.gpio_mode"/>
       <configSetting altId="p22_5.gpio_region.region.nonsafety" configurationId="p22_5.gpio_region"/>
       <configSetting altId="p22_6.iic1.iic_scl1" configurationId="p22_6"/>
       <configSetting altId="p22_6.gpio_speed.gpio_speed_middle" configurationId="p22_6.gpio_drivecapacity"/>
