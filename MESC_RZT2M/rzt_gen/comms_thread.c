@@ -14,6 +14,62 @@
                 static void comms_thread_func(void * pvParameters);
                 void rtos_startup_err_callback(void * p_instance, void * p_data);
                 void rtos_startup_common_init(void);
+iic_master_instance_ctrl_t g_i2c_master1_ctrl;
+const iic_master_extended_cfg_t g_i2c_master1_extend =
+{
+    .timeout_mode            = IIC_MASTER_TIMEOUT_MODE_SHORT,
+    /* Actual calculated bitrate: 98425. Actual calculated duty cycle: 50%. */ .clock_settings.brl_value = 28, .clock_settings.brh_value = 28, .clock_settings.cks_value = 3
+};
+const i2c_master_cfg_t g_i2c_master1_cfg =
+{
+    .channel             = 1,
+    .rate                = I2C_MASTER_RATE_STANDARD,
+    .slave               = 0x00,
+    .addr_mode           = I2C_MASTER_ADDR_MODE_7BIT,
+#define FSP_NOT_DEFINED (1)
+#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
+    .p_transfer_tx       = NULL,
+#else
+    .p_transfer_tx       = &FSP_NOT_DEFINED,
+#endif
+#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
+    .p_transfer_rx       = NULL,
+#else
+    .p_transfer_rx       = &FSP_NOT_DEFINED,
+#endif
+#undef FSP_NOT_DEFINED
+    .p_callback          = NULL,
+    .p_context           = NULL,
+#if defined(VECTOR_NUMBER_IIC1_RXI)
+    .rxi_irq             = VECTOR_NUMBER_IIC1_RXI,
+#else
+    .rxi_irq             = FSP_INVALID_VECTOR,
+#endif
+#if defined(VECTOR_NUMBER_IIC1_TXI)
+    .txi_irq             = VECTOR_NUMBER_IIC1_TXI,
+#else
+    .txi_irq             = FSP_INVALID_VECTOR,
+#endif
+#if defined(VECTOR_NUMBER_IIC1_TEI)
+    .tei_irq             = VECTOR_NUMBER_IIC1_TEI,
+#else
+    .tei_irq             = FSP_INVALID_VECTOR,
+#endif
+#if defined(VECTOR_NUMBER_IIC1_EEI)
+    .eri_irq             = VECTOR_NUMBER_IIC1_EEI,
+#else
+    .eri_irq             = FSP_INVALID_VECTOR,
+#endif
+    .ipl                 = (12),
+    .p_extend            = &g_i2c_master1_extend,
+};
+/* Instance structure to use this module. */
+const i2c_master_instance_t g_i2c_master1 =
+{
+    .p_ctrl        = &g_i2c_master1_ctrl,
+    .p_cfg         = &g_i2c_master1_cfg,
+    .p_api         = &g_i2c_master_on_iic
+};
 spi_instance_ctrl_t g_spi3_ctrl;
 
 /** SPI extended configuration for SPI HAL driver */
@@ -101,10 +157,10 @@ const spi_instance_t g_spi3 =
     .p_cfg         = &g_spi3_cfg,
     .p_api         = &g_spi_on_spi
 };
-spi_instance_ctrl_t g_spi1_ctrl;
+spi_instance_ctrl_t g_spi2_ctrl;
 
 /** SPI extended configuration for SPI HAL driver */
-const spi_extended_cfg_t g_spi1_ext_cfg =
+const spi_extended_cfg_t g_spi2_ext_cfg =
 {
     .spi_clksyn              = SPI_SSL_MODE_CLK_SYN,
     .spi_comm                = SPI_COMMUNICATION_FULL_DUPLEX,
@@ -126,7 +182,7 @@ const spi_extended_cfg_t g_spi1_ext_cfg =
  };
 
 /** SPI configuration for SPI HAL driver */
-const spi_cfg_t g_spi1_cfg =
+const spi_cfg_t g_spi2_cfg =
 {
     .channel             = 1,
 
@@ -175,17 +231,17 @@ const spi_cfg_t g_spi1_cfg =
     .p_transfer_rx       = &FSP_NOT_DEFINED,
 #endif
 #undef FSP_NOT_DEFINED
-    .p_callback          = spi1_callback,
+    .p_callback          = spi2_callback,
 
     .p_context           = NULL,
-    .p_extend            = (void *)&g_spi1_ext_cfg,
+    .p_extend            = (void *)&g_spi2_ext_cfg,
 };
 
 /* Instance structure to use this module. */
-const spi_instance_t g_spi1 =
+const spi_instance_t g_spi2 =
 {
-    .p_ctrl        = &g_spi1_ctrl,
-    .p_cfg         = &g_spi1_cfg,
+    .p_ctrl        = &g_spi2_ctrl,
+    .p_cfg         = &g_spi2_cfg,
     .p_api         = &g_spi_on_spi
 };
 spi_instance_ctrl_t g_spi0_ctrl;

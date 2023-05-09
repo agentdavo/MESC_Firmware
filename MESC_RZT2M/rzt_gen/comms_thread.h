@@ -11,6 +11,8 @@
                 #else
                 extern void comms_thread_entry(void * pvParameters);
                 #endif
+#include "r_iic_master.h"
+#include "r_i2c_master_api.h"
 #include "r_spi.h"
 #include "r_dmac.h"
 #include "r_transfer_api.h"
@@ -19,6 +21,16 @@
 #include "r_canfd.h"
 #include "r_can_api.h"
 FSP_HEADER
+/* I2C Master on IIC Instance. */
+extern const i2c_master_instance_t g_i2c_master1;
+
+/** Access the I2C Master instance using these structures when calling API functions directly (::p_api is not used). */
+extern iic_master_instance_ctrl_t g_i2c_master1_ctrl;
+extern const i2c_master_cfg_t g_i2c_master1_cfg;
+
+#ifndef NULL
+void NULL(i2c_master_callback_args_t * p_args);
+#endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi3;
 
@@ -28,18 +40,18 @@ extern const spi_cfg_t g_spi3_cfg;
 
 /** Callback used by SPI Instance. */
 #ifndef spi3_callback
-void spi3_callback(spi_callback_args_t* p_args);
+void spi3_callback(spi_callback_args_t * p_args);
 #endif
 /** SPI on SPI Instance. */
-extern const spi_instance_t g_spi1;
+extern const spi_instance_t g_spi2;
 
 /** Access the SPI instance using these structures when calling API functions directly (::p_api is not used). */
-extern spi_instance_ctrl_t g_spi1_ctrl;
-extern const spi_cfg_t g_spi1_cfg;
+extern spi_instance_ctrl_t g_spi2_ctrl;
+extern const spi_cfg_t g_spi2_cfg;
 
 /** Callback used by SPI Instance. */
-#ifndef spi1_callback
-void spi1_callback(spi_callback_args_t * p_args);
+#ifndef spi2_callback
+void spi2_callback(spi_callback_args_t * p_args);
 #endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi0;

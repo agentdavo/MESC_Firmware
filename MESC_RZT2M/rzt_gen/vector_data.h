@@ -4,7 +4,7 @@
         #include "bsp_api.h"
                 /* Number of interrupts allocated */
         #ifndef VECTOR_DATA_IRQ_COUNT
-        #define VECTOR_DATA_IRQ_COUNT    (34)
+        #define VECTOR_DATA_IRQ_COUNT    (38)
         #endif
         /* ISR prototypes */
         void R_IRQ1_isr(void);
@@ -17,6 +17,10 @@
         void m_sci0_rxi_interrupt(void);
         void m_sci0_txi_interrupt(void);
         void m_sci0_tei_interrupt(void);
+        void m_i2c1_eei_interrupt(void);
+        void m_i2c1_rxi_interrupt(void);
+        void m_i2c1_txi_interrupt(void);
+        void m_i2c1_tei_interrupt(void);
         void canfd_rx_fifo_isr(void);
         void canfd_error_isr(void);
         void canfd_channel_tx_isr(void);
@@ -41,6 +45,10 @@
         #define VECTOR_NUMBER_SCI0_RXI ((IRQn_Type) 289) /* SCI0_RXI (SCI0 Receive data full) */
         #define VECTOR_NUMBER_SCI0_TXI ((IRQn_Type) 290) /* SCI0_TXI (SCI0 Transmit data empty) */
         #define VECTOR_NUMBER_SCI0_TEI ((IRQn_Type) 291) /* SCI0_TEI (SCI0 Transmit end) */
+        #define VECTOR_NUMBER_IIC1_EEI ((IRQn_Type) 312) /* IIC1_EEI (IIC1 Transfer error or event generation) */
+        #define VECTOR_NUMBER_IIC1_RXI ((IRQn_Type) 313) /* IIC1_RXI (IIC1 Receive data full) */
+        #define VECTOR_NUMBER_IIC1_TXI ((IRQn_Type) 314) /* IIC1_TXI (IIC1 Transmit data empty) */
+        #define VECTOR_NUMBER_IIC1_TEI ((IRQn_Type) 315) /* IIC1_TEI (IIC1 Transmit end) */
         #define VECTOR_NUMBER_CAN_RXF ((IRQn_Type) 316) /* CAN_RXF (CANFD RX FIFO interrupt) */
         #define VECTOR_NUMBER_CAN_GLERR ((IRQn_Type) 317) /* CAN_GLERR (CANFD Global error interrupt) */
         #define VECTOR_NUMBER_CAN0_TX ((IRQn_Type) 318) /* CAN0_TX (CANFD0 Channel TX interrupt) */
@@ -99,6 +107,10 @@
             SCI0_RXI_IRQn = 289, /* SCI0_RXI (SCI0 Receive data full) */
             SCI0_TXI_IRQn = 290, /* SCI0_TXI (SCI0 Transmit data empty) */
             SCI0_TEI_IRQn = 291, /* SCI0_TEI (SCI0 Transmit end) */
+            IIC1_EEI_IRQn = 312, /* IIC1_EEI (IIC1 Transfer error or event generation) */
+            IIC1_RXI_IRQn = 313, /* IIC1_RXI (IIC1 Receive data full) */
+            IIC1_TXI_IRQn = 314, /* IIC1_TXI (IIC1 Transmit data empty) */
+            IIC1_TEI_IRQn = 315, /* IIC1_TEI (IIC1 Transmit end) */
             CAN_RXF_IRQn = 316, /* CAN_RXF (CANFD RX FIFO interrupt) */
             CAN_GLERR_IRQn = 317, /* CAN_GLERR (CANFD Global error interrupt) */
             CAN0_TX_IRQn = 318, /* CAN0_TX (CANFD0 Channel TX interrupt) */

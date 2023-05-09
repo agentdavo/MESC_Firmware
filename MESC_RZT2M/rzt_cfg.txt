@@ -470,8 +470,8 @@ FSP Configuration
       P22_3 A4 GPIO M1_OT_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
       P22_4 E8 GPIO M1_OC_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D11" - IO - - 
       P22_5 B5 GPIO M1_OV_LED Low - "Output mode (Low & Not Into Input)" - - "BSC: D12; SCI4: CTS4#" - IO - - 
-      P22_6 E7 IIC1_IIC_SCL1 IIC_SCL1 Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
-      P22_7 C6 IIC1_IIC_SDA1 IIC_SDA1 Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
+      P22_6 E7 IIC1_IIC_SCL1 EEPROM_SCL Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
+      P22_7 C6 IIC1_IIC_SDA1 EEPROM_SDA Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 SPI2_SPI_MOSI2 SPI2_SPI_MOSI2 High - "Peripheral mode" - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
       P23_1 E6 MTU3_MTCLKA MTU3_MTCLKA Middle - "Peripheral mode" - - "BSC: D16; BSC: WE0#_DQMLL; IRQ: NMI; MTU3: MTCLKA" - I - - 
       P23_2 B4 MTU3_MTCLKB MTU3_MTCLKB Middle - "Peripheral mode" - - "BSC: D17; BSC: WE1#_DQMLU; IRQ: IRQ8; MTU3: MTCLKB" - I - - 
@@ -791,8 +791,8 @@ FSP Configuration
       P22_3 A4 - M1_OT_LED Low - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
       P22_4 E8 - M1_OC_LED Low - Disabled - - "BSC: D11" - IO - - 
       P22_5 B5 - M1_OV_LED Low - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
-      P22_6 E7 IIC1_IIC_SCL1 IIC_SCL1 Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
-      P22_7 C6 IIC1_IIC_SDA1 IIC_SDA1 Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
+      P22_6 E7 IIC1_IIC_SCL1 EEPROM_SCL Middle - "Peripheral mode" - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
+      P22_7 C6 IIC1_IIC_SDA1 EEPROM_SDA Middle - "Peripheral mode" - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 - SPI2_SPI_MOSI2 Low - Disabled - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
       P23_1 E6 - MTU3_MTCLKA Low - Disabled - - "BSC: D16; BSC: WE0#_DQMLL; IRQ: NMI; MTU3: MTCLKA" - I - - 
       P23_2 B4 - MTU3_MTCLKB Low - Disabled - - "BSC: D17; BSC: WE1#_DQMLU; IRQ: IRQ8; MTU3: MTCLKB" - I - - 
@@ -1112,8 +1112,8 @@ FSP Configuration
       P22_3 A4 - M1_OT_LED Low - Disabled - - "BSC: D10; ENCIF: ENCIF11; GPT_POEG: GTETRGSB; MTU38: MTIOC8D" - IO - - 
       P22_4 E8 - M1_OC_LED Low - Disabled - - "BSC: D11" - IO - - 
       P22_5 B5 - M1_OV_LED Low - Disabled - - "BSC: D12; SCI4: CTS4#" - IO - - 
-      P22_6 E7 - IIC_SCL1 Low - Disabled - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
-      P22_7 C6 - IIC_SDA1 Low - Disabled - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
+      P22_6 E7 - EEPROM_SCL Low - Disabled - - "BSC: D13; IIC1: IIC_SCL1; SCI4: DE4" - IO - - 
+      P22_7 C6 - EEPROM_SDA Low - Disabled - - "BSC: D14; IIC1: IIC_SDA1; SCI0: SCK0" - IO - - 
       P23_0 A3 - SPI2_SPI_MOSI2 Low - Disabled - - "BSC: D15; IRQ: IRQ5; SPI2: SPI_MOSI2" - IO - - 
       P23_1 E6 - MTU3_MTCLKA Low - Disabled - - "BSC: D16; BSC: WE0#_DQMLL; IRQ: NMI; MTU3: MTCLKA" - I - - 
       P23_2 B4 - MTU3_MTCLKB Low - Disabled - - "BSC: D17; BSC: WE1#_DQMLU; IRQ: IRQ8; MTU3: MTCLKB" - I - - 
@@ -1233,6 +1233,10 @@ FSP Configuration
     ENCIF_INT4 (ENCIF CH1 Interrupt A): r_enc_ch1_int_isr
     ENCIF_INT1 (ENCIF CH0 Interrupt B): r_enc_ch0_err_int_isr
     ENCIF_INT5 (ENCIF CH1 Interrupt B): r_enc_ch1_err_int_isr
+    IIC1_EEI (IIC1 Transfer error or event generation): m_i2c1_eei_interrupt
+    IIC1_RXI (IIC1 Receive data full): m_i2c1_rxi_interrupt
+    IIC1_TXI (IIC1 Transmit data empty): m_i2c1_txi_interrupt
+    IIC1_TEI (IIC1 Transmit end): m_i2c1_tei_interrupt
     
   User Event Links
     
@@ -1408,6 +1412,14 @@ FSP Configuration
     
   Module "Buffer Allocation 2"
   Module "Heap 4"
+  Module "ADC Driver on r_tsu"
+    Parameter Checking: Default (BSP)
+    
+  Module "I2C Master Driver on r_iic_master"
+    Parameter Checking: Default (BSP)
+    DMAC on Transmission and Reception: Disabled
+    10-bit slave addressing: Disabled
+    
   FreeRTOS
     General: Custom FreeRTOSConfig.h: 
     General: Use Preemption: Enabled
@@ -1463,7 +1475,7 @@ FSP Configuration
     Optional Functions: xTaskGetIdleTaskHandle() Function: Disabled
     Optional Functions: eTaskGetState() Function: Disabled
     Optional Functions: xEventGroupSetBitFromISR() Function: Enabled
-    Optional Functions: xTimerPendFunctionCall() Function: Disabled
+    Optional Functions: xTimerPendFunctionCall() Function: Enabled
     Optional Functions: xTaskAbortDelay() Function: Enabled
     Optional Functions: xTaskGetHandle() Function: Disabled
     Optional Functions: xTaskResumeFromISR() Function: Enabled
@@ -2357,6 +2369,9 @@ FSP Configuration
         Extra: Short Circuit: High Count Threshold: 0x0
         Extra: Short Circuit: Low Count Threshold: 0x0
         
+    Instance "g_tsu0 ADC Driver on r_tsu"
+      Name: g_tsu0
+      
   Thread "Comms Thread"
     Symbol: comms_thread
     Name: Comms Thread
@@ -2521,8 +2536,8 @@ FSP Configuration
       Receive FIFO Threshold: 0
       Receive Data Ready Detect Adjustment: 0
       
-    Instance "g_spi1 SPI Driver on r_spi"
-      Name: g_spi1
+    Instance "g_spi2 SPI Driver on r_spi"
+      Name: g_spi2
       Channel: 1
       Receive Interrupt Priority: Priority 12
       Transmit Buffer Empty Interrupt Priority: Priority 12
@@ -2533,7 +2548,7 @@ FSP Configuration
       Clock Polarity: Low when idle
       Mode Fault Error: Disable
       Bit Order: MSB First
-      Callback: spi1_callback
+      Callback: spi2_callback
       SPI Mode: Clock Synchronous Operation
       Full or Transmit Only Mode: Full Duplex
       Slave Select Polarity: Active Low
@@ -2683,3 +2698,16 @@ FSP Configuration
             
         Instance "Buffer Allocation 2"
     Instance "Heap 4"
+    Instance "g_i2c_master1 I2C Master Driver on r_iic_master"
+      Name: g_i2c_master1
+      Channel: 1
+      Rate: Standard
+      Rise Time (ns): 120
+      Fall Time (ns): 120
+      Duty Cycle (%): 50
+      Slave Address: 0x00
+      Address Mode: 7-Bit
+      Timeout Mode: Short Mode
+      Callback: NULL
+      Interrupt Priority Level: Priority 12
+      

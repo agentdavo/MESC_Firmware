@@ -14,6 +14,10 @@
             [289] = m_sci0_rxi_interrupt, /* SCI0_RXI (SCI0 Receive data full) */
             [290] = m_sci0_txi_interrupt, /* SCI0_TXI (SCI0 Transmit data empty) */
             [291] = m_sci0_tei_interrupt, /* SCI0_TEI (SCI0 Transmit end) */
+            [312] = m_i2c1_eei_interrupt, /* IIC1_EEI (IIC1 Transfer error or event generation) */
+            [313] = m_i2c1_rxi_interrupt, /* IIC1_RXI (IIC1 Receive data full) */
+            [314] = m_i2c1_txi_interrupt, /* IIC1_TXI (IIC1 Transmit data empty) */
+            [315] = m_i2c1_tei_interrupt, /* IIC1_TEI (IIC1 Transmit end) */
             [316] = canfd_rx_fifo_isr, /* CAN_RXF (CANFD RX FIFO interrupt) */
             [317] = canfd_error_isr, /* CAN_GLERR (CANFD Global error interrupt) */
             [318] = canfd_channel_tx_isr, /* CAN0_TX (CANFD0 Channel TX interrupt) */

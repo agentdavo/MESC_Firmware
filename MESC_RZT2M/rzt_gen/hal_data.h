@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "bsp_api.h"
 #include "common_data.h"
+#include "r_tsu.h"
+#include "r_adc_api.h"
 #include "r_dsmif.h"
 #include "r_adc_api.h"
 #include "r_mtu3.h"
@@ -19,6 +21,12 @@
 #include "r_gpt.h"
 #include "r_timer_api.h"
 FSP_HEADER
+/** ADC on TSU Instance. */
+extern const adc_instance_t g_tsu0;
+
+/** Access the TSU instance using these structures when calling API functions directly (::p_api is not used). */
+extern tsu_instance_ctrl_t g_tsu0_ctrl;
+extern const adc_cfg_t g_tsu0_cfg;
 /** ADC on DSMIF Instance. */
             extern const adc_instance_t g_dsmif1;
             extern dsmif_instance_ctrl_t g_dsmif1_ctrl;

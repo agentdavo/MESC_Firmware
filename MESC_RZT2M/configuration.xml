@@ -409,6 +409,14 @@
       <description>FreeRTOS+TCP</description>
       <originalPack>Renesas.RZT_AWS.1.2.0.pack</originalPack>
     </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_iic_master" variant="" vendor="Renesas" version="1.2.0">
+      <description>I2C Master Interface</description>
+      <originalPack>Renesas.RZT.1.2.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_tsu" variant="" vendor="Renesas" version="1.2.0">
+      <description>Temperature Sensor Unit</description>
+      <originalPack>Renesas.RZT.1.2.0.pack</originalPack>
+    </component>
   </raComponentSelection>
   <raElcConfiguration/>
   <raIcuConfiguration>
@@ -423,6 +431,10 @@
     <interrupt event="event.encif.ch1.encif_int4" isr="r_enc_ch1_int_isr"/>
     <interrupt event="event.encif.ch0.encif_int1" isr="r_enc_ch0_err_int_isr"/>
     <interrupt event="event.encif.ch1.encif_int5" isr="r_enc_ch1_err_int_isr"/>
+    <interrupt event="event.iic.ch1.iic1_eei" isr="m_i2c1_eei_interrupt"/>
+    <interrupt event="event.iic.ch1.iic1_rxi" isr="m_i2c1_rxi_interrupt"/>
+    <interrupt event="event.iic.ch1.iic1_txi" isr="m_i2c1_txi_interrupt"/>
+    <interrupt event="event.iic.ch1.iic1_tei" isr="m_i2c1_tei_interrupt"/>
   </raIcuConfiguration>
   <raModuleConfiguration>
     <module id="module.driver.ioport_on_ioport.0">
@@ -1467,7 +1479,7 @@
       <property id="module.driver.spi.receive_data_ready_detect_adjustment" value="0"/>
     </module>
     <module id="module.driver.spi_on_spi.125790719">
-      <property id="module.driver.spi.name" value="g_spi1"/>
+      <property id="module.driver.spi.name" value="g_spi2"/>
       <property id="module.driver.spi.channel" value="1"/>
       <property id="module.driver.spi.rxi_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.spi.txi_ipl" value="board.icu.common.irq.priority12"/>
@@ -1478,7 +1490,7 @@
       <property id="module.driver.spi.clk_polarity" value="module.driver.spi.clk_polarity.clk_polarity_low"/>
       <property id="module.driver.spi.mode_fault" value="module.driver.spi.mode_fault.mode_fault_error_disable"/>
       <property id="module.driver.spi.bit_order" value="module.driver.spi.bit_order.bit_order_msb_first"/>
-      <property id="module.driver.spi.p_callback" value="spi1_callback"/>
+      <property id="module.driver.spi.p_callback" value="spi2_callback"/>
       <property id="module.driver.spi.spi_clksyn" value="module.driver.spi.spi_clksyn.spi_clksyn"/>
       <property id="module.driver.spi.spi_comm" value="module.driver.spi.spi_comm.full_duplex"/>
       <property id="module.driver.spi.ssl_polarity" value="module.driver.spi.ssl_polarity.low"/>
@@ -1628,6 +1640,22 @@
       <property id="module.driver.ether_selector.ref_clock" value="module.driver.ether_selector.ref_clock.input"/>
     </module>
     <module id="module.freertos.heap.4.2061220694"/>
+    <module id="module.driver.adc_on_tsu.1907829491">
+      <property id="module.driver.tsu.name" value="g_tsu0"/>
+    </module>
+    <module id="module.driver.i2c_on_iic_master.913837714">
+      <property id="module.driver.i2c_master.name" value="g_i2c_master1"/>
+      <property id="module.driver.i2c_master.channel" value="1"/>
+      <property id="module.driver.i2c_master.rate" value="module.driver.i2c_master.rate.rate_standard"/>
+      <property id="module.driver.i2c_master.rise_time_ns" value="120"/>
+      <property id="module.driver.i2c_master.fall_time_ns" value="120"/>
+      <property id="module.driver.i2c_master.duty" value="50"/>
+      <property id="module.driver.i2c_master.slave" value="0x00"/>
+      <property id="module.driver.i2c_master.addr_mode" value="module.driver.i2c_master.addr_mode.addr_mode_7bit"/>
+      <property id="module.driver.i2c_master.timeout_mode" value="module.driver.i2c_master.timeout_mode.short_mode"/>
+      <property id="module.driver.i2c_master.p_callback" value="NULL"/>
+      <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority12"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.timer_on_gpt.2100970901"/>
@@ -1663,6 +1691,7 @@
         <stack module="module.driver.dsmif_channel.1350920333" requires="module.driver.dsmif.requires.channel1"/>
         <stack module="module.driver.dsmif_channel.423155545" requires="module.driver.dsmif.requires.channel2"/>
       </stack>
+      <stack module="module.driver.adc_on_tsu.1907829491"/>
     </context>
     <context id="rtos.awsfreertos.thread.1148694635">
       <property id="_symbol" value="comms_thread"/>
@@ -1698,10 +1727,14 @@
         </stack>
       </stack>
       <stack module="module.freertos.heap.4.2061220694"/>
+      <stack module="module.driver.i2c_on_iic_master.913837714"/>
     </context>
     <config id="config.driver.ether_selector">
       <property id="config.driver.ether_selector.param_checking_enable" value="config.driver.ether_selector.param_checking_enable.bsp"/>
       <property id="config.driver.ether_selector.mode" value="config.driver.ether_selector.mode.0"/>
+    </config>
+    <config id="config.driver.tsu">
+      <property id="config.driver.tsu.param_checking_enable" value="config.driver.tsu.param_checking_enable.bsp"/>
     </config>
     <config id="config.driver.dmac">
       <property id="config.driver.dmac.param_checking_enable" value="config.driver.dmac.param_checking_enable.bsp"/>
@@ -1785,6 +1818,11 @@
       <property id="config.driver.mtu3.output_support_enable" value="config.driver.mtu3.output_support_enable.enabled_extra"/>
       <property id="config.driver.mtu3.uvw_support_enable" value="config.driver.mtu3.uvw_support_enable.enabled"/>
     </config>
+    <config id="config.driver.iic_master">
+      <property id="config.driver.iic_master.param_checking_enable" value="config.driver.iic_master.param_checking_enable.bsp"/>
+      <property id="config.driver.iic_master.dmac_enable" value="config.driver.iic_master.dmac_enable.disabled"/>
+      <property id="config.driver.iic_master.addr_mode_10_bit_enable" value="config.driver.iic_master.addr_mode_10_bit_enable.disabled"/>
+    </config>
     <config id="config.driver.adc">
       <property id="config.driver.adc.param_checking_enable" value="config.driver.adc.param_checking_enable.bsp"/>
     </config>
@@ -1855,7 +1893,7 @@
       <property id="config.awsfreertos.thread.include_xtaskgetidletaskhandle" value="config.awsfreertos.thread.include_xtaskgetidletaskhandle.disabled"/>
       <property id="config.awsfreertos.thread.include_etaskgetstate" value="config.awsfreertos.thread.include_etaskgetstate.disabled"/>
       <property id="config.awsfreertos.thread.include_xeventgroupsetbitfromisr" value="config.awsfreertos.thread.include_xeventgroupsetbitfromisr.enabled"/>
-      <property id="config.awsfreertos.thread.include_xtimerpendfunctioncall" value="config.awsfreertos.thread.include_xtimerpendfunctioncall.disabled"/>
+      <property id="config.awsfreertos.thread.include_xtimerpendfunctioncall" value="config.awsfreertos.thread.include_xtimerpendfunctioncall.enabled"/>
       <property id="config.awsfreertos.thread.include_xtaskabortdelay" value="config.awsfreertos.thread.include_xtaskabortdelay.enabled"/>
       <property id="config.awsfreertos.thread.include_xtaskgethandle" value="config.awsfreertos.thread.include_xtaskgethandle.disabled"/>
       <property id="config.awsfreertos.thread.include_xtaskresumefromisr" value="config.awsfreertos.thread.include_xtaskresumefromisr.enabled"/>
@@ -2113,8 +2151,8 @@
     <symbolicName propertyId="p22_3.symbolic_name" value="M1_OT_LED"/>
     <symbolicName propertyId="p22_4.symbolic_name" value="M1_OC_LED"/>
     <symbolicName propertyId="p22_5.symbolic_name" value="M1_OV_LED"/>
-    <symbolicName propertyId="p22_6.symbolic_name" value="IIC_SCL1"/>
-    <symbolicName propertyId="p22_7.symbolic_name" value="IIC_SDA1"/>
+    <symbolicName propertyId="p22_6.symbolic_name" value="EEPROM_SCL"/>
+    <symbolicName propertyId="p22_7.symbolic_name" value="EEPROM_SDA"/>
     <symbolicName propertyId="p23_0.symbolic_name" value="SPI2_SPI_MOSI2"/>
     <symbolicName propertyId="p23_1.symbolic_name" value="MTU3_MTCLKA"/>
     <symbolicName propertyId="p23_2.symbolic_name" value="MTU3_MTCLKB"/>

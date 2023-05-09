@@ -11,6 +11,32 @@
 
 
 
+tsu_instance_ctrl_t g_tsu0_ctrl;
+const adc_cfg_t g_tsu0_cfg =
+{
+    .unit           = 0,
+    .mode           = ADC_MODE_SINGLE_SCAN,
+    .resolution     = ADC_RESOLUTION_12_BIT,
+    .alignment      = ADC_ALIGNMENT_RIGHT,
+    .trigger        = ADC_TRIGGER_SOFTWARE,
+    .scan_end_irq   = FSP_INVALID_VECTOR,
+    .scan_end_ipl   = (BSP_IRQ_DISABLED),
+    .scan_end_b_irq = FSP_INVALID_VECTOR,
+    .scan_end_b_ipl = (BSP_IRQ_DISABLED),
+    .scan_end_c_irq = FSP_INVALID_VECTOR,
+    .scan_end_c_ipl = (BSP_IRQ_DISABLED),
+    .p_callback     = NULL,
+    .p_context      = NULL,
+    .p_extend       = NULL,
+};
+/* Instance structure to use this module. */
+const adc_instance_t g_tsu0 =
+{
+    .p_ctrl        = &g_tsu0_ctrl,
+    .p_cfg         = &g_tsu0_cfg,
+    .p_channel_cfg = NULL,
+    .p_api         = &g_adc_on_tsu,
+};
 dsmif_channel_cfg_t g_dsmif1_channel_cfg2 =
 {
     .ioel                = 0,
