@@ -46,6 +46,6 @@ jobs:
           name: output
           # A file, directory or wildcard pattern that describes what to upload
           path: |
-            ${{github.workspace}}/build/*.elf
-            ${{github.workspace}}/build/*.bin
-            ${{github.workspace}}/build/*.hex
+            ${{github.workspace}}/build/MESC_RZT2M/*.elf
+            ${{github.workspace}}/build/MESC_RZT2M/*.bin
+            ${{github.workspace}}/build/MESC_RZT2M/*.hex
