@@ -27,10 +27,10 @@
 
 motor_state_e MotorState;
 motor_sensor_mode_e MotorSensorMode;
-motor_error_type_e MotorError;
+//OI motor_error_type_e MotorError;
 motor_direction_e MotorDirection;
 motor_control_type_e MotorControlType;
-test_mode_e TestMode;
+//OI test_mode_e TestMode;
 
 void MESCmotor_state_set(motor_state_e mState)
 {

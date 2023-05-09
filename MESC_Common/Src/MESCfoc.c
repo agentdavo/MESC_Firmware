@@ -69,11 +69,11 @@ float sqrt3_on_2 = 0.866025f;
 float two_on_sqrt3 = 1.15470f;
 int adc_conv_end;
 
-MESC_motor mtr[NUM_MOTORS];
-
 MESCtest_s test_vals;
 input_vars_t input_vars;
 sampled_vars_t sampled_vars;
+motor_error_type_e MotorError;
+test_mode_e TestMode;
 
 volatile int print_samples_now, lognow;
 
@@ -163,7 +163,8 @@ void MESCInit(MESC_motor* _motor, MESC_hal* _hal)
 
   _motor->hal->MotorInitStage2(_motor); //OI mesc_init_2(_motor);
 
-  hw_init(_motor);  // Populate the resistances, gains etc of the PCB - edit within
+  _motor->hal->MotorInitHardware(_motor);
+  //OI hw_init(_motor);  // Populate the resistances, gains etc of the PCB - edit within
                     // this function if compiling for other PCBs
 
   // Start the PWM channels, reset the counter to zero each time to avoid
@@ -174,10 +175,10 @@ void MESCInit(MESC_motor* _motor, MESC_hal* _hal)
   _motor->key_bits = UNINITIALISED_KEY + KILLSWITCH_KEY + SAFESTART_KEY;
 
   while (_motor->MotorState == MOTOR_STATE_INITIALISING)
-    {
-      //At this point, the ADCs have started and we want nothing to happen until initialisation complete
-      generateBreakAll();
-    }
+  {
+    //At this point, the ADCs have started and we want nothing to happen until initialisation complete
+    _motor->hal->GenerateBreakAll(_motor);
+  }
   calculateGains(_motor);
   calculateVoltageGain(_motor);
 
@@ -205,11 +206,11 @@ void MESCInit(MESC_motor* _motor, MESC_hal* _hal)
 
   //Lock it in initialising while the offsets not completed
   while (_motor->key_bits & UNINITIALISED_KEY)
-    {
-      _motor->MotorState = MOTOR_STATE_INITIALISING;
-      Delay(0);
-      generateBreakAll();
-    }
+  {
+    _motor->MotorState = MOTOR_STATE_INITIALISING;
+    Delay(0);
+    _motor->hal->GenerateBreakAll(_motor);
+  }
 }
 
 void InputInit()
@@ -544,7 +545,7 @@ void fastLoop(MESC_motor* _motor)
         //hadc1.Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
 #endif
 #endif
-  adc1_start();
+  _motor->hal->AdcStart(); //OI adc1_start();
 }
 
 // The hyperloop runs at PWM timer bottom, when the PWM is in V7 (all high)
@@ -1473,27 +1474,15 @@ void generateEnable(MESC_motor* _motor)
   _motor->hal->phW_Enable();
 }
 
-void generateBreakAll()
-{
-//  for (int i = 0; i < NUM_MOTORS; i++)
-//  {
-//    mtr[i].hal->invEnable(false);
-//  }
-  for (int i = 0; i < NUM_MOTORS; i++)
-  {
-    generateBreak(&mtr[i]);
-  }
-}
-
 void measureResistance(MESC_motor* _motor)
 {
   if (_motor->meas.PWM_cycles < 2)
     {
       _motor->meas.previous_HFI_type = _motor->HFIType;
       uint16_t half_ARR = _motor->hal->MotorTimerGetAutoreload() / 2; //OI htim1.Instance->ARR / 2;
-      mtr[0].hal->MotorTimerDuty1(half_ARR);//OI htim1.Instance->CCR1 = half_ARR;
-      mtr[0].hal->MotorTimerDuty2(half_ARR);//OI htim1.Instance->CCR2 = half_ARR;
-      mtr[0].hal->MotorTimerDuty3(half_ARR);//OI htim1.Instance->CCR3 = half_ARR;
+      _motor->hal->MotorTimerDuty1(half_ARR);//OI htim1.Instance->CCR1 = half_ARR;
+      _motor->hal->MotorTimerDuty2(half_ARR);//OI htim1.Instance->CCR2 = half_ARR;
+      _motor->hal->MotorTimerDuty3(half_ARR);//OI htim1.Instance->CCR3 = half_ARR;
       _motor->m.R = 0.001f;       // Initialise with a very low value 1mR
       _motor->m.L_D = 0.000001f;  // Initialise with a very low value 1uH
       _motor->m.L_Q = 0.000001f;
@@ -1958,7 +1947,7 @@ void calculateVoltageGain(MESC_motor* _motor)
         //_motor->FOC.HFI_Threshold = ((HFI_VOLTAGE*sqrt2*2.0f)*_motor->FOC.pwm_period)/((_motor->m.L_D+_motor->m.L_Q)*0.5f);
         if (HFI_THRESHOLD == 0.0f)
           {
-            _motor->FOC.HFI_toggle_voltage = mtr->Conv.Vbus * 0.05f;
+            _motor->FOC.HFI_toggle_voltage = _motor->Conv.Vbus * 0.05f;
             if (_motor->FOC.HFI_toggle_voltage < 3.0f)
               {
                 _motor->FOC.HFI_toggle_voltage = 3.0f;
@@ -2003,9 +1992,9 @@ void doublePulseTest(MESC_motor* _motor)
       _motor->hal->phU_Enable();
       _motor->hal->phV_Enable();
       _motor->hal->phW_Enable();
-      mtr[0].hal->MotorTimerDuty1(0);
-      mtr[0].hal->MotorTimerDuty2(0);
-      mtr[0].hal->MotorTimerDuty3(0);
+      _motor->hal->MotorTimerDuty1(0);
+      _motor->hal->MotorTimerDuty2(0);
+      _motor->hal->MotorTimerDuty3(0);
       //OI htim1.Instance->CCR1 = 0;
       //OI htim1.Instance->CCR2 = 0;
       //OI htim1.Instance->CCR3 = 0;
@@ -2435,16 +2424,16 @@ void deadshort(MESC_motor* _motor)
   if (countdown > 10)
     {
       generateBreak(_motor);
-      mtr[0].hal->MotorTimerDuty1(50);  // htim1.Instance->CCR1 = 50;
-      mtr[0].hal->MotorTimerDuty2(50);  // htim1.Instance->CCR2 = 50;
-      mtr[0].hal->MotorTimerDuty3(50);  // htim1.Instance->CCR3 = 50;
+      _motor->hal->MotorTimerDuty1(50);  // htim1.Instance->CCR1 = 50;
+      _motor->hal->MotorTimerDuty2(50);  // htim1.Instance->CCR2 = 50;
+      _motor->hal->MotorTimerDuty3(50);  // htim1.Instance->CCR3 = 50;
       //Preload the timer at mid
     }
   if (countdown <= 10 && countdown > 1)
     {
-      mtr[0].hal->MotorTimerDuty1(50);  // htim1.Instance->CCR1 = 50;
-      mtr[0].hal->MotorTimerDuty2(50);  // htim1.Instance->CCR2 = 50;
-      mtr[0].hal->MotorTimerDuty3(50);  // htim1.Instance->CCR3 = 50;
+      _motor->hal->MotorTimerDuty1(50);  // htim1.Instance->CCR1 = 50;
+      _motor->hal->MotorTimerDuty2(50);  // htim1.Instance->CCR2 = 50;
+      _motor->hal->MotorTimerDuty3(50);  // htim1.Instance->CCR3 = 50;
       generateEnable(_motor);
     }
   if (countdown == 1)
@@ -2495,9 +2484,9 @@ void getDeadtime(MESC_motor* _motor)
 
   if (use_phase == 0)
     {
-      mtr[0].hal->MotorTimerDuty1(test_on_time);  //OI htim1.Instance->CCR1 = test_on_time;
-      mtr[0].hal->MotorTimerDuty2(0);             //OI htim1.Instance->CCR2 = 0;
-      mtr[0].hal->MotorTimerDuty3(0);             //OI htim1.Instance->CCR3 = 0;
+      _motor->hal->MotorTimerDuty1(test_on_time);  //OI htim1.Instance->CCR1 = test_on_time;
+      _motor->hal->MotorTimerDuty2(0);             //OI htim1.Instance->CCR2 = 0;
+      _motor->hal->MotorTimerDuty3(0);             //OI htim1.Instance->CCR3 = 0;
       if (_motor->Conv.Iu < 1.0f)
         {
           test_on_time++;
@@ -2512,9 +2501,9 @@ void getDeadtime(MESC_motor* _motor)
 
   if (use_phase == 1)
     {
-      mtr[0].hal->MotorTimerDuty1(0);             //OI htim1.Instance->CCR1 = 0;
-      mtr[0].hal->MotorTimerDuty2(test_on_time);  //OI htim1.Instance->CCR2 = test_on_time;
-      mtr[0].hal->MotorTimerDuty3(0);             //OI htim1.Instance->CCR3 = 0;
+      _motor->hal->MotorTimerDuty1(0);             //OI htim1.Instance->CCR1 = 0;
+      _motor->hal->MotorTimerDuty2(test_on_time);  //OI htim1.Instance->CCR2 = test_on_time;
+      _motor->hal->MotorTimerDuty3(0);             //OI htim1.Instance->CCR3 = 0;
       if (_motor->Conv.Iv < 1.0f)
         {
           test_on_time++;
@@ -2529,9 +2518,9 @@ void getDeadtime(MESC_motor* _motor)
 
   if (use_phase == 2)
     {
-      mtr[0].hal->MotorTimerDuty1(0);             //OI htim1.Instance->CCR1 = 0;
-      mtr[0].hal->MotorTimerDuty2(0);             //OI htim1.Instance->CCR2 = 0;
-      mtr[0].hal->MotorTimerDuty3(test_on_time);  //OI htim1.Instance->CCR3 = test_on_time;
+      _motor->hal->MotorTimerDuty1(0);             //OI htim1.Instance->CCR1 = 0;
+      _motor->hal->MotorTimerDuty2(0);             //OI htim1.Instance->CCR2 = 0;
+      _motor->hal->MotorTimerDuty3(test_on_time);  //OI htim1.Instance->CCR3 = test_on_time;
       if (_motor->Conv.Iw < 1.0f)
         {
           test_on_time++;  // = test_on_time + 1;
@@ -3661,8 +3650,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phV_Break();
         _motor->hal->phU_Enable();
         _motor->hal->phW_Enable();
-        mtr[0].hal->MotorTimerDuty1(0);
-        mtr[0].hal->MotorTimerDuty3(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty1(0);
+        _motor->hal->MotorTimerDuty3(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR1 = 0;
         //OI _motor->mtimer->Instance->CCR3 = _motor->BLDC.BLDC_PWM;
         break;
@@ -3670,8 +3659,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phW_Break();
         _motor->hal->phU_Enable();
         _motor->hal->phV_Enable();
-        mtr[0].hal->MotorTimerDuty1(0);
-        mtr[0].hal->MotorTimerDuty2(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty1(0);
+        _motor->hal->MotorTimerDuty2(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR1 = 0;
         //OI _motor->mtimer->Instance->CCR2 = _motor->BLDC.BLDC_PWM;
         break;
@@ -3679,8 +3668,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phU_Break();
         _motor->hal->phV_Enable();
         _motor->hal->phW_Enable();
-        mtr[0].hal->MotorTimerDuty3(0);
-        mtr[0].hal->MotorTimerDuty2(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty3(0);
+        _motor->hal->MotorTimerDuty2(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR3 = 0;
         //OI _motor->mtimer->Instance->CCR2 = _motor->BLDC.BLDC_PWM;
         break;
@@ -3688,8 +3677,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phV_Break();
         _motor->hal->phU_Enable();
         _motor->hal->phW_Enable();
-        mtr[0].hal->MotorTimerDuty3(0);
-        mtr[0].hal->MotorTimerDuty1(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty3(0);
+        _motor->hal->MotorTimerDuty1(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR3 = 0;
         //OI _motor->mtimer->Instance->CCR1 = _motor->BLDC.BLDC_PWM;
         break;
@@ -3697,8 +3686,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phW_Break();
         _motor->hal->phU_Enable();
         _motor->hal->phV_Enable();
-        mtr[0].hal->MotorTimerDuty2(0);
-        mtr[0].hal->MotorTimerDuty1(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty2(0);
+        _motor->hal->MotorTimerDuty1(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR2 = 0;
         //OI _motor->mtimer->Instance->CCR1 = _motor->BLDC.BLDC_PWM;
         break;
@@ -3706,8 +3695,8 @@ void BLDCCommute(MESC_motor* _motor)
         _motor->hal->phU_Break();
         _motor->hal->phV_Enable();
         _motor->hal->phW_Enable();
-        mtr[0].hal->MotorTimerDuty2(0);
-        mtr[0].hal->MotorTimerDuty3(_motor->BLDC.BLDC_PWM);
+        _motor->hal->MotorTimerDuty2(0);
+        _motor->hal->MotorTimerDuty3(_motor->BLDC.BLDC_PWM);
         //OI _motor->mtimer->Instance->CCR2 = 0;
         //OI _motor->mtimer->Instance->CCR3 = _motor->BLDC.BLDC_PWM;
         break;

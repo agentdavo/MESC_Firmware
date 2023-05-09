@@ -189,11 +189,6 @@ void tim1_enable_main_output()
   htim1.Instance->BDTR |= TIM_BDTR_MOE;
 }
 
-//void tim1_setup_deadtime()
-//{
-//
-//}
-
 // Turn all phase U FETs off, Tristate the HBridge output - For BLDC mode
 // mainly, but also used for measuring, software fault detection and recovery
 void phU_Break()

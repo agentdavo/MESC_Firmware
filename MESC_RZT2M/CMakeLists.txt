@@ -15,7 +15,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 #    list(APPEND compile_definitions "NDEBUG")
 #endif()
 
-SET(RASC_CMAKE_EXE_LINKER_FLAGS "-g -O0 -mcpu=cortex-r52 -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -mthumb -T fsp.ld -Xlinker --gc-sections -Wl,-Map,${PROJECT_NAME}.map --specs=nano.specs --specs=rdimon.specs -L ${CMAKE_CURRENT_LIST_DIR}/../ -L ${CMAKE_CURRENT_LIST_DIR}/../script  -o ${CMAKE_CURRENT_LIST_DIR}/../build/CMakeFiles/${RASC_PROJECT_NAME}.elf.dir/${RASC_PROJECT_NAME}.elf")
+SET(RASC_CMAKE_EXE_LINKER_FLAGS "-g -O0 -mcpu=cortex-r52 -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -mthumb -T fsp.ld -Xlinker --gc-sections -Wl,-Map,${PROJECT_NAME}.map --specs=nano.specs --specs=rdimon.specs -static -Wl,--start-group -lc -lm -Wl,--end-group -L ${CMAKE_CURRENT_LIST_DIR}/../ -L ${CMAKE_CURRENT_LIST_DIR}/../script  -o ${CMAKE_CURRENT_LIST_DIR}/../build/CMakeFiles/${RASC_PROJECT_NAME}.elf.dir/${RASC_PROJECT_NAME}.elf")
 #SET(RASC_ASM_FILES "${CMAKE_CURRENT_LIST_DIR}/../rzt_gen/*.asm")
 
 add_compile_options(
@@ -73,7 +73,6 @@ include_directories(
         rzt_cfg/fsp_cfg
         rzt_cfg/fsp_cfg/bsp
         rzt_gen
-        src/fsp
         src/CMSIS_RTOS_V2
         src)
 
@@ -153,7 +152,8 @@ set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_FLAGS
 	-Wl,-Map=\"${PROJECT_NAME}.map\" \
     -Xlinker --gc-sections \
 	--specs=nano.specs \
-    --specs=rdimon.specs") # -static \ -Wl,--start-group -lc -lm -Wl,--end-group")
+    --specs=rdimon.specs \
+    -static -Wl,--start-group -lc -lm -Wl,--end-group") # -static \ -Wl,--start-group -lc -lm -Wl,--end-group")
 
 ## The OBJCOPY utility will separate the EEPROM section from the main program
 #add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD

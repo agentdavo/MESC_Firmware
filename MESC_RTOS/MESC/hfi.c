@@ -43,6 +43,7 @@ static uint8_t CMD_main(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args
 static void TASK_main(void *pvParameters);
 static uint8_t INPUT_handler(TERMINAL_HANDLE * handle, uint16_t c);
 
+extern MESC_motor mtr[NUM_MOTORS];
 
 uint8_t REGISTER_hfi(TermCommandDescriptor * desc){
     TERM_addCommand(CMD_main, APP_NAME, APP_DESCRIPTION, 0, desc); 

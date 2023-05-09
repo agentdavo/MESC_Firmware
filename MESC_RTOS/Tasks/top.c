@@ -35,6 +35,8 @@
 #define APP_DESCRIPTION "shows performance stats"
 #define APP_STACK 400
 
+extern MESC_motor mtr[NUM_MOTORS];
+
 static uint8_t CMD_main(TERMINAL_HANDLE* handle, uint8_t argCount, char** args);
 static void TASK_main(void* pvParameters);
 static uint8_t INPUT_handler(TERMINAL_HANDLE* handle, uint16_t c);

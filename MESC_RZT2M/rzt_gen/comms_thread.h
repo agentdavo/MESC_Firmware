@@ -28,7 +28,7 @@ extern const spi_cfg_t g_spi3_cfg;
 
 /** Callback used by SPI Instance. */
 #ifndef spi3_callback
-void spi3_callback(spi_callback_args_t * p_args);
+void spi3_callback(spi_callback_args_t* p_args);
 #endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi1;

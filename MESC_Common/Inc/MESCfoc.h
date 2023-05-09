@@ -477,6 +477,7 @@ struct MESC_hal_
   void (*MotorInitStage0)(struct MESC_motor_* _motor);
   void (*MotorInitStage1)(struct MESC_motor_* _motor);
   void (*MotorInitStage2)(struct MESC_motor_* _motor);
+  void (*MotorInitHardware)(struct MESC_motor_* _motor);
   void (*MotorInitStage3)(struct MESC_motor_* _motor);
   void (*FastLed)(bool enabled);
   void (*SlowLed)(bool enabled);
@@ -502,6 +503,7 @@ struct MESC_hal_
   void (*phU_Break)(void);
   void (*phV_Break)(void);
   void (*phW_Break)(void);
+  void (*GenerateBreakAll)(struct MESC_motor_* _motor);
   void (*phU_Enable)(void);
   void (*phV_Enable)(void);
   void (*phW_Enable)(void);
@@ -509,6 +511,7 @@ struct MESC_hal_
   void (*invEnable)(bool isEnabled);
   void (*getRawADC)(struct MESC_motor_* _motor);
   void (*getRawADCVph)(struct MESC_motor_* _motor);
+  void (*AdcStart)();
 };
 typedef struct MESC_hal_ MESC_hal;
 
@@ -545,7 +548,7 @@ struct MESC_motor_
 };
 typedef struct MESC_motor_ MESC_motor;
 
-extern MESC_motor mtr[NUM_MOTORS];
+//OI extern MESC_motor mtr[NUM_MOTORS];
 
 enum MESCADC
 {
@@ -718,7 +721,7 @@ extern "C"
   void generateBreak(MESC_motor* _motor);  // Software break that does not stop the PWM timer but
   // disables the outputs, sum of phU,V,W_Break();
   void generateEnable(MESC_motor* _motor);  // Opposite of generateBreak
-  void generateBreakAll();                          //Disables all drives
+  //OI void generateBreakAll();                          //Disables all drives
 
   void measureResistance(MESC_motor* _motor);
 

@@ -71,6 +71,7 @@
 #define OVERLAY_OUTPUT_CSV 			2
 #define OVERLAY_OUTPUT_JSON			3
 
+extern MESC_motor mtr[NUM_MOTORS];
 
 void show_overlay(TERMINAL_HANDLE * handle){
 #ifndef DASH

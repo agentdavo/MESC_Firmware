@@ -48,6 +48,8 @@
 
 extern uint16_t deadtime_comp;
 
+extern MESC_motor mtr[NUM_MOTORS];
+
 uint8_t CMD_measure(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args)
 {
 	MESC_motor* motor_curr = &mtr[0];

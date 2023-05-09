@@ -7,7 +7,7 @@
 #include <HAL/MESC_HAL.h>
 
 #include <Tasks/init.h>
-#include <bsp_api.h>
+
 #include <hal_data.h>
 
 TaskHandle_t defaultTaskHandle = NULL;
@@ -26,17 +26,12 @@ void StartDefaultTask(void* argument)
   }
 }
 
+
+MESC_motor mtr[NUM_MOTORS];
+
 int main(void)
 {
   g_hal_init();
-
-#ifdef IC_TIMER
-  MESC_IC_Init(IC_TIMER);
-#endif
-
-#ifdef USE_ENCODER
-  EncoderInit(); //OI HAL_SPI_Init(&hspi3);
-#endif
 
   bat_init(PROFILE_DEFAULT);
   speed_init(PROFILE_DEFAULT);
