@@ -351,7 +351,7 @@ FSP Configuration
       P07_4 W2 USB_HS_USB_VBUSIN USB_VBUSIN - - "Peripheral mode" - - "ADC0: ADTRG0#; IRQ: IRQ1; USB_HS: USB_VBUSIN" - I - - 
       P07_5 V4 GPIO GPIO_8 - - "Input mode" - - "BSC: A21; BSC: D22" - IO - - 
       P07_6 R6 GPIO SHDN_BMS0 Low - "Output mode (Low & Not Into Input)" - - "BSC: A22; BSC: D23; SPI2: SPI_SSL21" - IO - - 
-      P07_7 W3 GPIO GPIO_10 - - "Input mode" - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
+      P07_7 W3 GPIO ETH_EN Low - "Output mode (Low & Not Into Input)" - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
       P08_0 V5 GPIO TJA_INT - - "Input mode" - - "BSC: A24; BSC: D25; ETHER_ETHSW: ETHSW_LPI0" - IO - - 
       P08_1 Y2 USB_HS_USB_VBUSEN USB_VBUSEN Low - "Peripheral mode" - - "BSC: A25; BSC: D26; ETHER_ETHSW: ETHSW_LPI2; USB_HS: USB_VBUSEN" - O - - 
       P08_2 V6 GPIO TJA_INH - - "Input mode" - - "BSC: D27; ETHER_ESC: ESC_LATCH0; ETHER_ESC: ESC_LATCH1; ETHER_GMAC: GMAC_PTPTRG0" - IO - - 
@@ -672,7 +672,7 @@ FSP Configuration
       P07_4 W2 USB_HS_USB_VBUSIN USB_VBUSIN - - "Peripheral mode" - - "ADC0: ADTRG0#; IRQ: IRQ1; USB_HS: USB_VBUSIN" - I - - 
       P07_5 V4 - GPIO_8 - - Disabled - - "BSC: A21; BSC: D22" - IO - - 
       P07_6 R6 - SHDN_BMS0 Low - Disabled - - "BSC: A22; BSC: D23; SPI2: SPI_SSL21" - IO - - 
-      P07_7 W3 - GPIO_10 - - Disabled - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
+      P07_7 W3 - ETH_EN Low - Disabled - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
       P08_0 V5 - TJA_INT - - Disabled - - "BSC: A24; BSC: D25; ETHER_ETHSW: ETHSW_LPI0" - IO - - 
       P08_1 Y2 - USB_VBUSEN Low - Disabled - - "BSC: A25; BSC: D26; ETHER_ETHSW: ETHSW_LPI2; USB_HS: USB_VBUSEN" - O - - 
       P08_2 V6 GPIO TJA_INH - - "Output mode (Low & Not Into Input)" - - "BSC: D27; ETHER_ESC: ESC_LATCH0; ETHER_ESC: ESC_LATCH1; ETHER_GMAC: GMAC_PTPTRG0" - IO - - 
@@ -993,7 +993,7 @@ FSP Configuration
       P07_4 W2 - USB_VBUSIN - - Disabled - - "ADC0: ADTRG0#; IRQ: IRQ1; USB_HS: USB_VBUSIN" - I - - 
       P07_5 V4 - GPIO_8 - - Disabled - - "BSC: A21; BSC: D22" - IO - - 
       P07_6 R6 - SHDN_BMS0 Low - Disabled - - "BSC: A22; BSC: D23; SPI2: SPI_SSL21" - IO - - 
-      P07_7 W3 - GPIO_10 - - Disabled - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
+      P07_7 W3 - ETH_EN Low - Disabled - - "BSC: A23; BSC: D24; ETHER_ETHSW: ETHSW_LPI1" - IO - - 
       P08_0 V5 - TJA_INT - - Disabled - - "BSC: A24; BSC: D25; ETHER_ETHSW: ETHSW_LPI0" - IO - - 
       P08_1 Y2 - USB_VBUSEN Low - Disabled - - "BSC: A25; BSC: D26; ETHER_ETHSW: ETHSW_LPI2; USB_HS: USB_VBUSEN" - O - - 
       P08_2 V6 - TJA_INH - - Disabled - - "BSC: D27; ETHER_ESC: ESC_LATCH0; ETHER_ESC: ESC_LATCH1; ETHER_GMAC: GMAC_PTPTRG0" - IO - - 

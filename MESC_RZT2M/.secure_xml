@@ -217,7 +217,7 @@
       <configSetting altId="p04_5.input" configurationId="p04_5"/>
       <configSetting altId="p07_5.input" configurationId="p07_5"/>
       <configSetting altId="p07_6.output.low" configurationId="p07_6"/>
-      <configSetting altId="p07_7.input" configurationId="p07_7"/>
+      <configSetting altId="p07_7.output.low" configurationId="p07_7"/>
       <configSetting altId="p08_0.input" configurationId="p08_0"/>
       <configSetting altId="p08_2.input" configurationId="p08_2"/>
       <configSetting altId="p08_3.input" configurationId="p08_3"/>

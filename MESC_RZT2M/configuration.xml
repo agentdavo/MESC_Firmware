@@ -2028,7 +2028,7 @@
     <symbolicName propertyId="p07_4.symbolic_name" value="USB_VBUSIN"/>
     <symbolicName propertyId="p07_5.symbolic_name" value="GPIO_8"/>
     <symbolicName propertyId="p07_6.symbolic_name" value="SHDN_BMS0"/>
-    <symbolicName propertyId="p07_7.symbolic_name" value="GPIO_10"/>
+    <symbolicName propertyId="p07_7.symbolic_name" value="ETH_EN"/>
     <symbolicName propertyId="p08_0.symbolic_name" value="TJA_INT"/>
     <symbolicName propertyId="p08_1.symbolic_name" value="USB_VBUSEN"/>
     <symbolicName propertyId="p08_2.symbolic_name" value="TJA_INH"/>
@@ -2559,8 +2559,8 @@
       <configSetting altId="p07_6.output.low" configurationId="p07_6"/>
       <configSetting altId="p07_6.gpio_mode.gpio_mode_out.low" configurationId="p07_6.gpio_mode"/>
       <configSetting altId="p07_6.gpio_region.region.nonsafety" configurationId="p07_6.gpio_region"/>
-      <configSetting altId="p07_7.input" configurationId="p07_7"/>
-      <configSetting altId="p07_7.gpio_mode.gpio_mode_in" configurationId="p07_7.gpio_mode"/>
+      <configSetting altId="p07_7.output.low" configurationId="p07_7"/>
+      <configSetting altId="p07_7.gpio_mode.gpio_mode_out.low" configurationId="p07_7.gpio_mode"/>
       <configSetting altId="p07_7.gpio_region.region.nonsafety" configurationId="p07_7.gpio_region"/>
       <configSetting altId="p08_0.input" configurationId="p08_0"/>
       <configSetting altId="p08_0.gpio_mode.gpio_mode_in" configurationId="p08_0.gpio_mode"/>
