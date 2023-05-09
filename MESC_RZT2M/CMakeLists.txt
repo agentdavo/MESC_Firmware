@@ -20,9 +20,10 @@ SET(RASC_CMAKE_EXE_LINKER_FLAGS "-g -O0 -mcpu=cortex-r52 -Wunused -Wuninitialize
 
 add_compile_options(
         # CPU specific
-        "-mthumb"
         "-mcpu=cortex-r52"
-#        "-mfloat-abi=hard"
+        "-mthumb"
+        "-mfloat-abi=hard"
+        "-mfpu=neon-fp-armv8"
         # Non-CPU specific
 #        "--specs=nano.specs"
         "-ffunction-sections"
@@ -52,6 +53,7 @@ add_compile_options(
 add_compile_definitions(
 #        USE_HAL_DRIVER
 #        STM32F405xx
+        _RENESAS_RZT_
         _RZT_CORE=CR52_0
         USE_TTERM)
 
