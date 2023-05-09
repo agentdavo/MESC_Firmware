@@ -1986,8 +1986,8 @@
     <symbolicName propertyId="p02_1.symbolic_name" value="GPIO_0"/>
     <symbolicName propertyId="p02_2.symbolic_name" value="SPI3_SPI_MOSI3"/>
     <symbolicName propertyId="p02_3.symbolic_name" value="CANFD1_CANRX1"/>
-    <symbolicName propertyId="p02_4.symbolic_name" value="GPIO_1"/>
-    <symbolicName propertyId="p02_5.symbolic_name" value="GPIO_2"/>
+    <symbolicName propertyId="p02_4.symbolic_name" value="INT_BMS1"/>
+    <symbolicName propertyId="p02_5.symbolic_name" value="INT_BMS0"/>
     <symbolicName propertyId="p02_6.symbolic_name" value="SWD_TMS_SWDIO"/>
     <symbolicName propertyId="p02_7.symbolic_name" value="SWD_TCK_SWCLK"/>
     <symbolicName propertyId="p03_0.symbolic_name" value="ENCIF_ENCIF8"/>
@@ -2027,9 +2027,9 @@
     <symbolicName propertyId="p07_3.symbolic_name" value="ETH1_RXCLK"/>
     <symbolicName propertyId="p07_4.symbolic_name" value="USB_VBUSIN"/>
     <symbolicName propertyId="p07_5.symbolic_name" value="GPIO_8"/>
-    <symbolicName propertyId="p07_6.symbolic_name" value="GPIO_9"/>
+    <symbolicName propertyId="p07_6.symbolic_name" value="SHDN_BMS0"/>
     <symbolicName propertyId="p07_7.symbolic_name" value="GPIO_10"/>
-    <symbolicName propertyId="p08_0.symbolic_name" value="GPIO_11"/>
+    <symbolicName propertyId="p08_0.symbolic_name" value="TJA_INT"/>
     <symbolicName propertyId="p08_1.symbolic_name" value="USB_VBUSEN"/>
     <symbolicName propertyId="p08_2.symbolic_name" value="TJA_INH"/>
     <symbolicName propertyId="p08_3.symbolic_name" value="TJA_WAKE"/>
@@ -2060,7 +2060,7 @@
     <symbolicName propertyId="p11_4.symbolic_name" value="MTU32_MTIOC2B"/>
     <symbolicName propertyId="p11_5.symbolic_name" value="MTU30_MTIOC0B"/>
     <symbolicName propertyId="p11_6.symbolic_name" value="ETHER_ETH0_COL"/>
-    <symbolicName propertyId="p11_7.symbolic_name" value="GPIO_14"/>
+    <symbolicName propertyId="p11_7.symbolic_name" value="SHDN_BMS1"/>
     <symbolicName propertyId="p12_0.symbolic_name" value="ENCIF_ENCIF3"/>
     <symbolicName propertyId="p12_1.symbolic_name" value="ENCIF_ENCIF4"/>
     <symbolicName propertyId="p12_2.symbolic_name" value="ENCIF_ENCIF5"/>
@@ -2410,9 +2410,11 @@
       <configSetting altId="p02_3.gpio_region.region.nonsafety" configurationId="p02_3.gpio_region"/>
       <configSetting altId="p02_4.input" configurationId="p02_4"/>
       <configSetting altId="p02_4.gpio_mode.gpio_mode_in" configurationId="p02_4.gpio_mode"/>
+      <configSetting altId="p02_4.gpio_pupd.gpio_pupd_ip_up" configurationId="p02_4.gpio_pupd"/>
       <configSetting altId="p02_4.gpio_region.region.nonsafety" configurationId="p02_4.gpio_region"/>
       <configSetting altId="p02_5.input" configurationId="p02_5"/>
       <configSetting altId="p02_5.gpio_mode.gpio_mode_in" configurationId="p02_5.gpio_mode"/>
+      <configSetting altId="p02_5.gpio_pupd.gpio_pupd_ip_up" configurationId="p02_5.gpio_pupd"/>
       <configSetting altId="p02_5.gpio_region.region.nonsafety" configurationId="p02_5.gpio_region"/>
       <configSetting altId="p02_6.jtag_fslash_swd.tms_swdio" configurationId="p02_6"/>
       <configSetting altId="p02_6.gpio_speed.gpio_speed_high" configurationId="p02_6.gpio_drivecapacity"/>
@@ -2554,14 +2556,15 @@
       <configSetting altId="p07_5.input" configurationId="p07_5"/>
       <configSetting altId="p07_5.gpio_mode.gpio_mode_in" configurationId="p07_5.gpio_mode"/>
       <configSetting altId="p07_5.gpio_region.region.nonsafety" configurationId="p07_5.gpio_region"/>
-      <configSetting altId="p07_6.input" configurationId="p07_6"/>
-      <configSetting altId="p07_6.gpio_mode.gpio_mode_in" configurationId="p07_6.gpio_mode"/>
+      <configSetting altId="p07_6.output.low" configurationId="p07_6"/>
+      <configSetting altId="p07_6.gpio_mode.gpio_mode_out.low" configurationId="p07_6.gpio_mode"/>
       <configSetting altId="p07_6.gpio_region.region.nonsafety" configurationId="p07_6.gpio_region"/>
       <configSetting altId="p07_7.input" configurationId="p07_7"/>
       <configSetting altId="p07_7.gpio_mode.gpio_mode_in" configurationId="p07_7.gpio_mode"/>
       <configSetting altId="p07_7.gpio_region.region.nonsafety" configurationId="p07_7.gpio_region"/>
       <configSetting altId="p08_0.input" configurationId="p08_0"/>
       <configSetting altId="p08_0.gpio_mode.gpio_mode_in" configurationId="p08_0.gpio_mode"/>
+      <configSetting altId="p08_0.gpio_pupd.gpio_pupd_ip_up" configurationId="p08_0.gpio_pupd"/>
       <configSetting altId="p08_0.gpio_region.region.nonsafety" configurationId="p08_0.gpio_region"/>
       <configSetting altId="p08_1.usb_hs.usb_vbusen" configurationId="p08_1"/>
       <configSetting altId="p08_1.gpio_mode.gpio_mode_peripheral" configurationId="p08_1.gpio_mode"/>
@@ -2672,8 +2675,8 @@
       <configSetting altId="p11_6.ether_eth0.eth0_col" configurationId="p11_6"/>
       <configSetting altId="p11_6.gpio_mode.gpio_mode_peripheral" configurationId="p11_6.gpio_mode"/>
       <configSetting altId="p11_6.gpio_region.region.nonsafety" configurationId="p11_6.gpio_region"/>
-      <configSetting altId="p11_7.input" configurationId="p11_7"/>
-      <configSetting altId="p11_7.gpio_mode.gpio_mode_in" configurationId="p11_7.gpio_mode"/>
+      <configSetting altId="p11_7.output.low" configurationId="p11_7"/>
+      <configSetting altId="p11_7.gpio_mode.gpio_mode_out.low" configurationId="p11_7.gpio_mode"/>
       <configSetting altId="p11_7.gpio_region.region.nonsafety" configurationId="p11_7.gpio_region"/>
       <configSetting altId="p12_0.encif.encif3" configurationId="p12_0"/>
       <configSetting altId="p12_0.gpio_mode.gpio_mode_peripheral" configurationId="p12_0.gpio_mode"/>
