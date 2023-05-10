@@ -532,7 +532,7 @@ const mtu3_phase_count_cfg_t g_mtu_phase_count_ch2_cfg =
 {
     .counting_mode       = MTU3_PHASE_COUNTING_MODE_1,
     .bit_mode            = MTU3_BIT_MODE_NORMAL_16BIT,
-    .external_clock      = MTU3_EXTERAL_CLOCK_MTCLKA_B,
+    .external_clock      = MTU3_EXTERAL_CLOCK_MTCLKC_D,
     .channel             = 2,
     .p_timer_instance    = &g_timer9,
     .channel_mask        = (1 << 2),

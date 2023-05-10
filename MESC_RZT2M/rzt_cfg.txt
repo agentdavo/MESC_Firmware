@@ -2109,7 +2109,7 @@ FSP Configuration
       General: Counting Mode: Mode1
       Noise Filter: Extarnal Clock: Enable: 
       Noise Filter: Extarnal Clock: Clock Select: PCLK divided by 1
-      Input: Clock Pin Select: MTCLKA, MTCLKB
+      Input: Clock Pin Select: MTCLKC, MTCLKD
       
       Instance "g_timer9 Timer Driver on r_mtu3"
         General: Name: g_timer9
