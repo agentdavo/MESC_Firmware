@@ -89,11 +89,11 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_02_PIN_4,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_PULLUP_ENABLE | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_02_PIN_5,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_PULLUP_ENABLE | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_02_PIN_6,
@@ -253,15 +253,15 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_07_PIN_6,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_07_PIN_7,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_08_PIN_0,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_PULLUP_ENABLE | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_08_PIN_1,
@@ -385,7 +385,7 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
     },
     {
         .pin = BSP_IO_PORT_11_PIN_7,
-        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
+        .pin_cfg = ((uint32_t) IOPORT_CFG_PORT_DIRECTION_OUTPUT | (uint32_t) IOPORT_CFG_PORT_OUTPUT_LOW | (uint32_t) IOPORT_CFG_REGION_NSAFETY)
     },
     {
         .pin = BSP_IO_PORT_12_PIN_0,
