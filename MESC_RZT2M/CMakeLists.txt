@@ -18,6 +18,34 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 SET(RASC_CMAKE_EXE_LINKER_FLAGS "-g -O0 -mcpu=cortex-r52 -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -mthumb -T fsp.ld -Xlinker --gc-sections -Wl,-Map,${PROJECT_NAME}.map --specs=nano.specs --specs=rdimon.specs -static -Wl,--start-group -lc -lm -Wl,--end-group -L ${CMAKE_CURRENT_LIST_DIR}/../ -L ${CMAKE_CURRENT_LIST_DIR}/../script  -o ${CMAKE_CURRENT_LIST_DIR}/../build/CMakeFiles/${RASC_PROJECT_NAME}.elf.dir/${RASC_PROJECT_NAME}.elf")
 #SET(RASC_ASM_FILES "${CMAKE_CURRENT_LIST_DIR}/../rzt_gen/*.asm")
 
+write_file(enc_dat.S "
+.section ".enc_dat", #alloc
+.balign 32
+.global g_a_as_config_dat
+g_a_as_config_dat:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/dat/Config_AFormat_v1.0.dat\"
+.balign 32
+.global g_biss_config_dat
+g_biss_config_dat:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/dat/Config_Biss_v1.0.dat\"
+.balign 32
+.global g_endat_config_dat
+g_endat_config_dat:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/dat/Config_Endat22_v1.0.dat\"
+.balign 32
+.global g_fac_config_dat
+g_fac_config_dat:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/dat/Config_Fa_Coder_V1.0.dat\"
+.balign 32
+.global g_hfdsl_config_dat
+g_hfdsl_config_dat:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/dat/Config_hfdsl_V1.0.dat\"
+.balign 32
+.global g_pinmux_config
+g_pinmux_config:
+.incbin \"${CMAKE_CURRENT_LIST_DIR}/lib/ecl/RZT2_pinmux_v1.0.bin\"
+.end")
+
 add_compile_options(
         # CPU specific
         "-mthumb"
@@ -89,7 +117,7 @@ file(GLOB_RECURSE PLATFORM_SOURCES *.c *.cpp)
 
 add_executable(${PROJECT_NAME}.elf
         ${PLATFORM_SOURCES}
-        src/enc_dat.S
+        ${CMAKE_BINARY_DIR}/enc_dat.S
         ../MESC_Common/Src/fonts.c
         ../MESC_Common/Src/MESCbat.c
         ../MESC_Common/Src/MESCcli.c
