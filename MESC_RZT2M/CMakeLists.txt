@@ -18,7 +18,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 SET(RASC_CMAKE_EXE_LINKER_FLAGS "-g -O0 -mcpu=cortex-r52 -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -mthumb -T fsp.ld -Xlinker --gc-sections -Wl,-Map,${PROJECT_NAME}.map --specs=nano.specs --specs=rdimon.specs -static -Wl,--start-group -lc -lm -Wl,--end-group -L ${CMAKE_CURRENT_LIST_DIR}/../ -L ${CMAKE_CURRENT_LIST_DIR}/../script  -o ${CMAKE_CURRENT_LIST_DIR}/../build/CMakeFiles/${RASC_PROJECT_NAME}.elf.dir/${RASC_PROJECT_NAME}.elf")
 #SET(RASC_ASM_FILES "${CMAKE_CURRENT_LIST_DIR}/../rzt_gen/*.asm")
 
-write_file(enc_dat.S "
+write_file(${CMAKE_BINARY_DIR}/enc_dat.S "
 .section \".enc_dat\", #alloc
 .balign 32
 .global g_a_as_config_dat
