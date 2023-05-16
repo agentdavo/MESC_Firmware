@@ -51,8 +51,6 @@ add_compile_options(
 )
 
 add_compile_definitions(
-#        USE_HAL_DRIVER
-#        STM32F405xx
 #        _RENESAS_RZT_
         _RZT_CORE=CR52_0
         USE_TTERM)
@@ -76,20 +74,14 @@ include_directories(
         rzt_cfg/fsp_cfg/bsp
         rzt_gen
         src/CMSIS_RTOS_V2
-        src)
-
-#        Drivers/STM32F4xx_HAL_Driver/Inc
-#        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-#        Middlewares/Third_Party/FreeRTOS/Source/include
-#        Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
-#        Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
-#        Middlewares/ST/STM32_USB_Device_Library/Core/Inc
-#        Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
-#        Drivers/CMSIS/Device/ST/STM32F4xx/Include
-#        Drivers/CMSIS/Include
-#        Core/Inc
-#        USB_DEVICE/App
-#        USB_DEVICE/Target)
+        src
+#        encoder/AFormat
+#        encoder/BiSS
+#        encoder/EnDat
+#        encoder/FACoder
+#        encoder/HIPERFACE_DSL
+        encoder
+        lib)
 
 message(STATUS "CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
 
@@ -97,18 +89,15 @@ file(GLOB_RECURSE PLATFORM_SOURCES *.c *.cpp)
 
 add_executable(${PROJECT_NAME}.elf
         ${PLATFORM_SOURCES}
+        src/enc_dat.S
         ../MESC_Common/Src/fonts.c
-#        ../MESC_Common/Src/MESC_BLDC.c
-#        ../MESC_Common/Src/MESC_Comms.c
         ../MESC_Common/Src/MESCbat.c
-#        ../MESC_Common/Src/MESCBLDC.c
         ../MESC_Common/Src/MESCcli.c
         ../MESC_Common/Src/MESCerror.c
         ../MESC_Common/Src/MESCflash.c
         ../MESC_Common/Src/MESCfnv.c
         ../MESC_Common/Src/MESCfoc.c
         ../MESC_Common/Src/MESCmotor.c
-#        ../MESC_Common/Src/MESCmotor_state.c
         ../MESC_Common/Src/MESCposition.c
         ../MESC_Common/Src/MESCprofile.c
         ../MESC_Common/Src/MESCsin_lut.c
@@ -116,9 +105,13 @@ add_executable(${PROJECT_NAME}.elf
         ../MESC_Common/Src/MESCtemp.c
         ../MESC_Common/Src/MESCuart.c
         ../MESC_Common/Src/MESCui.c
+        ../MESC_Common/Src/ssd1306.c
+#        ../MESC_Common/Src/MESC_BLDC.c
+#        ../MESC_Common/Src/MESC_Comms.c
+#        ../MESC_Common/Src/MESCBLDC.c
+#        ../MESC_Common/Src/MESCmotor_state.c
 #        ../MESC_Common/Src/MPU6050.c
 #        ../MESC_Common/Src/Simple_coms.c
-        ../MESC_Common/Src/ssd1306.c
 
         ../MESC_RTOS/Tasks/app_template.c
         ../MESC_RTOS/Tasks/apps.c
@@ -146,16 +139,20 @@ add_executable(${PROJECT_NAME}.elf
 #        ${CMAKE_CURRENT_LIST_DIR}/MESC_Common/Inc
 #        ${CMAKE_CURRENT_LIST_DIR}/MESC_Common)
 
+set(SELECTED_LINKER_SCRIPT
+        fsp.ld)
+#        fsp_xspi0_boot.ld)
+
 set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_FLAGS
     "-mthumb \
     -mcpu=cortex-r52 \
-	-T\"${CMAKE_CURRENT_LIST_DIR}/script/fsp.ld\" \
+	-T\"${CMAKE_CURRENT_LIST_DIR}/script/${SELECTED_LINKER_SCRIPT}\" \
 	-L${CMAKE_CURRENT_LIST_DIR} \
 	-Wl,-Map=\"${PROJECT_NAME}.map\" \
     -Xlinker --gc-sections \
 	--specs=nano.specs \
-    --specs=rdimon.specs \
-    -static -Wl,--start-group -lc -lm -Wl,--end-group") # -static \ -Wl,--start-group -lc -lm -Wl,--end-group")
+    --specs=rdimon.specs")
+    #-static -Wl,--start-group -lc -lm -Wl,--end-group")
 
 ## The OBJCOPY utility will separate the EEPROM section from the main program
 #add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD

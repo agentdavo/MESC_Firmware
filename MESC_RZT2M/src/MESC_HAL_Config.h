@@ -163,8 +163,6 @@
 
 #define HAS_PHASE_SENSORS //This refers to VOLTAGE sensing on phase, not current!
 
-#define NUM_MOTORS	1
-
 #define SLOWTIM_SCALER 2
 
 //#define MISSING_UCURRSENSOR //You can run two current sensors ONLY if they are phase sensors.

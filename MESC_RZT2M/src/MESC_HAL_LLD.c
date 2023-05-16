@@ -273,7 +273,7 @@ void bms_wr_all_slaves(uint8_t reg, uint16_t data) {
   uint8_t cmd = 0x02; // WRITEALL command byte
   uint8_t data_lsb = (uint8_t)(data & 0xFF);
   uint8_t data_msb = (uint8_t)(data >> 8) & 0xFF;
-  uint8_t message[4] = {cmd, reg, data_lsb, data_msb};
+  //uint8_t message[4] = {cmd, reg, data_lsb, data_msb};
   uint8_t message_pec = 0x00;
 
   // fsp_err_t err = FSP_SUCCESS;
@@ -464,25 +464,25 @@ void m_sci0_tei_interrupt(void)
 //void spi_tei_isr(void);
 //void adc_scan_end_isr(void);
 
-void r_enc_ch0_int_isr(void)
-{
+//void r_enc_ch0_int_isr(void)
+//{
+//
+//}
 
-}
+//void r_enc_ch0_err_int_isr(void)
+//{
+//
+//}
 
-void r_enc_ch0_err_int_isr(void)
-{
+//void r_enc_ch1_int_isr(void)
+//{
+//
+//}
 
-}
-
-void r_enc_ch1_int_isr(void)
-{
-
-}
-
-void r_enc_ch1_err_int_isr(void)
-{
-
-}
+//void r_enc_ch1_err_int_isr(void)
+//{
+//
+//}
 
 static uint32_t const flash_sector_map[] = {
 // 4 x  16k

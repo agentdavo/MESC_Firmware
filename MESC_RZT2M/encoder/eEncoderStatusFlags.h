@@ -1,0 +1,15 @@
+#pragma once
+
+// Encoder status flags
+#define ESTATE_OVERSPEED	  0x0001
+#define ESTATE_INIT_ERR		  0x0002
+#define ESTATE_COUNT_ERR	  0x0004
+#define ESTATE_MULTI_OVF	  0x0008
+#define ESTATE_MULTI_ERR	  0x0020
+#define ESTATE_BATT_ERR		  0x0040
+#define ESTATE_BATT_ALARM	  0x0080
+#define ESTATE_EEPROM_BUSY  0x0100
+#define ESTATE_EEPROM_ERR	  0x0200
+#define ESTATE_OVER_TEMP    0x0400
+#define ESTATE_PARITY_ERR   0x0800
+#define ESTATE_DELIM_ERR    0x1000

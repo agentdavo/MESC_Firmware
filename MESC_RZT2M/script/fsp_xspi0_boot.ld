@@ -96,6 +96,12 @@ SECTIONS
         . = . + (_data_end - _data_start);
         flash_contents_end = .;
     } > xSPI0_CS0_SPACE
+    .enc_dat 0x60070000 : AT (0x60070000)
+    {
+        _enc_dat_start = .;
+        KEEP(*(.enc_dat))
+        _enc_dat_end = .;
+    } > xSPI0_CS0_SPACE
     .loader_text 0x00102000 : AT (_mloader_text)
     {
         _loader_text_start = .;
