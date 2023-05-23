@@ -21,11 +21,14 @@ void StartDefaultTask(void* argument)
   UsbDeviceInit();
   while(true)
   {
-    //ToggleLed();
+    getHalForMotor0()->FastLed(true);
+    getHalForMotor1()->FastLed(true);
+    vTaskDelay(200);
+    getHalForMotor0()->FastLed(false);
+    getHalForMotor1()->FastLed(false);
     vTaskDelay(200);
   }
 }
-
 
 MESC_motor mtr[NUM_MOTORS];
 
@@ -33,28 +36,35 @@ int main(void)
 {
   g_hal_init();
 
-  bat_init(PROFILE_DEFAULT);
-  speed_init(PROFILE_DEFAULT);
-  temp_init(PROFILE_DEFAULT);
-  motor_init(PROFILE_DEFAULT);
+  //bat_init(PROFILE_DEFAULT);
+  //speed_init(PROFILE_DEFAULT);
+  //temp_init(PROFILE_DEFAULT);
+  //motor_init(PROFILE_DEFAULT);
   // Initialise user Interface
   //ui_init(PROFILE_DEFAULT);
 
-  Delay(1);
+  //Delay(1);
 
-  MESCInit(&mtr[0], getHalForMotor0());
-  MESCInit(&mtr[1], getHalForMotor1());
+  //MESCInit(&mtr[0], getHalForMotor0());
+  //MESCInit(&mtr[1], getHalForMotor1());
 
   uint8_t returnCode = xTaskCreate(StartDefaultTask, "defaultTask", 256 * 4, NULL, tskIDLE_PRIORITY, defaultTaskHandle);
 
-  init_system();
+  //init_system();
 
   vTaskStartScheduler();
 
   // TODO: Tjis task can be suppressed by config freertos special idle hook
   while (1)
   {
-    vTaskDelay(configTICK_RATE_HZ);
+    getHalForMotor0()->SlowLed(true);
+    getHalForMotor1()->SlowLed(true);
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M1_OV_LED);
+    vTaskDelay(1000);
+    getHalForMotor0()->SlowLed(false);
+    getHalForMotor1()->SlowLed(false);
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M2_OV_LED);
+    vTaskDelay(1000);
   }
   return 0;
 }

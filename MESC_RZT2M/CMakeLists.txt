@@ -115,7 +115,7 @@ message(STATUS "CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
 
 file(GLOB_RECURSE PLATFORM_SOURCES *.c *.cpp)
 
-add_executable(${PROJECT_NAME}.elf
+add_executable(${PROJECT_NAME}.bin
         ${PLATFORM_SOURCES}
         ${CMAKE_BINARY_DIR}/enc_dat.S
         ../MESC_Common/Src/fonts.c
@@ -171,7 +171,7 @@ set(SELECTED_LINKER_SCRIPT
         fsp.ld)
 #        fsp_xspi0_boot.ld)
 
-set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_FLAGS
+set_target_properties(${PROJECT_NAME}.bin PROPERTIES LINK_FLAGS
     "-mthumb \
     -mcpu=cortex-r52 \
 	-T\"${CMAKE_CURRENT_LIST_DIR}/script/${SELECTED_LINKER_SCRIPT}\" \
@@ -181,9 +181,3 @@ set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_FLAGS
 	--specs=nano.specs \
     --specs=rdimon.specs")
     #-static -Wl,--start-group -lc -lm -Wl,--end-group")
-
-## The OBJCOPY utility will separate the EEPROM section from the main program
-#add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
-#        COMMAND "${CMAKE_OBJCOPY}" ARGS -j .eeprom "$<TARGET_FILE:${PROJECT_NAME}>" -O ihex "eeprom.hex"
-#        COMMAND "${CMAKE_OBJCOPY}" ARGS -R .eeprom "$<TARGET_FILE:${PROJECT_NAME}>" "program.elf"
-#        BYPRODUCTS "eeprom.hex" "program.elf")

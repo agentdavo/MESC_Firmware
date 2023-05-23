@@ -265,16 +265,14 @@ void r_pinmux_encif04_release(void)
 
 void r_pinmux_encif59_create(short encoder_type)
 {
-    uint32_t port_num = 0;               /* Initialize ioport registers to the reset value. */
-
     R_BSP_RegisterProtectDisable(BSP_REG_PROTECT_GPIO);
 
-    for(port_num=0; port_num < 25; port_num++)
+    for(uint32_t port_num=0; port_num < 25; port_num++)
     {
         R_PTADR->RSELP[port_num] = 0xFF;
     }
     
-    /* Set MTIOC2A pin */
+    // Set MTIOC2A pin
     R_PORT_NSR->PFC_b[0x0B].PFC3 = 0U;
     R_PORT_NSR->PMC_b[0x0B].PMC3 = 0U;
     R_PORT_NSR->PM_b[0x0B].PM3 = 0U;
@@ -283,7 +281,7 @@ void r_pinmux_encif59_create(short encoder_type)
     R_PORT_NSR->DRCTL[0x0B].L_b.SMT3 = 0U;
     R_PORT_NSR->DRCTL[0x0B].L_b.SR3 = 0U;
 
-    /* Set MTCLKC pin */
+    // Set MTCLKC pin
     R_PORT_NSR->PFC_b[0x0D].PFC7 = 0U;
     R_PORT_NSR->PMC_b[0x0D].PMC7 = 0U;
     R_PORT_NSR->PM_b[0x0D].PM7 = 0U;
@@ -292,7 +290,7 @@ void r_pinmux_encif59_create(short encoder_type)
     R_PORT_NSR->DRCTL[0x0D].H_b.SMT7 = 0U;
     R_PORT_NSR->DRCTL[0x0D].H_b.SR7 = 0U;
 
-    /* Set MTCLKD pin */
+    // Set MTCLKD pin
     R_PORT_NSR->PFC_b[0x0D].PFC1 = 0U;
     R_PORT_NSR->PMC_b[0x0D].PMC1 = 0U;
     R_PORT_NSR->PM_b[0x0D].PM1 = 0U;
@@ -301,7 +299,7 @@ void r_pinmux_encif59_create(short encoder_type)
     R_PORT_NSR->DRCTL[0x0D].L_b.SMT1 = 0U;
     R_PORT_NSR->DRCTL[0x0D].L_b.SR1 = 0U;
     
-    /* Set ENCIF5 pin */
+    // Set ENCIF5 pin
     R_PORT_NSR->PFC_b[0x0C].PFC2 = 2U;
     R_PORT_NSR->PMC_b[0x0C].PMC2 = 1U;
     R_PORT_NSR->PM_b[0x0C].PM2 = 1U;
@@ -310,7 +308,7 @@ void r_pinmux_encif59_create(short encoder_type)
     R_PORT_NSR->DRCTL[0x0C].L_b.SMT2 = 0U;
     R_PORT_NSR->DRCTL[0x0C].L_b.SR2 = 1U;
 
-    /* Set ENCIF6 pin */
+    // Set ENCIF6 pin
     R_PORT_NSR->PFC_b[0x0C].PFC3 = 2U;
     R_PORT_NSR->PMC_b[0x0C].PMC3 = 1U;
     R_PORT_NSR->PM_b[0x0C].PM3 = 3U;
@@ -319,7 +317,7 @@ void r_pinmux_encif59_create(short encoder_type)
     R_PORT_NSR->DRCTL[0x0C].L_b.SMT3 = 0U;
     R_PORT_NSR->DRCTL[0x0C].L_b.SR3 = 1U;
 
-    /* Set ENCIF7 pin */
+    // Set ENCIF7 pin
     R_PORT_NSR->PFC_b[0x11].PFC5 = 6U;
     R_PORT_NSR->PMC_b[0x11].PMC5 = 1U;
     R_PORT_NSR->PM_b[0x11].PM5 = 3U;
@@ -331,7 +329,7 @@ void r_pinmux_encif59_create(short encoder_type)
     if((ETYPE_INCREMENTAL != encoder_type)&&
         (ETYPE_APE_BISS != encoder_type))
     {
-        /* Set ENCIF8 pin */
+        // Set ENCIF8 pin
         R_PORT_NSR->PFC_b[0x11].PFC6 = 3U;
         R_PORT_NSR->PMC_b[0x11].PMC6 = 1U;
         R_PORT_NSR->PM_b[0x11].PM6 = 2U;
@@ -343,7 +341,7 @@ void r_pinmux_encif59_create(short encoder_type)
     else
     {
         //ETYPE_APE_BISS
-        /* Set ENCIF8 pin */
+        // Set ENCIF8 pin
         R_PORT_NSR->PFC_b[0x11].PFC6 = 0U;
         R_PORT_NSR->PMC_b[0x11].PMC6 = 0U;
         R_PORT_NSR->PM_b[0x11].PM6 = 2U;
@@ -354,7 +352,7 @@ void r_pinmux_encif59_create(short encoder_type)
         R_PORT_NSR->P_b[0x11].POUT_6 = 0U;
     }
 
-    /* Set ENCIF9 pin */
+    // Set ENCIF9 pin
     R_PORT_NSR->PFC_b[0x11].PFC7 = 6U;
     R_PORT_NSR->PMC_b[0x11].PMC7 = 1U;
     R_PORT_NSR->PM_b[0x11].PM7 = 2U;
@@ -366,16 +364,14 @@ void r_pinmux_encif59_create(short encoder_type)
 
 void r_pinmux_encif59_release(void)
 {
-    uint32_t port_num = 0;               /* Initialize ioport registers to the reset value. */
-    
     R_BSP_RegisterProtectDisable(BSP_REG_PROTECT_GPIO);
     
-    for(port_num=0; port_num < 25; port_num++)
+    for(uint32_t port_num=0; port_num < 25; port_num++)
     {
         R_PTADR->RSELP[port_num] = 0xFF;
     }
     
-    /* Set MTIOC2A pin */
+    // Set MTIOC2A pin
     R_PORT_NSR->PFC_b[0x0B].PFC3 = 2U;
     R_PORT_NSR->PMC_b[0x0B].PMC3 = 1U;
     R_PORT_NSR->PM_b[0x0B].PM3 = 1U;
@@ -384,7 +380,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x0B].L_b.SMT3 = 0U;
     R_PORT_NSR->DRCTL[0x0B].L_b.SR3 = 1U;
 
-    /* Set MTCLKC pin */
+    // Set MTCLKC pin
     R_PORT_NSR->PFC_b[0x0D].PFC7 = 4U;
     R_PORT_NSR->PMC_b[0x0D].PMC7 = 1U;
     R_PORT_NSR->PM_b[0x0D].PM7 = 1U;
@@ -393,7 +389,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x0D].H_b.SMT7 = 0U;
     R_PORT_NSR->DRCTL[0x0D].H_b.SR7 = 1U;
 
-    /* Set MTCLKD pin */
+    // Set MTCLKD pin
     R_PORT_NSR->PFC_b[0x0D].PFC1 = 3U;
     R_PORT_NSR->PMC_b[0x0D].PMC1 = 1U;
     R_PORT_NSR->PM_b[0x0D].PM1 = 1U;
@@ -402,7 +398,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x0D].L_b.SMT1 = 0U;
     R_PORT_NSR->DRCTL[0x0D].L_b.SR1 = 1U;
     
-    /* Set ENCIF5 pin */
+    // Set ENCIF5 pin
     R_PORT_NSR->PFC_b[0x0C].PFC2 = 0U;
     R_PORT_NSR->PMC_b[0x0C].PMC2 = 0U;
     R_PORT_NSR->PM_b[0x0C].PM2 = 0U;
@@ -411,7 +407,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x0C].L_b.SMT2 = 0U;
     R_PORT_NSR->DRCTL[0x0C].L_b.SR2 = 0U;
 
-    /* Set ENCIF6 pin */
+    // Set ENCIF6 pin
     R_PORT_NSR->PFC_b[0x0C].PFC3 = 0U;
     R_PORT_NSR->PMC_b[0x0C].PMC3 = 0U;
     R_PORT_NSR->PM_b[0x0C].PM3 = 2U;
@@ -421,7 +417,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x0C].L_b.SR3 = 0U;
     R_PORT_NSR->P_b[0x0C].POUT_3 = 0U;
 
-    /* Set ENCIF7 pin */
+    // Set ENCIF7 pin
     R_PORT_NSR->PFC_b[0x11].PFC5 = 0U;
     R_PORT_NSR->PMC_b[0x11].PMC5 = 0U;
     R_PORT_NSR->PM_b[0x11].PM5 = 0U;
@@ -430,7 +426,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x11].H_b.SMT5 = 0U;
     R_PORT_NSR->DRCTL[0x11].H_b.SR5 = 0U;
 
-    /* Set ENCIF8 pin */
+    // Set ENCIF8 pin
     R_PORT_NSR->PFC_b[0x11].PFC6 = 0U;
     R_PORT_NSR->PMC_b[0x11].PMC6 = 0U;
     R_PORT_NSR->PM_b[0x11].PM6 = 2U;
@@ -440,7 +436,7 @@ void r_pinmux_encif59_release(void)
     R_PORT_NSR->DRCTL[0x11].H_b.SR6 = 0U;
     R_PORT_NSR->P_b[0x11].POUT_6 = 0U;
 
-    /* Set ENCIF9 pin */
+    // Set ENCIF9 pin
     R_PORT_NSR->PFC_b[0x11].PFC7 = 0U;
     R_PORT_NSR->PMC_b[0x11].PMC7 = 0U;
     R_PORT_NSR->PM_b[0x11].PM7 = 0U;

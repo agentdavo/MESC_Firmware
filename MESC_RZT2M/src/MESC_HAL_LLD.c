@@ -11,67 +11,62 @@ extern MESC_motor mtr[NUM_MOTORS];
 
 void R_BSP_WarmStart(bsp_warm_start_event_t event)
 {
-  if (BSP_WARM_START_RESET == event)
+  switch(event)
   {
-    // Pre clock initialization
-  }
-
-  if (BSP_WARM_START_POST_C == event)
-  {
-    // C runtime environment and system clocks are setup.
-
-    // Configure pins.
-    R_IOPORT_Open(&g_ioport_ctrl, &g_bsp_pin_cfg);
+    case BSP_WARM_START_RESET:
+      break;
+    case BSP_WARM_START_POST_CLOCK:
+      break;
+    case BSP_WARM_START_POST_C:
+      R_IOPORT_Open(&g_ioport_ctrl, &g_bsp_pin_cfg);
+      break;
+    default:
+      break;
   }
 }
 
-void g_uart0_callback(uart_callback_args_t* p_args)
+void uart0_callback(uart_callback_args_t* p_args)
 {
   if (p_args->channel == 0)
+  {
+    // Handle the UART event
+    switch (p_args->event)
     {
-      // Handle the UART event
-      switch (p_args->event)
-        {
-          case UART_EVENT_RX_COMPLETE:
-            { // Receive complete
-              break;
-            }
+      case UART_EVENT_RX_COMPLETE:
+      { // Receive complete
+        break;
+      }
 
-          case UART_EVENT_TX_COMPLETE:
-            { // Transmit complete
-              break;
-            }
+      case UART_EVENT_TX_COMPLETE:
+      { // Transmit complete
+        break;
+      }
 
-          case UART_EVENT_RX_CHAR:
-            { // Received a character
-              break;
-            }
+      case UART_EVENT_RX_CHAR:
+      { // Received a character
+        break;
+      }
 
-          case UART_EVENT_TX_DATA_EMPTY:
-            { // Last byte trasmitting
-              break;
-            }
+      case UART_EVENT_TX_DATA_EMPTY:
+      { // Last byte trasmitting
+        break;
+      }
 
-          default:
-            {
-            }
-        }
+      default:
+        break;
     }
+  }
 }
 
 static volatile spi_event_t g_spi2_event_flag;
-void g_spi2_callback(spi_callback_args_t * p_args)
+void spi2_callback(spi_callback_args_t * p_args)
 {
     g_spi2_event_flag = (SPI_EVENT_TRANSFER_COMPLETE == p_args->event) ? SPI_EVENT_TRANSFER_COMPLETE : SPI_EVENT_TRANSFER_ABORTED;
 }
 
 bool g_canfd0_write_complete = false;
-bool g_canfd1_write_complete = false;
-
 bool g_canfd0_error = false;
-bool g_canfd1_error = false;
-
-void g_canfd0_callback(can_callback_args_t *p_args)
+void canfd0_callback(can_callback_args_t *p_args)
 {
   switch (p_args->event)
     {
@@ -99,14 +94,16 @@ void g_canfd0_callback(can_callback_args_t *p_args)
     }
 }
 
-void g_canfd1_callback(can_callback_args_t *p_args)
+bool g_canfd1_write_complete = false;
+bool g_canfd1_error = false;
+void canfd1_callback(can_callback_args_t *p_args)
 {
   switch (p_args->event)
     {
       case CAN_EVENT_TX_COMPLETE:
       case CAN_EVENT_TX_FIFO_EMPTY:
         {
-          g_canfd0_write_complete = true;
+          g_canfd1_write_complete = true;
           break;
         }
       case CAN_EVENT_RX_COMPLETE:
@@ -127,7 +124,7 @@ void g_canfd1_callback(can_callback_args_t *p_args)
     }
 }
 
-/* MAX17841B Automotive SPI Communication Interface */
+// MAX17841B Automotive SPI Communication Interface
 
 /* SPI Transactions Table p18 */
 #define BMS_CLR_TX_BUF                  0x20
@@ -422,7 +419,6 @@ void R_IRQ1_isr(void)
 
 void r_mtu_tgiv3_interrupt(void)
 {
-
   MESC_PWM_IRQ_handler(&mtr[0]);
 }
 
@@ -484,24 +480,25 @@ void m_sci0_tei_interrupt(void)
 //
 //}
 
+//TODO: Should be checked for RZT because sectors organization will be different
 static uint32_t const flash_sector_map[] = {
-// 4 x  16k
-FLASH_BASE + (0 * (16 << 10)),
-FLASH_BASE + (1 * (16 << 10)),
-FLASH_BASE + (2 * (16 << 10)),
-FLASH_BASE + (3 * (16 << 10)),
-// 1 x  64k
-FLASH_BASE + (4 * (16 << 10)),
-// 7 x 128k
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (0 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (1 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (2 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (3 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (4 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (5 * (128 << 10)),
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (6 * (128 << 10)),
-// END
-FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (7 * (128 << 10)),
+  // 4 x  16k
+  FLASH_BASE + (0 * (16 << 10)),
+  FLASH_BASE + (1 * (16 << 10)),
+  FLASH_BASE + (2 * (16 << 10)),
+  FLASH_BASE + (3 * (16 << 10)),
+  // 1 x  64k
+  FLASH_BASE + (4 * (16 << 10)),
+  // 7 x 128k
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (0 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (1 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (2 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (3 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (4 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (5 * (128 << 10)),
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (6 * (128 << 10)),
+  // END
+  FLASH_BASE + (4 * (16 << 10)) + (64 << 10) + (7 * (128 << 10)),
 };
 
 bool flash_Unlock()
@@ -676,14 +673,6 @@ void MotorInitStage0_0(MESC_motor* _motor)
 	DBGMCU->APB2FZ |= DBGMCU_APB2FZ_DBG_TIM1_STOP;
 #else
 	DBGMCU->APB2FZ |= DBGMCU_APB2_FZ_DBG_TIM1_STOP;
-#endif
-#ifdef FASTLED
-	FASTLED->MODER |= 0x1<<(FASTLEDIONO*2);
-	FASTLED->MODER &= ~(0x2<<(FASTLEDIONO*2));
-#endif
-#ifdef SLOWLED
-	SLOWLED->MODER |= 0x1<<(SLOWLEDIONO*2);
-	SLOWLED->MODER &= ~(0x2<<(SLOWLEDIONO*2));
 #endif
 
 #ifdef KILLSWITCH_GPIO
@@ -889,36 +878,56 @@ void MotorInitStage3_1(MESC_motor* _motor)
 void FastLed0(bool enabled)
 {
 #ifdef FASTLED
-  //FASTLED->BSRR = enable ? FASTLEDIO : FASTLEDIO<<16U;
-  //R_BSP_PinClear(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
-  //R_BSP_PinToggle(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
+  if (enabled)
+  {
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M1_OT_LED);
+  }
+  else
+  {
+    R_BSP_PinClear(BSP_IO_REGION_NOT_SAFE, M1_OT_LED);
+  }
 #endif
 }
 
 void SlowLed0(bool enabled)
 {
 #ifdef SLOWLED
-  //SLOWLED->BSRR = enabled ? SLOWLEDIO : SLOWLEDIO << 16U;
-  //R_BSP_PinClear(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
-  //R_BSP_PinToggle(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
+  if (enabled)
+  {
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M1_OC_LED);
+  }
+  else
+  {
+    R_BSP_PinClear(BSP_IO_REGION_NOT_SAFE, M1_OC_LED);
+  }
 #endif
 }
 
 void FastLed1(bool enabled)
 {
 #ifdef FASTLED
-  //FASTLED->BSRR = enable ? FASTLEDIO : FASTLEDIO<<16U;
-  //R_BSP_PinClear(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
-  //R_BSP_PinToggle(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
+  if (enabled)
+  {
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M2_OT_LED);
+  }
+  else
+  {
+    R_BSP_PinClear(BSP_IO_REGION_NOT_SAFE, M2_OT_LED);
+  }
 #endif
 }
 
 void SlowLed1(bool enabled)
 {
 #ifdef SLOWLED
-  //SLOWLED->BSRR = enabled ? SLOWLEDIO : SLOWLEDIO << 16U;
-  //R_BSP_PinClear(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
-  //R_BSP_PinToggle(BSP_IO_REGION_SAFE, (bsp_io_port_pin_t)leds.p_leds[i]);
+  if (enabled)
+  {
+    R_BSP_PinSet(BSP_IO_REGION_NOT_SAFE, M2_OC_LED);
+  }
+  else
+  {
+    R_BSP_PinClear(BSP_IO_REGION_NOT_SAFE, M2_OC_LED);
+  }
 #endif
 }
 
@@ -1030,34 +1039,6 @@ uint16_t EncoderAngle0()
   //OI HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
   R_SPI_Write(&g_spi0_ctrl, (uint8_t*)&reg, 1, SPI_BIT_WIDTH_8_BITS); //OI HAL_SPI_Transmit(&hspi3, (uint8_t*)&reg, 1, 1000);
   R_SPI_Read(&g_spi0_ctrl, (uint8_t*)&pkt, len, SPI_BIT_WIDTH_8_BITS); //OI HAL_SPI_Receive(&hspi3, (uint8_t*)&pkt, len, 1000);
-  //      volatile uint8_t crc = 0;
-  //#if 1
-  //      reg ^= 0xFF00;
-  //      crc = pkt_crc8( crc, &((uint8_t *)&reg)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&reg)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.angle)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.angle)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.speed)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.speed)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.revolutions)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.revolutions)[0], 1 );
-  //#else
-  //      crc = pkt_crc8( crc, &reg, 2 );
-  //      crc = pkt_crc8( crc, &pkt.angle, 6 );
-  //#endif
-  //      crc = pkt_crc8( crc, &pkt.safetyword.STAT_RESP, 1 );
-  //      crc = ~crc;
-  //      if (crc != pkt.safetyword.crc)
-  //      {
-  //    	  __NOP();
-  //    	  __NOP();
-  //    	  __NOP();
-  //      }
-  //      else
-  //      {
-  //    	  __NOP();
-  //      }
-  //OI HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
   pkt.revolutions = pkt.revolutions & 0b0000000111111111;
   return pkt.angle & 0x7fff;
 #else
@@ -1090,34 +1071,6 @@ uint16_t EncoderAngle1()
   //OI HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
   R_SPI_Write(&g_spi3_ctrl, (uint8_t*)&reg, 1, SPI_BIT_WIDTH_8_BITS); //OI HAL_SPI_Transmit(&hspi3, (uint8_t*)&reg, 1, 1000);
   R_SPI_Read(&g_spi3_ctrl, (uint8_t*)&pkt, len, SPI_BIT_WIDTH_8_BITS); //OI HAL_SPI_Receive(&hspi3, (uint8_t*)&pkt, len, 1000);
-  //      volatile uint8_t crc = 0;
-  //#if 1
-  //      reg ^= 0xFF00;
-  //      crc = pkt_crc8( crc, &((uint8_t *)&reg)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&reg)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.angle)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.angle)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.speed)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.speed)[0], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.revolutions)[1], 1 );
-  //      crc = pkt_crc8( crc, &((uint8_t *)&pkt.revolutions)[0], 1 );
-  //#else
-  //      crc = pkt_crc8( crc, &reg, 2 );
-  //      crc = pkt_crc8( crc, &pkt.angle, 6 );
-  //#endif
-  //      crc = pkt_crc8( crc, &pkt.safetyword.STAT_RESP, 1 );
-  //      crc = ~crc;
-  //      if (crc != pkt.safetyword.crc)
-  //      {
-  //    	  __NOP();
-  //    	  __NOP();
-  //    	  __NOP();
-  //      }
-  //      else
-  //      {
-  //    	  __NOP();
-  //      }
-  //OI HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
   pkt.revolutions = pkt.revolutions & 0b0000000111111111;
   return pkt.angle & 0x7fff;
 #else
