@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes   <System Includes> , "Project Includes"
@@ -28,8 +14,6 @@
 /***********************************************************************************************************************
  * Macro definitions
  ***********************************************************************************************************************/
-#define ether_phy_targets_initialize_default    ether_phy_targets_initialize_ksz9131
-
 #ifndef ETHER_PHY_ERROR_RETURN
 
 /*LDRA_INSPECTED 77 S This macro does not work when surrounded by parentheses. */
@@ -162,6 +146,9 @@
 #define ETHER_PHY_GMII_ADDRESS_GW                      (1 << 1) /**< GMII Write */
 #define ETHER_PHY_GMII_ADDRESS_GB                      (1 << 0) /**< GMII Busy */
 
+#define ETHER_PHY_ADDRESS_SIZE                         (0x1fU)
+#define ETHER_PHY_REGISTER_DATA_SIZE                   (0xffffU)
+
 /***********************************************************************************************************************
  * Typedef definitions
  ***********************************************************************************************************************/
@@ -201,17 +188,17 @@ void ether_phy_convert_speed_duplex(uint32_t                  line_speed_duple,
                                     ether_selector_speed_t  * p_selector_speed,
                                     ether_selector_duplex_t * p_selector_duplex);
 
-uint32_t        ether_phy_read(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr);
-static uint32_t ether_phy_read_gmac(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr);
+static void ether_phy_read_gmac(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr,
+                                uint32_t * const p_data);
 
 #if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
-static uint32_t ether_phy_read_ethsw(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_add);
+static void ether_phy_read_ethsw(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_add,
+                                 uint32_t * const p_data);
 
 #endif
 
-static uint32_t ether_phy_read_esc(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_add);
+static void ether_phy_read_esc(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_add, uint32_t * const p_data);
 
-void        ether_phy_write(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t data);
 static void ether_phy_write_gmac(ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t data);
 
 #if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
@@ -223,39 +210,30 @@ static void ether_phy_write_esc(ether_phy_instance_ctrl_t * p_instance_ctrl, uin
 
 static void ether_phy_targets_initialize(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_VSC8541) == ETHER_PHY_CHIP_VSC8541)
+#if (ETHER_PHY_CFG_TARGET_VSC8541_ENABLE)
 static void ether_phy_targets_initialize_vsc8541(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9131) == ETHER_PHY_CHIP_KSZ9131)
+#if (ETHER_PHY_CFG_TARGET_KSZ9131_ENABLE)
 static void ether_phy_targets_initialize_ksz9131(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9031) == ETHER_PHY_CHIP_KSZ9031)
+#if (ETHER_PHY_CFG_TARGET_KSZ9031_ENABLE)
 static void ether_phy_targets_initialize_ksz9031(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8081) == ETHER_PHY_CHIP_KSZ8081)
+#if (ETHER_PHY_CFG_TARGET_KSZ8081_ENABLE)
 static void ether_phy_targets_initialize_ksz8081(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8041) == ETHER_PHY_CHIP_KSZ8041)
+#if (ETHER_PHY_CFG_TARGET_KSZ8041_ENABLE)
 static void ether_phy_targets_initialize_ksz8041(ether_phy_instance_ctrl_t * p_instance_ctrl);
 
 #endif
-
-/** ETHER_PHYHAL module version data structure */
-static const fsp_version_t module_version =
-{
-    .api_version_minor  = ETHER_PHY_API_VERSION_MINOR,
-    .api_version_major  = ETHER_PHY_API_VERSION_MAJOR,
-    .code_version_major = ETHER_PHY_CODE_VERSION_MAJOR,
-    .code_version_minor = ETHER_PHY_CODE_VERSION_MINOR
-};
 
 /** ETHER_PHY HAL API mapping for Ethernet PHY Controller interface */
 /*LDRA_INSPECTED 27 D This structure must be accessible in user code. It cannot be static. */
@@ -266,7 +244,9 @@ const ether_phy_api_t g_ether_phy_on_ether_phy =
     .startAutoNegotiate    = R_ETHER_PHY_StartAutoNegotiate,
     .linkPartnerAbilityGet = R_ETHER_PHY_LinkPartnerAbilityGet,
     .linkStatusGet         = R_ETHER_PHY_LinkStatusGet,
-    .versionGet            = R_ETHER_PHY_VersionGet
+    .chipInit              = R_ETHER_PHY_ChipInit,
+    .read                  = R_ETHER_PHY_Read,
+    .write                 = R_ETHER_PHY_Write
 };
 
 /*******************************************************************************************************************//**
@@ -288,6 +268,7 @@ const ether_phy_api_t g_ether_phy_on_ether_phy =
  * @retval  FSP_ERR_INVALID_CHANNEL                 Invalid channel number is given.
  * @retval  FSP_ERR_INVALID_ARGUMENT                Invalid arguments.
  * @retval  FSP_ERR_TIMEOUT                         PHY-LSI Reset wait timeout.
+ * @retval  FSP_ERR_INVALID_POINTER                 Pointer to p_cfg is NULL.
  ***********************************************************************************************************************/
 fsp_err_t R_ETHER_PHY_Open (ether_phy_ctrl_t * const p_ctrl, ether_phy_cfg_t const * const p_cfg)
 {
@@ -402,9 +383,7 @@ fsp_err_t R_ETHER_PHY_Close (ether_phy_ctrl_t * const p_ctrl)
     /** Clear configure block parameters. */
     p_instance_ctrl->p_ether_phy_cfg = NULL;
     p_instance_ctrl->p_reg_etherc    = 0;
-    p_instance_ctrl->p_reg_etherc    = 0;
-
-    p_instance_ctrl->open = 0;
+    p_instance_ctrl->open            = 0;
 
     return FSP_SUCCESS;
 }                                      /* End of function R_ETHER_PHY_Close() */
@@ -412,15 +391,18 @@ fsp_err_t R_ETHER_PHY_Close (ether_phy_ctrl_t * const p_ctrl)
 /********************************************************************************************************************//**
  * Starts auto-negotiate. Implements @ref ether_phy_api_t::startAutoNegotiate.
  *
- * @retval  FSP_SUCCESS             ETHER_PHY successfully starts auto-negotiate.
- * @retval  FSP_ERR_ASSERTION       Pointer to ETHER_PHY control block is NULL.
- * @retval  FSP_ERR_NOT_OPEN        The control block has not been opened.
- * @retval  FSP_ERR_INVALID_MODE    It was aborted the process because it is not auto-negotiation mode.
+ * @retval  FSP_SUCCESS                 ETHER_PHY successfully starts auto-negotiate.
+ * @retval  FSP_ERR_ASSERTION           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_NOT_OPEN            The control block has not been opened.
+ * @retval  FSP_ERR_INVALID_MODE        It was aborted the process because it is not auto-negotiation mode.
+ * @retval  FSP_ERR_INVALID_ARGUMENT    Register address is incorrect
+ * @retval  FSP_ERR_INVALID_POINTER     Pointer to read buffer is NULL.
  ***********************************************************************************************************************/
 fsp_err_t R_ETHER_PHY_StartAutoNegotiate (ether_phy_ctrl_t * const p_ctrl)
 {
     ether_phy_instance_ctrl_t * p_instance_ctrl = (ether_phy_instance_ctrl_t *) p_ctrl;
     ether_phy_extend_cfg_t    * p_extend;
+    uint32_t reg;
 
 #if (ETHER_PHY_CFG_PARAM_CHECKING_ENABLE)
     FSP_ASSERT(p_instance_ctrl);
@@ -431,12 +413,12 @@ fsp_err_t R_ETHER_PHY_StartAutoNegotiate (ether_phy_ctrl_t * const p_ctrl)
     ETHER_PHY_ERROR_RETURN(ETHER_PHY_AUTO_NEGOTIATION_ON == (p_extend->auto_negotiation), FSP_ERR_INVALID_MODE);
 
     /* Restart Auto-Negoration */
-    ether_phy_write(p_instance_ctrl,
-                    ETHER_PHY_REG_CONTROL,
-                    (ETHER_PHY_CONTROL_AN_ENABLE |
-                     ETHER_PHY_CONTROL_AN_RESTART));
+    R_ETHER_PHY_Write(p_instance_ctrl,
+                      ETHER_PHY_REG_CONTROL,
+                      (ETHER_PHY_CONTROL_AN_ENABLE |
+                       ETHER_PHY_CONTROL_AN_RESTART));
 
-    ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_AN_ADVERTISEMENT);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_AN_ADVERTISEMENT, &reg);
 
     return FSP_SUCCESS;
 }                                      /* End of function R_ETHER_PHY_StartAutoNegotiate() */
@@ -450,6 +432,7 @@ fsp_err_t R_ETHER_PHY_StartAutoNegotiate (ether_phy_ctrl_t * const p_ctrl)
  * @retval  FSP_ERR_NOT_OPEN                            The control block has not been opened
  * @retval  FSP_ERR_ETHER_PHY_ERROR_LINK                PHY-LSI is not link up.
  * @retval  FSP_ERR_ETHER_PHY_NOT_READY                 The auto-negotiation isn't completed
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Status register address is incorrect
  ***********************************************************************************************************************/
 fsp_err_t R_ETHER_PHY_LinkPartnerAbilityGet (ether_phy_ctrl_t * const p_ctrl,
                                              uint32_t * const         p_line_speed_duplex,
@@ -508,6 +491,8 @@ fsp_err_t R_ETHER_PHY_LinkPartnerAbilityGet (ether_phy_ctrl_t * const p_ctrl,
  * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
  * @retval  FSP_ERR_NOT_OPEN                            The control block has not been opened
  * @retval  FSP_ERR_ETHER_PHY_ERROR_LINK                PHY-LSI is not link up.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Status register address is incorrect
+ * @retval  FSP_ERR_INVALID_POINTER                     Pointer to read buffer is NULL.
  ***********************************************************************************************************************/
 fsp_err_t R_ETHER_PHY_LinkStatusGet (ether_phy_ctrl_t * const p_ctrl)
 {
@@ -521,8 +506,8 @@ fsp_err_t R_ETHER_PHY_LinkStatusGet (ether_phy_ctrl_t * const p_ctrl)
 #endif
 
     /* Because reading the first time shows the previous state, the Link status bit is read twice. */
-    ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_STATUS);
-    reg = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_STATUS);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_STATUS, &reg);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_STATUS, &reg);
 
     /* When the link isn't up, return error */
     if ((ETHER_PHY_REGISTER_READ_ERROR == (reg & ETHER_PHY_REGISTER_READ_ERROR)) ||
@@ -541,23 +526,119 @@ fsp_err_t R_ETHER_PHY_LinkStatusGet (ether_phy_ctrl_t * const p_ctrl)
 }                                      /* End of function R_ETHER_PHY_LinkStatusGet() */
 
 /********************************************************************************************************************//**
- * DEPRECATED Provides API and code version in the user provided pointer. Implements @ref ether_phy_api_t::versionGet.
+ * @brief Initialize Ethernet PHY device. Implements @ref ether_phy_api_t::chipInit.
  *
- * @param[in] p_version   Version number set here
- *
- * @retval  FSP_SUCCESS                  Version information stored in provided p_version.
- * @retval  FSP_ERR_ASSERTION            p_version is NULL.
+ * @retval  FSP_ERR_UNSUPPORTED                     Initialize Ethernet PHY device is not supported.
  ***********************************************************************************************************************/
-__INLINE fsp_err_t R_ETHER_PHY_VersionGet (fsp_version_t * const p_version)
+fsp_err_t R_ETHER_PHY_ChipInit (ether_phy_ctrl_t * const p_ctrl, ether_phy_cfg_t const * const p_cfg)
 {
+    FSP_PARAMETER_NOT_USED(p_ctrl);
+    FSP_PARAMETER_NOT_USED(p_cfg);
+
+    return FSP_ERR_UNSUPPORTED;
+}                                      /* End of function R_ETHER_PHY_ChipInit() */
+
+/********************************************************************************************************************//**
+ * @brief Read data from register of PHY-LSI . Implements @ref ether_phy_api_t::read.
+ *
+ * @retval  FSP_SUCCESS                                 ETHER_PHY successfully read data.
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_INVALID_POINTER                     Pointer to read buffer is NULL.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Address is not a valid size
+ ***********************************************************************************************************************/
+fsp_err_t R_ETHER_PHY_Read (ether_phy_ctrl_t * const p_ctrl, uint32_t reg_addr, uint32_t * const p_data)
+{
+    ether_phy_instance_ctrl_t * p_instance_ctrl = (ether_phy_instance_ctrl_t *) p_ctrl;
+
 #if (ETHER_PHY_CFG_PARAM_CHECKING_ENABLE)
-    FSP_ASSERT(p_version);
+    FSP_ASSERT(p_instance_ctrl);
+    ETHER_PHY_ERROR_RETURN(NULL != p_data, FSP_ERR_INVALID_POINTER);
+    ETHER_PHY_ERROR_RETURN(ETHER_PHY_ADDRESS_SIZE >= reg_addr, FSP_ERR_INVALID_ARGUMENT);
 #endif
 
-    *p_version = module_version;
+    ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_instance_ctrl->p_ether_phy_cfg->p_extend;
+
+    switch (p_extend->mdio_type)
+    {
+        case ETHER_PHY_MDIO_GMAC:
+        {
+            ether_phy_read_gmac(p_instance_ctrl, reg_addr, p_data);
+            break;
+        }
+
+#if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
+        case ETHER_PHY_MDIO_ETHSW:
+        {
+            ether_phy_read_ethsw(p_instance_ctrl, reg_addr, p_data);
+            break;
+        }
+#endif
+
+        case ETHER_PHY_MDIO_ESC:
+        {
+            ether_phy_read_esc(p_instance_ctrl, reg_addr, p_data);
+            break;
+        }
+
+        default:
+        {
+            *p_data = ETHER_PHY_REGISTER_READ_ERROR;
+            break;
+        }
+    }
 
     return FSP_SUCCESS;
-}                                      /* End of function R_ETHER_PHY_VersionGet() */
+}                                      /* End of function R_ETHER_PHY_Read() */
+
+/********************************************************************************************************************//**
+ * @brief Write data to register of PHY-LSI . Implements @ref ether_phy_api_t::write.
+ *
+ * @retval  FSP_SUCCESS                                 ETHER_PHY successfully write data.
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Address or data is not a valid size
+ ***********************************************************************************************************************/
+fsp_err_t R_ETHER_PHY_Write (ether_phy_ctrl_t * const p_ctrl, uint32_t reg_addr, uint32_t data)
+{
+    ether_phy_instance_ctrl_t * p_instance_ctrl = (ether_phy_instance_ctrl_t *) p_ctrl;
+
+#if (ETHER_PHY_CFG_PARAM_CHECKING_ENABLE)
+    FSP_ASSERT(p_instance_ctrl);
+    ETHER_PHY_ERROR_RETURN(ETHER_PHY_ADDRESS_SIZE >= reg_addr, FSP_ERR_INVALID_ARGUMENT);
+    ETHER_PHY_ERROR_RETURN(ETHER_PHY_REGISTER_DATA_SIZE >= data, FSP_ERR_INVALID_ARGUMENT);
+#endif
+
+    ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_instance_ctrl->p_ether_phy_cfg->p_extend;
+
+    switch (p_extend->mdio_type)
+    {
+        case ETHER_PHY_MDIO_GMAC:
+        {
+            ether_phy_write_gmac(p_instance_ctrl, reg_addr, data);
+            break;
+        }
+
+#if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
+        case ETHER_PHY_MDIO_ETHSW:
+        {
+            ether_phy_write_ethsw(p_instance_ctrl, reg_addr, data);
+            break;
+        }
+#endif
+
+        case ETHER_PHY_MDIO_ESC:
+        {
+            ether_phy_write_esc(p_instance_ctrl, reg_addr, data);
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+
+    return FSP_SUCCESS;
+}                                      /* End of function R_ETHER_PHY_Write() */
 
 /*******************************************************************************************************************//**
  * @} (end addtogroup ETHER_PHY)
@@ -579,7 +660,8 @@ __INLINE fsp_err_t R_ETHER_PHY_VersionGet (fsp_version_t * const p_version)
  * @retval  FSP_ERR_ASSERTION            Pointer to ETHER control block or configuration structure is NULL
  * @retval  FSP_ERR_ALREADY_OPEN         Control block has already been opened
  * @retval  FSP_ERR_INVALID_CHANNEL      Invalid channel number is given.
- * @retval  FSP_ERR_INVALID_ARGUMENT      Irq number lower then 0.
+ * @retval  FSP_ERR_INVALID_ARGUMENT     Irq number lower then 0.
+ * @retval  FSP_ERR_INVALID_POINTER      Pointer to p_cfg or p_extend is NULL.
  **********************************************************************************************************************/
 static fsp_err_t ether_phy_open_param_check (ether_phy_instance_ctrl_t   * p_instance_ctrl,
                                              ether_phy_cfg_t const * const p_cfg)
@@ -587,8 +669,8 @@ static fsp_err_t ether_phy_open_param_check (ether_phy_instance_ctrl_t   * p_ins
     ether_phy_extend_cfg_t * p_extend;
 
     FSP_ASSERT(p_instance_ctrl);
-    FSP_ASSERT(NULL != p_cfg);
-    FSP_ASSERT(NULL != p_cfg->p_extend);
+    ETHER_PHY_ERROR_RETURN(NULL != p_cfg, FSP_ERR_INVALID_POINTER);
+    ETHER_PHY_ERROR_RETURN(NULL != p_cfg->p_extend, FSP_ERR_INVALID_POINTER);
 
     p_extend = (ether_phy_extend_cfg_t *) p_cfg->p_extend;
 
@@ -633,31 +715,31 @@ static ether_selector_speed_t ether_phy_get_selector_speed (ether_phy_speed_t bp
     {
         case ETHER_PHY_SPEED_10_100:
         {
-            selector_speed = ETHER_SELECTOR_SPEED_100MBPS;
+            selector_speed = ETHER_SELECTOR_SPEED_100_MBPS;
             break;
         }
 
         case ETHER_PHY_SPEED_10_1000:
         {
-            selector_speed = ETHER_SELECTOR_SPEED_1000MBPS;
+            selector_speed = ETHER_SELECTOR_SPEED_1000_MBPS;
             break;
         }
 
         case ETHER_PHY_SPEED_10:
         {
-            selector_speed = ETHER_SELECTOR_SPEED_10MBPS;
+            selector_speed = ETHER_SELECTOR_SPEED_10_MBPS;
             break;
         }
 
         case ETHER_PHY_SPEED_100:
         {
-            selector_speed = ETHER_SELECTOR_SPEED_100MBPS;
+            selector_speed = ETHER_SELECTOR_SPEED_100_MBPS;
             break;
         }
 
         case ETHER_PHY_SPEED_1000:
         {
-            selector_speed = ETHER_SELECTOR_SPEED_1000MBPS;
+            selector_speed = ETHER_SELECTOR_SPEED_1000_MBPS;
             break;
         }
 
@@ -709,32 +791,48 @@ static ether_selector_duplex_t ether_phy_get_selector_duplex (ether_phy_duplex_t
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   p_cfg               Pointer to pin configuration structure
  *
- * @retval  FSP_SUCCESS             Successfully
- * @retval  FSP_ERR_TIMEOUT         Reset timeout
+ * @retval  FSP_SUCCESS                                 Successfully
+ * @retval  FSP_ERR_TIMEOUT                             Reset timeout
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_INVALID_POINTER                     Pointer to read buffer is NULL.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Address or data is not a valid size
  **********************************************************************************************************************/
 fsp_err_t ether_phy_reset (ether_phy_instance_ctrl_t * p_instance_ctrl, ether_phy_cfg_t const * const p_cfg)
 {
-    static bool g_ether_phy_state_initialized = false;
-
+    bool phy_state_initialized;
+    static bsp_io_port_pin_t g_phy_reset_pin_initialized[BSP_FEATURE_ETHER_PHY_MAX_CHANNELS] = {(bsp_io_port_pin_t) 0U};
+    uint32_t                 index;
     ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_cfg->p_extend;
     fsp_err_t                err      = FSP_SUCCESS;
 
-    if (!g_ether_phy_state_initialized)
+    phy_state_initialized = false;
+
+    for (index = 0U; index < BSP_FEATURE_ETHER_PHY_MAX_CHANNELS; index++)
+    {
+        if (g_phy_reset_pin_initialized[index] == p_extend->phy_reset_pin)
+        {
+            phy_state_initialized = true;
+            break;
+        }
+    }
+
+    g_phy_reset_pin_initialized[p_cfg->channel] = p_extend->phy_reset_pin;
+
+    if (!phy_state_initialized)
     {
         /* Reset PHY by hard */
-        g_ether_phy_state_initialized = true;
 
         /* This code uses BSP IO functions to show how it is used.*/
         R_BSP_PinAccessEnable();
 
         /* Write Low-output to ESC_RESETOUT# as PHY reset */
-        R_BSP_PinWrite(p_extend->phy_reset_pin, BSP_IO_LEVEL_LOW);
+        R_BSP_PinClear(R_BSP_IoRegionGet(p_extend->phy_reset_pin), p_extend->phy_reset_pin);
 
         /* Assertion time for reset  */
         R_BSP_SoftwareDelay(p_extend->phy_reset_time, BSP_DELAY_UNITS_MICROSECONDS);
 
         /* Write High-output to ESC_RESETOUT# as release */
-        R_BSP_PinWrite(p_extend->phy_reset_pin, BSP_IO_LEVEL_HIGH);
+        R_BSP_PinSet(R_BSP_IoRegionGet(p_extend->phy_reset_pin), p_extend->phy_reset_pin);
 
         /* Delay after release */
         R_BSP_SoftwareDelay(p_extend->phy_reset_time, BSP_DELAY_UNITS_MICROSECONDS);
@@ -750,11 +848,11 @@ fsp_err_t ether_phy_reset (ether_phy_instance_ctrl_t * p_instance_ctrl, ether_ph
             uint32_t count = 0;
 
             /* Reset PHY by soft */
-            ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_CONTROL, ETHER_PHY_CONTROL_RESET);
+            R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_CONTROL, ETHER_PHY_CONTROL_RESET);
 
             while (1)
             {
-                reg = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_CONTROL);
+                R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_CONTROL, &reg);
 
                 if ((ETHER_PHY_REGISTER_READ_ERROR != (reg & ETHER_PHY_REGISTER_READ_ERROR)) &&
                     (0 == (reg & ETHER_PHY_CONTROL_RESET)))
@@ -782,6 +880,7 @@ fsp_err_t ether_phy_reset (ether_phy_instance_ctrl_t * p_instance_ctrl, ether_ph
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  *
  * @retval  FSP_SUCCESS                                 Successfully
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
  * @retval  FSP_ERR_INVALID_ARGUMENT                    Invalid arguments.
  **********************************************************************************************************************/
 fsp_err_t ether_phy_set_auto_negotiate_off (ether_phy_instance_ctrl_t * p_instance_ctrl)
@@ -835,7 +934,7 @@ fsp_err_t ether_phy_set_auto_negotiate_off (ether_phy_instance_ctrl_t * p_instan
             return FSP_ERR_INVALID_ARGUMENT;
     }
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_CONTROL, reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_CONTROL, reg);
 
     p_instance_ctrl->local_advertise = 0;
 
@@ -848,6 +947,7 @@ fsp_err_t ether_phy_set_auto_negotiate_off (ether_phy_instance_ctrl_t * p_instan
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  *
  * @retval  FSP_SUCCESS                                 Successfully
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
  * @retval  FSP_ERR_INVALID_ARGUMENT                    Invalid arguments.
  **********************************************************************************************************************/
 fsp_err_t ether_phy_set_auto_negotiate_on (ether_phy_instance_ctrl_t * p_instance_ctrl)
@@ -959,8 +1059,8 @@ fsp_err_t ether_phy_set_auto_negotiate_on (ether_phy_instance_ctrl_t * p_instanc
 
     p_instance_ctrl->local_advertise = reg_adv;
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_AN_ADVERTISEMENT, reg_adv);
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_1000BT_CONTROL, reg_ctr);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_AN_ADVERTISEMENT, reg_adv);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_1000BT_CONTROL, reg_ctr);
 
     return FSP_SUCCESS;
 }                                      /* End of function ether_phy_set_auto_negotiate_on() */
@@ -973,7 +1073,10 @@ fsp_err_t ether_phy_set_auto_negotiate_on (ether_phy_instance_ctrl_t * p_instanc
  * @param[out] p_local_pause        Pointer to the location to store the local pause bits.
  * @param[out] p_partner_pause      Pointer to the location to store the partner pause bits.
  *
- * @retval  FSP_SUCCESS             ETHER_PHY successfully get link partner ability.
+ * @retval  FSP_SUCCESS                                 ETHER_PHY successfully get link partner ability.
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Address or data is not a valid size
+ * @retval  FSP_ERR_INVALID_POINTER                     Pointer to read buffer is NULL.
  ***********************************************************************************************************************/
 fsp_err_t ether_phy_get_ability_auto_negotiate_off (ether_phy_instance_ctrl_t * p_instance_ctrl,
                                                     uint32_t * const            p_line_speed_duplex,
@@ -982,7 +1085,7 @@ fsp_err_t ether_phy_get_ability_auto_negotiate_off (ether_phy_instance_ctrl_t * 
 {
     uint32_t reg;
 
-    reg = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_CONTROL);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_CONTROL, &reg);
 
     if (ETHER_PHY_CONTROL_SPEED_SELCT == (reg & ETHER_PHY_CONTROL_SPEED_SELCT))
     {
@@ -1032,9 +1135,12 @@ fsp_err_t ether_phy_get_ability_auto_negotiate_off (ether_phy_instance_ctrl_t * 
  * @param[out] p_local_pause        Pointer to the location to store the local pause bits.
  * @param[out] p_partner_pause      Pointer to the location to store the partner pause bits.
  *
- * @retval  FSP_SUCCESS                         ETHER_PHY successfully get link partner ability.
- * @retval  FSP_ERR_ETHER_PHY_ERROR_LINK        PHY-LSI is not link up.
- * @retval  FSP_ERR_ETHER_PHY_NOT_READY         The auto-negotiation isn't completed
+ * @retval  FSP_SUCCESS                                 ETHER_PHY successfully get link partner ability.
+ * @retval  FSP_ERR_ASSERTION                           Pointer to ETHER_PHY control block is NULL.
+ * @retval  FSP_ERR_INVALID_ARGUMENT                    Address or data is not a valid size
+ * @retval  FSP_ERR_INVALID_POINTER                     Pointer to read buffer is NULL.
+ * @retval  FSP_ERR_ETHER_PHY_ERROR_LINK                PHY-LSI is not link up.
+ * @retval  FSP_ERR_ETHER_PHY_NOT_READY                 The auto-negotiation isn't completed
  ***********************************************************************************************************************/
 fsp_err_t ether_phy_get_ability_auto_negotiate_on (ether_phy_instance_ctrl_t * p_instance_ctrl,
                                                    uint32_t * const            p_line_speed_duplex,
@@ -1042,14 +1148,14 @@ fsp_err_t ether_phy_get_ability_auto_negotiate_on (ether_phy_instance_ctrl_t * p
                                                    uint32_t * const            p_partner_pause)
 {
     uint32_t reg_status;
-    uint32_t reg_4;
-    uint32_t reg_5;
-    uint32_t reg_9;
-    uint32_t reg_10;
+    uint32_t reg_4  = 0U;
+    uint32_t reg_5  = 0U;
+    uint32_t reg_9  = 0U;
+    uint32_t reg_10 = 0U;
 
     /* Because reading the first time shows the previous state, the Link status bit is read twice. */
-    ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_STATUS);
-    reg_status = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_STATUS);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_STATUS, &reg_status);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_STATUS, &reg_status);
 
     /* When the link isn't up, return error */
     ETHER_PHY_ERROR_RETURN(ETHER_PHY_STATUS_LINK_UP == (reg_status & ETHER_PHY_STATUS_LINK_UP),
@@ -1060,7 +1166,7 @@ fsp_err_t ether_phy_get_ability_auto_negotiate_on (ether_phy_instance_ctrl_t * p
                            FSP_ERR_ETHER_PHY_NOT_READY);
 
     reg_4 = p_instance_ctrl->local_advertise;
-    reg_5 = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_AN_LINK_PARTNER);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_AN_LINK_PARTNER, &reg_5);
 
     /* Establish local pause capability */
     *p_local_pause = 0;
@@ -1114,8 +1220,8 @@ fsp_err_t ether_phy_get_ability_auto_negotiate_on (ether_phy_instance_ctrl_t * p
 
     if (reg_status & ETHER_PHY_STATUS_EX_STATUS)
     {
-        reg_9  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_1000BT_CONTROL);
-        reg_10 = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_1000BT_STATUS);
+        R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_1000BT_CONTROL, &reg_9);
+        R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_1000BT_STATUS, &reg_10);
 
         if ((ETHER_PHY_1000BT_STATUS_PARTNER_1000H == (reg_10 & ETHER_PHY_1000BT_STATUS_PARTNER_1000H)) &&
             (ETHER_PHY_1000BT_CONTROL_1000H == (reg_9 & ETHER_PHY_1000BT_CONTROL_1000H)))
@@ -1150,35 +1256,35 @@ void ether_phy_convert_speed_duplex (uint32_t                  line_speed_duple,
     {
         case ETHER_PHY_LINK_SPEED_10H:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_10MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_10_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_HALF;
             break;
         }
 
         case ETHER_PHY_LINK_SPEED_10F:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_10MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_10_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_FULL;
             break;
         }
 
         case ETHER_PHY_LINK_SPEED_100H:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_100MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_100_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_HALF;
             break;
         }
 
         case ETHER_PHY_LINK_SPEED_100F:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_100MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_100_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_FULL;
             break;
         }
 
         case ETHER_PHY_LINK_SPEED_1000H:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_1000MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_1000_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_HALF;
             break;
         }
@@ -1186,7 +1292,7 @@ void ether_phy_convert_speed_duplex (uint32_t                  line_speed_duple,
         case ETHER_PHY_LINK_SPEED_1000F:
         default:
         {
-            *p_selector_speed  = ETHER_SELECTOR_SPEED_1000MBPS;
+            *p_selector_speed  = ETHER_SELECTOR_SPEED_1000_MBPS;
             *p_selector_duplex = ETHER_SELECTOR_DUPLEX_FULL;
             break;
         }
@@ -1194,51 +1300,15 @@ void ether_phy_convert_speed_duplex (uint32_t                  line_speed_duple,
 }
 
 /*******************************************************************************************************************//**
- * Reads a PHY register
- *
- * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
- * @param[in]   reg_addr            Address of the PHY register
- *
- * @retval      read value
- **********************************************************************************************************************/
-uint32_t ether_phy_read (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr)
-{
-    ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_instance_ctrl->p_ether_phy_cfg->p_extend;
-
-    switch (p_extend->mdio_type)
-    {
-        case ETHER_PHY_MDIO_GMAC:
-        {
-            return ether_phy_read_gmac(p_instance_ctrl, reg_addr);
-        }
-
-#if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
-        case ETHER_PHY_MDIO_ETHSW:
-        {
-            return ether_phy_read_ethsw(p_instance_ctrl, reg_addr);
-        }
-#endif
-
-        case ETHER_PHY_MDIO_ESC:
-        {
-            return ether_phy_read_esc(p_instance_ctrl, reg_addr);
-        }
-
-        default:
-
-            return (uint32_t) -1;
-    }
-}                                      /* End of function ether_phy_read() */
-
-/*******************************************************************************************************************//**
  * Reads a PHY register by GMAC control
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
+ * @param[out]  p_data              Pointer to the location to store read data.
  *
  * @retval      read value
  **********************************************************************************************************************/
-uint32_t ether_phy_read_gmac (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr)
+void ether_phy_read_gmac (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t * const p_data)
 {
     volatile R_GMAC_Type * p_reg_etherc = (R_GMAC_Type *) p_instance_ctrl->p_reg_etherc;
     uint32_t               timeout;
@@ -1261,21 +1331,19 @@ uint32_t ether_phy_read_gmac (ether_phy_instance_ctrl_t * p_instance_ctrl, uint3
         /* Wait read complete */
         if (!(p_reg_etherc->GMII_Address_b.GB))
         {
-
-            /* Return phy value */
-            return p_reg_etherc->GMII_Data & ETHER_PHY_16BIT_DATA_MASK;
+            *p_data = p_reg_etherc->GMII_Data & ETHER_PHY_16BIT_DATA_MASK;
+            break;
         }
 
         if (0 == timeout)
         {
             /* Timeout */
+            *p_data = ETHER_PHY_REGISTER_READ_ERROR;
             break;
         }
 
         timeout--;
     }
-
-    return (uint32_t) -1;
 }                                      /* End of function ether_phy_read_gmac() */
 
 #if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
@@ -1285,10 +1353,11 @@ uint32_t ether_phy_read_gmac (ether_phy_instance_ctrl_t * p_instance_ctrl, uint3
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
+ * @param[out]  p_data              Pointer to the location to store read data.
  *
  * @retval      read value
  **********************************************************************************************************************/
-uint32_t ether_phy_read_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr)
+void ether_phy_read_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t * const p_data)
 {
     R_ETHSW_Type * p_Reg_Ethsw = (R_ETHSW_Type *) p_instance_ctrl->p_reg_etherc;
     uint32_t       timeout;
@@ -1314,9 +1383,11 @@ uint32_t ether_phy_read_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint
         {
             if (ETHER_PHY_ETHSW_MDIO_CFG_STATUS_READERR != (reg & ETHER_PHY_ETHSW_MDIO_CFG_STATUS_READERR))
             {
-
-                /* Return phy value */
-                return p_Reg_Ethsw->MDIO_DATA & ETHER_PHY_16BIT_DATA_MASK;
+                *p_data = p_Reg_Ethsw->MDIO_DATA & ETHER_PHY_16BIT_DATA_MASK;
+            }
+            else
+            {
+                *p_data = ETHER_PHY_REGISTER_READ_ERROR;
             }
 
             break;
@@ -1325,13 +1396,12 @@ uint32_t ether_phy_read_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint
         if (0 == timeout)
         {
             /* Timeout */
+            *p_data = ETHER_PHY_REGISTER_READ_ERROR;
             break;
         }
 
         timeout--;
     }
-
-    return (uint32_t) -1;
 }                                      /* End of function ether_phy_read_ethsw() */
 
 #endif
@@ -1341,14 +1411,15 @@ uint32_t ether_phy_read_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
+ * @param[out]  p_data              Pointer to the location to store read data.
  *
  * @retval      read value
  **********************************************************************************************************************/
-uint32_t ether_phy_read_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr)
+void ether_phy_read_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t * const p_data)
 {
     R_ESC_Type * p_Reg_Esc = (R_ESC_Type *) p_instance_ctrl->p_reg_etherc;
-    uint16_t     reg_tmp;
     uint32_t     timeout;
+    fsp_err_t    err = FSP_SUCCESS;
 
     /* WAIT_LOOP */
     timeout = ETHER_PHY_TIMEOUT_COUNT;
@@ -1356,117 +1427,89 @@ uint32_t ether_phy_read_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32
     {
         if (0 == timeout)
         {
-
             /* Timeout */
-            return (uint32_t) -1;
+            err = FSP_ERR_TIMEOUT;
+            break;
         }
 
         timeout--;
     }
 
-    /* Get PDI access right */
-    p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 1;
-
-    /* WAIT_LOOP */
-    timeout = ETHER_PHY_TIMEOUT_COUNT;
-    while (p_Reg_Esc->MII_ECAT_ACS_STAT_b.ACSMII == 1)
+    if (FSP_SUCCESS == err)
     {
-        if (0 == timeout)
+        /* Get PDI access right */
+        p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 1;
+
+        /* WAIT_LOOP */
+        timeout = ETHER_PHY_TIMEOUT_COUNT;
+        while (p_Reg_Esc->MII_ECAT_ACS_STAT_b.ACSMII == 1)
         {
+            if (0 == timeout)
+            {
+                /* Timeout */
+                err = FSP_ERR_TIMEOUT;
+                break;
+            }
 
-            /* Timeout */
-            return (uint32_t) -1;
+            timeout--;
         }
-
-        timeout--;
     }
 
-    /* Read PHY register */
-    p_Reg_Esc->PHY_ADR       = p_instance_ctrl->p_ether_phy_cfg->phy_lsi_address;
-    p_Reg_Esc->PHY_REG_ADR   = (uint8_t) reg_addr;
-    p_Reg_Esc->MII_CONT_STAT = (1 << 8) | (1 << 0); ///< Read command
-
-    /* WAIT_LOOP */
-    timeout = ETHER_PHY_TIMEOUT_COUNT;
-    while (p_Reg_Esc->MII_CONT_STAT_b.BUSY == 1)
+    if (FSP_SUCCESS == err)
     {
-        if (0 == timeout)
+        /* Read PHY register */
+        p_Reg_Esc->PHY_ADR       = p_instance_ctrl->p_ether_phy_cfg->phy_lsi_address;
+        p_Reg_Esc->PHY_REG_ADR   = (uint8_t) reg_addr;
+        p_Reg_Esc->MII_CONT_STAT = (1 << 8) | (1 << 0); ///< Read command
+
+        /* WAIT_LOOP */
+        timeout = ETHER_PHY_TIMEOUT_COUNT;
+        while (p_Reg_Esc->MII_CONT_STAT_b.BUSY == 1)
         {
+            if (0 == timeout)
+            {
+                /* Timeout */
+                err = FSP_ERR_TIMEOUT;
+                break;
+            }
 
-            /* Timeout */
-            return (uint32_t) -1;
+            timeout--;
         }
-
-        timeout--;
     }
 
-    /* Check the error bit */
-    if ((p_Reg_Esc->MII_CONT_STAT_b.CMDERR == 1) ||
-        (p_Reg_Esc->MII_CONT_STAT_b.READERR == 1))
+    if (FSP_SUCCESS == err)
     {
-        /* Error operation */
+        /* Check the error bit */
+        if ((p_Reg_Esc->MII_CONT_STAT_b.CMDERR == 1) ||
+            (p_Reg_Esc->MII_CONT_STAT_b.READERR == 1))
+        {
+            /* Error operation */
 
-        // Clear error bit
-        // p_Reg_Esc->MIICONTSTAT.WORD = 0x0000;
+            // Clear error bit
+            // p_Reg_Esc->MIICONTSTAT.WORD = 0x0000;
+        }
     }
 
-    /* Get read data */
-    reg_tmp = p_Reg_Esc->PHY_DATA;
+    if (FSP_SUCCESS == err)
+    {
+        /* Get read data */
+        *p_data = p_Reg_Esc->PHY_DATA;
 
-    /* Give the access right to ECAT */
-    p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 0;
-
-    return reg_tmp;
+        /* Give the access right to ECAT */
+        p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 0;
+    }
+    else
+    {
+        *p_data = ETHER_PHY_REGISTER_READ_ERROR;
+    }
 }                                      /* End of function ether_phy_read_esc() */
-
-/*******************************************************************************************************************//**
- * Writes to a PHY register
- *
- * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
- * @param[in]   reg_addr            Address of the PHY register
- * @param[in]   data                Value
- *
- * @retval      None
- **********************************************************************************************************************/
-void ether_phy_write (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t reg_addr, uint32_t data)
-{
-    ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_instance_ctrl->p_ether_phy_cfg->p_extend;
-
-    switch (p_extend->mdio_type)
-    {
-        case ETHER_PHY_MDIO_GMAC:
-        {
-            ether_phy_write_gmac(p_instance_ctrl, reg_addr, data);
-            break;
-        }
-
-#if (BSP_FEATURE_ETHSW_SUPPORTED == 1)
-        case ETHER_PHY_MDIO_ETHSW:
-        {
-            ether_phy_write_ethsw(p_instance_ctrl, reg_addr, data);
-            break;
-        }
-#endif
-
-        case ETHER_PHY_MDIO_ESC:
-        {
-            ether_phy_write_esc(p_instance_ctrl, reg_addr, data);
-            break;
-        }
-
-        default:
-        {
-            break;
-        }
-    }
-}                                      /* End of function ether_phy_write() */
 
 /***********************************************************************************************************************
  * Writes to a PHY register by GMAC control
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
- * @param[in]   data                value
+ * @param[in]   data                Data written to register.
  *
  * @retval      none
  **********************************************************************************************************************/
@@ -1516,7 +1559,7 @@ void ether_phy_write_gmac (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
- * @param[in]   data                value
+ * @param[in]   data                Data written to register.
  *
  * @retval      none
  **********************************************************************************************************************/
@@ -1564,7 +1607,7 @@ void ether_phy_write_ethsw (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_
  *
  * @param[in]   p_instance_ctrl     Pointer to the control block for the channel
  * @param[in]   reg_addr            Address of the PHY register
- * @param[in]   data                value
+ * @param[in]   data                Data written to register.
  *
  * @retval      none
  **********************************************************************************************************************/
@@ -1572,6 +1615,7 @@ void ether_phy_write_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t 
 {
     R_ESC_Type * p_Reg_Esc = (R_ESC_Type *) p_instance_ctrl->p_reg_etherc;
     uint32_t     timeout;
+    fsp_err_t    err = FSP_SUCCESS;
 
     /* WAIT_LOOP */
     timeout = ETHER_PHY_TIMEOUT_COUNT;
@@ -1579,57 +1623,69 @@ void ether_phy_write_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t 
     {
         if (0 == timeout)
         {
-            return;
+            err = FSP_ERR_TIMEOUT;
+            break;
         }
 
         timeout--;
     }
 
-    /* Get PDI access right */
-    p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 1;
-
-    /* WAIT_LOOP */
-    timeout = ETHER_PHY_TIMEOUT_COUNT;
-    while (p_Reg_Esc->MII_ECAT_ACS_STAT_b.ACSMII == 1)
+    if (FSP_SUCCESS == err)
     {
-        if (0 == timeout)
+        /* Get PDI access right */
+        p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 1;
+
+        /* WAIT_LOOP */
+        timeout = ETHER_PHY_TIMEOUT_COUNT;
+        while (p_Reg_Esc->MII_ECAT_ACS_STAT_b.ACSMII == 1)
         {
-            return;
-        }
+            if (0 == timeout)
+            {
+                err = FSP_ERR_TIMEOUT;
+                break;
+            }
 
-        timeout--;
+            timeout--;
+        }
     }
 
-    /* Write PHY register */
-    p_Reg_Esc->PHY_ADR       = p_instance_ctrl->p_ether_phy_cfg->phy_lsi_address;
-    p_Reg_Esc->PHY_REG_ADR   = (uint8_t) reg_addr;
-    p_Reg_Esc->PHY_DATA      = (uint16_t) data;
-    p_Reg_Esc->MII_CONT_STAT = (2 << 8) | (1 << 0); ///< Write command
-
-    /* WAIT_LOOP */
-    timeout = ETHER_PHY_TIMEOUT_COUNT;
-    while (p_Reg_Esc->MII_CONT_STAT_b.BUSY == 1)
+    if (FSP_SUCCESS == err)
     {
-        if (0 == timeout)
+        /* Write PHY register */
+        p_Reg_Esc->PHY_ADR       = p_instance_ctrl->p_ether_phy_cfg->phy_lsi_address;
+        p_Reg_Esc->PHY_REG_ADR   = (uint8_t) reg_addr;
+        p_Reg_Esc->PHY_DATA      = (uint16_t) data;
+        p_Reg_Esc->MII_CONT_STAT = (2 << 8) | (1 << 0); ///< Write command
+
+        /* WAIT_LOOP */
+        timeout = ETHER_PHY_TIMEOUT_COUNT;
+        while (p_Reg_Esc->MII_CONT_STAT_b.BUSY == 1)
         {
-            return;
+            if (0 == timeout)
+            {
+                err = FSP_ERR_TIMEOUT;
+                break;
+            }
+
+            timeout--;
+        }
+    }
+
+    if (FSP_SUCCESS == err)
+    {
+        /* Check the error bit */
+        if ((p_Reg_Esc->MII_CONT_STAT_b.CMDERR == 1) ||
+            (p_Reg_Esc->MII_CONT_STAT_b.READERR == 1))
+        {
+            /*  Error operation */
+
+            // Clear error bit
+            // p_Reg_Esc->MIICONTSTAT.WORD = 0x0000;
         }
 
-        timeout--;
+        /* Give the access right to ECAT */
+        p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 0;
     }
-
-    /* Check the error bit */
-    if ((p_Reg_Esc->MII_CONT_STAT_b.CMDERR == 1) ||
-        (p_Reg_Esc->MII_CONT_STAT_b.READERR == 1))
-    {
-        /*  Error operation */
-
-        // Clear error bit
-        // p_Reg_Esc->MIICONTSTAT.WORD = 0x0000;
-    }
-
-    /* Give the access right to ECAT */
-    p_Reg_Esc->MII_PDI_ACS_STAT_b.ACSMII = 0;
 }                                      /* End of function ether_phy_write_esc() */
 
 /*******************************************************************************************************************//**
@@ -1641,46 +1697,66 @@ void ether_phy_write_esc (ether_phy_instance_ctrl_t * p_instance_ctrl, uint32_t 
  **********************************************************************************************************************/
 void ether_phy_targets_initialize (ether_phy_instance_ctrl_t * p_instance_ctrl)
 {
-    ether_phy_extend_cfg_t * p_extend = (ether_phy_extend_cfg_t *) p_instance_ctrl->p_ether_phy_cfg->p_extend;
-
-    switch (p_extend->phy_chip)
+    switch (p_instance_ctrl->p_ether_phy_cfg->phy_lsi_type)
     {
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_VSC8541) == ETHER_PHY_CHIP_VSC8541)
-        case ETHER_PHY_CHIP_VSC8541:
+        /* User VSC8541 */
+#if (ETHER_PHY_CFG_TARGET_VSC8541_ENABLE)
+        case ETHER_PHY_LSI_TYPE_VSC8541:
         {
             ether_phy_targets_initialize_vsc8541(p_instance_ctrl);
             break;
         }
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9131) == ETHER_PHY_CHIP_KSZ9131)
-        case ETHER_PHY_CHIP_KSZ9131:
+        /* User KSZ9131 */
+#if (ETHER_PHY_CFG_TARGET_KSZ9131_ENABLE)
+        case ETHER_PHY_LSI_TYPE_KSZ9131:
         {
             ether_phy_targets_initialize_ksz9131(p_instance_ctrl);
             break;
         }
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9031) == ETHER_PHY_CHIP_KSZ9031)
-        case ETHER_PHY_CHIP_KSZ9031:
+        /* User KSZ9031 */
+#if (ETHER_PHY_CFG_TARGET_KSZ9031_ENABLE)
+        case ETHER_PHY_LSI_TYPE_KSZ9031:
         {
             ether_phy_targets_initialize_ksz9031(p_instance_ctrl);
             break;
         }
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8081) == ETHER_PHY_CHIP_KSZ8081)
-        case ETHER_PHY_CHIP_KSZ8081:
+        /* User KSZ8081 */
+#if (ETHER_PHY_CFG_TARGET_KSZ8081_ENABLE)
+        case ETHER_PHY_LSI_TYPE_KSZ8081:
         {
             ether_phy_targets_initialize_ksz8081(p_instance_ctrl);
             break;
         }
 #endif
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8041) == ETHER_PHY_CHIP_KSZ8041)
-        case ETHER_PHY_CHIP_KSZ8041:
+        /* User KSZ8041 */
+#if (ETHER_PHY_CFG_TARGET_KSZ8041_ENABLE)
+        case ETHER_PHY_LSI_TYPE_KSZ8041:
         {
             ether_phy_targets_initialize_ksz8041(p_instance_ctrl);
+            break;
+        }
+#endif
+
+        /* User custom */
+#if (ETHER_PHY_CFG_USE_CUSTOM_PHY_LSI_ENABLE)
+        {
+            if (NULL != p_instance_ctrl->p_ether_phy_cfg->p_extend)
+            {
+                ether_phy_extend_cfg_t const * p_extend = p_instance_ctrl->p_ether_phy_cfg->p_extend;
+
+                if (NULL != p_extend->p_target_init)
+                {
+                    p_extend->p_target_init(p_instance_ctrl);
+                }
+            }
+
             break;
         }
 #endif
@@ -1692,7 +1768,7 @@ void ether_phy_targets_initialize (ether_phy_instance_ctrl_t * p_instance_ctrl)
     }
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_VSC8541) == ETHER_PHY_CHIP_VSC8541)
+#if (ETHER_PHY_CFG_TARGET_VSC8541_ENABLE)
 
 /*******************************************************************************************************************//**
  * PHY-LSI specific initialization processing for VSC8541
@@ -1730,7 +1806,7 @@ void ether_phy_targets_initialize_vsc8541 (ether_phy_instance_ctrl_t * p_instanc
  #define ETHER_PHY_TXCLKDLY_MASK                       (0x7)
  #define ETHER_PHY_RXCLKDLY_MASK                       (0x7)
 
-    uint32_t reg;
+    uint32_t reg = 0U;
 
     /*
      * When VSC8541-02 of the Microsemi Corporation is used,
@@ -1743,21 +1819,21 @@ void ether_phy_targets_initialize_vsc8541 (ether_phy_instance_ctrl_t * p_instanc
      * b1 = 1 : LED1 combination feature disable (link only, duplex only)
      * b0 = 0 : LED0 combination feature enable  (link/activity)
      *//* LED Mode Select */
-    ether_phy_write(p_instance_ctrl,
-                    ETHER_PHY_REG_LED_MODE_SELECT,
-                    (ETHER_PHY_LEDMODE_ANYSPEED_LINK_ACTIVITY << ETHER_PHY_REG_LED1_MODE_SELECT_OFFSET) |
-                    (ETHER_PHY_LEDMODE_ANYSPEED_LINK_ACTIVITY << ETHER_PHY_REG_LED0_MODE_SELECT_OFFSET));
+    R_ETHER_PHY_Write(p_instance_ctrl,
+                      ETHER_PHY_REG_LED_MODE_SELECT,
+                      (ETHER_PHY_LEDMODE_ANYSPEED_LINK_ACTIVITY << ETHER_PHY_REG_LED1_MODE_SELECT_OFFSET) |
+                      (ETHER_PHY_LEDMODE_ANYSPEED_LINK_ACTIVITY << ETHER_PHY_REG_LED0_MODE_SELECT_OFFSET));
 
     /* LED Behavior */
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_LED_BEHAVIOR);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_LED_BEHAVIOR, &reg);
     reg &= ~(1U << ETHER_PHY_REG_LED0_FEATURE_DISABLE_OFFSET);
     reg |= 1U << ETHER_PHY_REG_LED1_FEATURE_DISABLE_OFFSET;
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_LED_BEHAVIOR, reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_LED_BEHAVIOR, reg);
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#endif /* ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_VSC8541) == ETHER_PHY_CHIP_VSC8541) */
+#endif /* ETHER_PHY_CFG_TARGET_VSC8541_ENABLE */
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9131) == ETHER_PHY_CHIP_KSZ9131)
+#if (ETHER_PHY_CFG_TARGET_KSZ9131_ENABLE)
 
 /*******************************************************************************************************************//**
  * PHY-LSI specific initialization processing for KSZ9131
@@ -1780,31 +1856,31 @@ void ether_phy_targets_initialize_ksz9131 (ether_phy_instance_ctrl_t * p_instanc
     uint32_t reg;
 
     /* 2.77 TX DLL */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_77);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_77);
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, &reg);
     reg &= ~(1U << 12);                /* Enable TX DLL */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
 
     /* Reset TX DLL */
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, &reg);
     reg |= (1U << 13);                 /* Set Reset bit */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
 
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, &reg);
     reg &= ~(1U << 13);                /* Clear reset bit */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, (uint16_t) reg);
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#endif
+#endif  /* ETHER_PHY_CFG_TARGET_KSZ9131_ENABLE */
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9031) == ETHER_PHY_CHIP_KSZ9031)
+#if (ETHER_PHY_CFG_TARGET_KSZ9031_ENABLE)
 
 /*******************************************************************************************************************//**
  * PHY-LSI specific initialization processing for KSZ9031
@@ -1843,45 +1919,45 @@ void ether_phy_targets_initialize_ksz9031 (ether_phy_instance_ctrl_t * p_instanc
      * b4 = 0 : Dual LED Mode (LINK/ACTIVITY)
      * The b4 is write only. The value of b4 can be read by b3.
      */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_0);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_0);
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, &reg);
     reg |= 1 << ETHER_PHY_REG_LED_OVERRIDE_OFFSET;
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, reg);
 
     /* 2.8 Clock Pad skew */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_8);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_8);
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_8_KSZ9031_DATA);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_8_KSZ9031_DATA);
 
     /* 2.6 TX Data Pad skew */
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (0 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_6);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_6);
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
-                    (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_CONTROL,
+                      (1 << ETHER_PHY_REG_MMD_OPERATION_MODE_OFFSET | ETHER_PHY_MMD_DEVICE_ADDRESS_2));
 
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_6_KSZ9031_DATA);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_MMD_ACCESS_REGISTER_DATA, ETHER_PHY_MMD_REGISTER_6_KSZ9031_DATA);
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#endif /* ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ9031) == ETHER_PHY_CHIP_KSZ9031) */
+#endif /* ETHER_PHY_CFG_TARGET_KSZ9031_ENABLE */
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8081) == ETHER_PHY_CHIP_KSZ8081)
+#if (ETHER_PHY_CFG_TARGET_KSZ8081_ENABLE)
 
 /*******************************************************************************************************************//**
  * PHY-LSI specific initialization processing for KSZ8081
@@ -1895,9 +1971,9 @@ void ether_phy_targets_initialize_ksz8081 (ether_phy_instance_ctrl_t * p_instanc
     (void) p_instance_ctrl;
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#endif
+#endif /* ETHER_PHY_CFG_TARGET_KSZ8081_ENABLE */
 
-#if ((ETHER_PHY_CFG_PHY_LSI & ETHER_PHY_CHIP_KSZ8041) == ETHER_PHY_CHIP_KSZ8041)
+#if (ETHER_PHY_CFG_TARGET_KSZ8041_ENABLE)
 
 /*******************************************************************************************************************//**
  * PHY-LSI specific initialization processing for KSZ8041
@@ -1918,10 +1994,10 @@ void ether_phy_targets_initialize_ksz8041 (ether_phy_instance_ctrl_t * p_instanc
      * the pin that outputs the state of LINK is used combinedly with ACTIVITY in default.
      * The setting of the pin is changed so that only the state of LINK is output.
      */
-    reg  = ether_phy_read(p_instance_ctrl, ETHER_PHY_REG_PHY_CONTROL_1);
+    R_ETHER_PHY_Read(p_instance_ctrl, ETHER_PHY_REG_PHY_CONTROL_1, &reg);
     reg &= ~(1U << 15);
     reg |= (1U << 14);
-    ether_phy_write(p_instance_ctrl, ETHER_PHY_REG_PHY_CONTROL_1, reg);
+    R_ETHER_PHY_Write(p_instance_ctrl, ETHER_PHY_REG_PHY_CONTROL_1, reg);
 }                                      /* End of function ether_phy_targets_initialize() */
 
-#endif
+#endif /* ETHER_PHY_CFG_TARGET_KSZ8041_ENABLE */

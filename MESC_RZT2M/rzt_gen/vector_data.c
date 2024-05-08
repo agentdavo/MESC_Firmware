@@ -5,6 +5,14 @@
         BSP_DONT_REMOVE const fsp_vector_t g_vector_table[BSP_ICU_VECTOR_MAX_ENTRIES] =
         {
                         [0] = R_IRQ1_isr, /* INTCPU0 (Software interrupt 0) */
+            [21] = dmac_int_isr, /* DMAC0_INT0 (DMAC0 transfer completion 0) */
+            [22] = dmac_int_isr, /* DMAC0_INT1 (DMAC0 transfer completion 1) */
+            [23] = dmac_int_isr, /* DMAC0_INT2 (DMAC0 transfer completion 2) */
+            [24] = dmac_int_isr, /* DMAC0_INT3 (DMAC0 transfer completion 3) */
+            [25] = dmac_int_isr, /* DMAC0_INT4 (DMAC0 transfer completion 4) */
+            [26] = dmac_int_isr, /* DMAC0_INT5 (DMAC0 transfer completion 5) */
+            [27] = dmac_int_isr, /* DMAC0_INT6 (DMAC0 transfer completion 6) */
+            [28] = dmac_int_isr, /* DMAC0_INT7 (DMAC0 transfer completion 7) */
             [84] = r_mtu_tgiv3_interrupt, /* TGIA3 (MTU3.TGRA input capture/compare match) */
             [97] = r_mtu_tgiv6_interrupt, /* TGIA6 (MTU6.TGRA input capture/compare match) */
             [251] = gmac_isr_pmt, /* GMAC_PMT (GMAC1 power management) */
@@ -22,8 +30,10 @@
             [317] = canfd_error_isr, /* CAN_GLERR (CANFD Global error interrupt) */
             [318] = canfd_channel_tx_isr, /* CAN0_TX (CANFD0 Channel TX interrupt) */
             [319] = canfd_error_isr, /* CAN0_CHERR (CANFD0 Channel CAN error interrupt) */
+            [320] = canfd_common_fifo_rx_isr, /* CAN0_COMFRX (CANFD0 Common RX FIFO or TXQ interrupt) */
             [321] = canfd_channel_tx_isr, /* CAN1_TX (CANFD1 Channel TX interrupt) */
             [322] = canfd_error_isr, /* CAN1_CHERR (CANFD1 Channel CAN error interrupt) */
+            [323] = canfd_common_fifo_rx_isr, /* CAN1_COMFRX (CANFD1 Common RX FIFO or TXQ interrupt) */
             [324] = spi_rxi_isr, /* SPI0_SPRI (SPI0 Reception buffer full) */
             [325] = spi_txi_isr, /* SPI0_SPTI (SPI0 Transmit buffer empty) */
             [327] = spi_eri_isr, /* SPI0_SPEI (SPI0 errors) */

@@ -10,8 +10,11 @@ file(GLOB_RECURSE Source_Files
 "${CMAKE_CURRENT_LIST_DIR}/../src/*.c"
 "${CMAKE_CURRENT_LIST_DIR}/../src/*.cpp")
 
+SET(ALL_FILES ${Source_Files})
+
 add_executable(${PROJECT_NAME}.elf
-    ${Source_Files})
+	${ALL_FILES}
+)
 
 target_include_directories(${PROJECT_NAME}.elf
      PRIVATE

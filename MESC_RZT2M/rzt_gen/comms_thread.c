@@ -14,10 +14,192 @@
                 static void comms_thread_func(void * pvParameters);
                 void rtos_startup_err_callback(void * p_instance, void * p_data);
                 void rtos_startup_common_init(void);
+dmac_instance_ctrl_t g_transfer7_ctrl;
+
+transfer_info_t g_transfer7_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_FIXED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer7_extend =
+{
+    .unit                = 0,
+    .channel             = 7,
+#if defined(VECTOR_NUMBER_DMAC0_INT7)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT7,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_IIC1_RXI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_SOURCE_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 7
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 7
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_i2c_master1_rx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer7_cfg =
+{
+    .p_info              = &g_transfer7_info,
+    .p_extend            = &g_transfer7_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer7 =
+{
+    .p_ctrl        = &g_transfer7_ctrl,
+    .p_cfg         = &g_transfer7_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
+dmac_instance_ctrl_t g_transfer6_ctrl;
+
+transfer_info_t g_transfer6_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer6_extend =
+{
+    .unit                = 0,
+    .channel             = 6,
+#if defined(VECTOR_NUMBER_DMAC0_INT6)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT6,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_IIC1_TXI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_DESTINATION_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 6
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 6
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_i2c_master1_tx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer6_cfg =
+{
+    .p_info              = &g_transfer6_info,
+    .p_extend            = &g_transfer6_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer6 =
+{
+    .p_ctrl        = &g_transfer6_ctrl,
+    .p_cfg         = &g_transfer6_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
 iic_master_instance_ctrl_t g_i2c_master1_ctrl;
+
+#define FSP_NOT_DEFINED (1)
+#if (FSP_NOT_DEFINED) != (g_transfer6)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void iic_master_tx_dmac_callback(iic_master_instance_ctrl_t * p_instance_ctrl);
+
+void g_i2c_master1_tx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    iic_master_tx_dmac_callback(&g_i2c_master1_ctrl);
+}
+#endif
+
+#if (FSP_NOT_DEFINED) != (g_transfer7)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void iic_master_rx_dmac_callback(iic_master_instance_ctrl_t * p_instance_ctrl);
+
+void g_i2c_master1_rx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    iic_master_rx_dmac_callback(&g_i2c_master1_ctrl);
+}
+#endif
+#undef FSP_NOT_DEFINED
+
 const iic_master_extended_cfg_t g_i2c_master1_extend =
 {
-    .timeout_mode            = IIC_MASTER_TIMEOUT_MODE_SHORT,
+    .timeout_mode             = IIC_MASTER_TIMEOUT_MODE_SHORT,
+    .timeout_scl_low          = IIC_MASTER_TIMEOUT_SCL_LOW_ENABLED,
     /* Actual calculated bitrate: 98425. Actual calculated duty cycle: 50%. */ .clock_settings.brl_value = 28, .clock_settings.brh_value = 28, .clock_settings.cks_value = 3
 };
 const i2c_master_cfg_t g_i2c_master1_cfg =
@@ -26,18 +208,8 @@ const i2c_master_cfg_t g_i2c_master1_cfg =
     .rate                = I2C_MASTER_RATE_STANDARD,
     .slave               = 0x00,
     .addr_mode           = I2C_MASTER_ADDR_MODE_7BIT,
-#define FSP_NOT_DEFINED (1)
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_tx       = NULL,
-#else
-    .p_transfer_tx       = &FSP_NOT_DEFINED,
-#endif
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_rx       = NULL,
-#else
-    .p_transfer_rx       = &FSP_NOT_DEFINED,
-#endif
-#undef FSP_NOT_DEFINED
+    .p_transfer_tx       = g_i2c_master1_P_TRANSFER_TX,
+    .p_transfer_rx       = g_i2c_master1_P_TRANSFER_RX,
     .p_callback          = NULL,
     .p_context           = NULL,
 #if defined(VECTOR_NUMBER_IIC1_RXI)
@@ -72,6 +244,32 @@ const i2c_master_instance_t g_i2c_master1 =
 };
 spi_instance_ctrl_t g_spi3_ctrl;
 
+#define FSP_NOT_DEFINED (1)
+#if (FSP_NOT_DEFINED) != (FSP_NOT_DEFINED)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_tx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi3_tx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_tx_dmac_callback(&g_spi3_ctrl);
+}
+#endif
+
+#if (FSP_NOT_DEFINED) != (FSP_NOT_DEFINED)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_rx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi3_rx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_rx_dmac_callback(&g_spi3_ctrl);
+}
+#endif
+#undef FSP_NOT_DEFINED
+
 /** SPI extended configuration for SPI HAL driver */
 const spi_extended_cfg_t g_spi3_ext_cfg =
 {
@@ -82,6 +280,11 @@ const spi_extended_cfg_t g_spi3_ext_cfg =
     .mosi_idle               = SPI_MOSI_IDLE_VALUE_FIXING_DISABLE,
     .parity                  = SPI_PARITY_MODE_DISABLE,
     .byte_swap               = SPI_BYTE_SWAP_DISABLE,
+#if 1
+    .clock_source            = SPI_CLOCK_SOURCE_SPI3ASYNCCLK,
+#else
+    .clock_source            = SPI_CLOCK_SOURCE_PCLKM,
+#endif
     .spck_div                = {
         /* Actual calculated bitrate: 16000000. */ .spbr = 2, .brdv = 0
     },
@@ -91,7 +294,6 @@ const spi_extended_cfg_t g_spi3_ext_cfg =
     .transmit_fifo_threshold = 0,
     .receive_fifo_threshold  = 0,
     .receive_data_ready_detect_adjustment  = 0,
-    .sync_bypass             = SPI_SYNCHRONIZER_NOT_BYPASS
  };
 
 /** SPI configuration for SPI HAL driver */
@@ -132,18 +334,8 @@ const spi_cfg_t g_spi3_cfg =
 
     .mode_fault          = SPI_MODE_FAULT_ERROR_DISABLE,
     .bit_order           = SPI_BIT_ORDER_MSB_FIRST,
-#define FSP_NOT_DEFINED (1)
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_tx       = NULL,
-#else
-    .p_transfer_tx       = &FSP_NOT_DEFINED,
-#endif
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_rx       = NULL,
-#else
-    .p_transfer_rx       = &FSP_NOT_DEFINED,
-#endif
-#undef FSP_NOT_DEFINED
+    .p_transfer_tx       = g_spi3_P_TRANSFER_TX,
+    .p_transfer_rx       = g_spi3_P_TRANSFER_RX,
     .p_callback          = spi3_callback,
 
     .p_context           = NULL,
@@ -157,7 +349,187 @@ const spi_instance_t g_spi3 =
     .p_cfg         = &g_spi3_cfg,
     .p_api         = &g_spi_on_spi
 };
+dmac_instance_ctrl_t g_transfer5_ctrl;
+
+transfer_info_t g_transfer5_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_FIXED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer5_extend =
+{
+    .unit                = 0,
+    .channel             = 5,
+#if defined(VECTOR_NUMBER_DMAC0_INT5)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT5,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_SPI1_SPRI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_SOURCE_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 5
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 5
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_spi2_rx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer5_cfg =
+{
+    .p_info              = &g_transfer5_info,
+    .p_extend            = &g_transfer5_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer5 =
+{
+    .p_ctrl        = &g_transfer5_ctrl,
+    .p_cfg         = &g_transfer5_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
+dmac_instance_ctrl_t g_transfer4_ctrl;
+
+transfer_info_t g_transfer4_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer4_extend =
+{
+    .unit                = 0,
+    .channel             = 4,
+#if defined(VECTOR_NUMBER_DMAC0_INT4)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT4,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_SPI1_SPTI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_DESTINATION_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 4
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 4
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_spi2_tx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer4_cfg =
+{
+    .p_info              = &g_transfer4_info,
+    .p_extend            = &g_transfer4_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer4 =
+{
+    .p_ctrl        = &g_transfer4_ctrl,
+    .p_cfg         = &g_transfer4_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
 spi_instance_ctrl_t g_spi2_ctrl;
+
+#define FSP_NOT_DEFINED (1)
+#if (FSP_NOT_DEFINED) != (g_transfer4)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_tx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi2_tx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_tx_dmac_callback(&g_spi2_ctrl);
+}
+#endif
+
+#if (FSP_NOT_DEFINED) != (g_transfer5)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_rx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi2_rx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_rx_dmac_callback(&g_spi2_ctrl);
+}
+#endif
+#undef FSP_NOT_DEFINED
 
 /** SPI extended configuration for SPI HAL driver */
 const spi_extended_cfg_t g_spi2_ext_cfg =
@@ -169,6 +541,11 @@ const spi_extended_cfg_t g_spi2_ext_cfg =
     .mosi_idle               = SPI_MOSI_IDLE_VALUE_FIXING_DISABLE,
     .parity                  = SPI_PARITY_MODE_DISABLE,
     .byte_swap               = SPI_BYTE_SWAP_DISABLE,
+#if 1
+    .clock_source            = SPI_CLOCK_SOURCE_SPI1ASYNCCLK,
+#else
+    .clock_source            = SPI_CLOCK_SOURCE_PCLKM,
+#endif
     .spck_div                = {
         /* Actual calculated bitrate: 16000000. */ .spbr = 2, .brdv = 0
     },
@@ -178,7 +555,6 @@ const spi_extended_cfg_t g_spi2_ext_cfg =
     .transmit_fifo_threshold = 0,
     .receive_fifo_threshold  = 0,
     .receive_data_ready_detect_adjustment  = 0,
-    .sync_bypass             = SPI_SYNCHRONIZER_NOT_BYPASS
  };
 
 /** SPI configuration for SPI HAL driver */
@@ -219,18 +595,8 @@ const spi_cfg_t g_spi2_cfg =
 
     .mode_fault          = SPI_MODE_FAULT_ERROR_DISABLE,
     .bit_order           = SPI_BIT_ORDER_MSB_FIRST,
-#define FSP_NOT_DEFINED (1)
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_tx       = NULL,
-#else
-    .p_transfer_tx       = &FSP_NOT_DEFINED,
-#endif
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_rx       = NULL,
-#else
-    .p_transfer_rx       = &FSP_NOT_DEFINED,
-#endif
-#undef FSP_NOT_DEFINED
+    .p_transfer_tx       = g_spi2_P_TRANSFER_TX,
+    .p_transfer_rx       = g_spi2_P_TRANSFER_RX,
     .p_callback          = spi2_callback,
 
     .p_context           = NULL,
@@ -244,7 +610,187 @@ const spi_instance_t g_spi2 =
     .p_cfg         = &g_spi2_cfg,
     .p_api         = &g_spi_on_spi
 };
+dmac_instance_ctrl_t g_transfer3_ctrl;
+
+transfer_info_t g_transfer3_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_FIXED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer3_extend =
+{
+    .unit                = 0,
+    .channel             = 3,
+#if defined(VECTOR_NUMBER_DMAC0_INT3)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT3,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_SPI0_SPRI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_SOURCE_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 3
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 3
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_spi0_rx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer3_cfg =
+{
+    .p_info              = &g_transfer3_info,
+    .p_extend            = &g_transfer3_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer3 =
+{
+    .p_ctrl        = &g_transfer3_ctrl,
+    .p_cfg         = &g_transfer3_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
+dmac_instance_ctrl_t g_transfer2_ctrl;
+
+transfer_info_t g_transfer2_info =
+{
+    .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
+};
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
+
+const dmac_extended_cfg_t g_transfer2_extend =
+{
+    .unit                = 0,
+    .channel             = 2,
+#if defined(VECTOR_NUMBER_DMAC0_INT2)
+    .dmac_int_irq         = VECTOR_NUMBER_DMAC0_INT2,
+#else
+    .dmac_int_irq         = FSP_INVALID_VECTOR,
+#endif
+    .dmac_int_ipl         = (12),
+    .dmac_int_irq_detect_type = (0),
+
+    .activation_source   = ELC_EVENT_SPI0_SPTI,
+
+    .ack_mode               = DMAC_ACK_MODE_BUS_CYCLE_MODE,
+    .detection_mode         = (dmac_detection_t) ((0) << 2 | (1) << 1 | (0) << 0),
+    .activation_request_source_select = DMAC_REQUEST_DIRECTION_DESTINATION_MODULE,
+
+    .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
+
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
+    .transfer_interval      = 0,
+#if 0 == 0
+ #if 7 >= 2
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 2
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_spi0_tx_transfer_callback,
+    .p_context           = NULL,
+};
+const transfer_cfg_t g_transfer2_cfg =
+{
+    .p_info              = &g_transfer2_info,
+    .p_extend            = &g_transfer2_extend,
+};
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer2 =
+{
+    .p_ctrl        = &g_transfer2_ctrl,
+    .p_cfg         = &g_transfer2_cfg,
+    .p_api         = &g_transfer_on_dmac
+};
 spi_instance_ctrl_t g_spi0_ctrl;
+
+#define FSP_NOT_DEFINED (1)
+#if (FSP_NOT_DEFINED) != (g_transfer2)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_tx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi0_tx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_tx_dmac_callback(&g_spi0_ctrl);
+}
+#endif
+
+#if (FSP_NOT_DEFINED) != (g_transfer3)
+
+/* If the transfer module is DMAC, define a DMAC transfer callback. */
+extern void spi_rx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+
+void g_spi0_rx_transfer_callback (transfer_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+    spi_rx_dmac_callback(&g_spi0_ctrl);
+}
+#endif
+#undef FSP_NOT_DEFINED
 
 /** SPI extended configuration for SPI HAL driver */
 const spi_extended_cfg_t g_spi0_ext_cfg =
@@ -256,6 +802,11 @@ const spi_extended_cfg_t g_spi0_ext_cfg =
     .mosi_idle               = SPI_MOSI_IDLE_VALUE_FIXING_DISABLE,
     .parity                  = SPI_PARITY_MODE_DISABLE,
     .byte_swap               = SPI_BYTE_SWAP_DISABLE,
+#if 1
+    .clock_source            = SPI_CLOCK_SOURCE_SPI0ASYNCCLK,
+#else
+    .clock_source            = SPI_CLOCK_SOURCE_PCLKM,
+#endif
     .spck_div                = {
         /* Actual calculated bitrate: 16000000. */ .spbr = 2, .brdv = 0
     },
@@ -265,7 +816,6 @@ const spi_extended_cfg_t g_spi0_ext_cfg =
     .transmit_fifo_threshold = 0,
     .receive_fifo_threshold  = 0,
     .receive_data_ready_detect_adjustment  = 0,
-    .sync_bypass             = SPI_SYNCHRONIZER_NOT_BYPASS
  };
 
 /** SPI configuration for SPI HAL driver */
@@ -306,18 +856,8 @@ const spi_cfg_t g_spi0_cfg =
 
     .mode_fault          = SPI_MODE_FAULT_ERROR_DISABLE,
     .bit_order           = SPI_BIT_ORDER_MSB_FIRST,
-#define FSP_NOT_DEFINED (1)
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_tx       = NULL,
-#else
-    .p_transfer_tx       = &FSP_NOT_DEFINED,
-#endif
-#if (FSP_NOT_DEFINED == FSP_NOT_DEFINED)
-    .p_transfer_rx       = NULL,
-#else
-    .p_transfer_rx       = &FSP_NOT_DEFINED,
-#endif
-#undef FSP_NOT_DEFINED
+    .p_transfer_tx       = g_spi0_P_TRANSFER_TX,
+    .p_transfer_rx       = g_spi0_P_TRANSFER_RX,
     .p_callback          = spi0_callback,
 
     .p_context           = NULL,
@@ -333,35 +873,24 @@ const spi_instance_t g_spi0 =
 };
 dmac_instance_ctrl_t g_transfer1_ctrl;
 
-dmac_register_set_setting_t g_transfer1_next1_register_setting =
-{
-    .p_dest = NULL,
-    .p_src  = NULL,
-    .length = 1
-};
-
-dmac_extended_info_t g_transfer1_extend_info =
-{
-    .src_size            = DMAC_TRANSFER_SIZE_1_BYTE,
-    .dest_size           = DMAC_TRANSFER_SIZE_1_BYTE,
-    .p_next1_register_setting = &g_transfer1_next1_register_setting,
-};
-
 transfer_info_t g_transfer1_info =
 {
-    .dest_addr_mode      = TRANSFER_ADDR_MODE_INCREMENTED,
-    .repeat_area         = (transfer_repeat_area_t) 0, // Unused
-    .irq                 = (transfer_irq_t) 0, // Unused
-    .chain_mode          = (transfer_chain_mode_t) 0, // Unused
-    .src_addr_mode       = TRANSFER_ADDR_MODE_FIXED,
-    .size                = (transfer_size_t) 0, // Unused
-    .mode                = TRANSFER_MODE_NORMAL,
-    .p_dest              = (void *) NULL,
-    .p_src               = (void const *) NULL,
-    .num_blocks          = 0, // Unused
-    .length              = 0,
-    .p_extend            = &g_transfer1_extend_info,
+    .dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_FIXED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
 };
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
 
 const dmac_extended_cfg_t g_transfer1_extend =
 {
@@ -372,7 +901,7 @@ const dmac_extended_cfg_t g_transfer1_extend =
 #else
     .dmac_int_irq         = FSP_INVALID_VECTOR,
 #endif
-    .dmac_int_ipl         = (BSP_IRQ_DISABLED),
+    .dmac_int_ipl         = (9),
     .dmac_int_irq_detect_type = (0),
 
     .activation_source   = ELC_EVENT_SCI0_RXI,
@@ -383,13 +912,29 @@ const dmac_extended_cfg_t g_transfer1_extend =
 
     .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
 
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
     .transfer_interval      = 0,
-    .channel_scheduling     = DMAC_CHANNEL_SCHEDULING_FIXED,
-
-    .p_callback          = NULL,
+#if 0 == 0
+ #if 7 >= 1
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 1
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_uart0_rx_transfer_callback,
     .p_context           = NULL,
-
-    .p_peripheral_module_handler = sci_uart_rxi_dmac_isr,
 };
 const transfer_cfg_t g_transfer1_cfg =
 {
@@ -405,35 +950,24 @@ const transfer_instance_t g_transfer1 =
 };
 dmac_instance_ctrl_t g_transfer0_ctrl;
 
-dmac_register_set_setting_t g_transfer0_next1_register_setting =
-{
-    .p_dest = NULL,
-    .p_src  = NULL,
-    .length = 1
-};
-
-dmac_extended_info_t g_transfer0_extend_info =
-{
-    .src_size            = DMAC_TRANSFER_SIZE_1_BYTE,
-    .dest_size           = DMAC_TRANSFER_SIZE_1_BYTE,
-    .p_next1_register_setting = &g_transfer0_next1_register_setting,
-};
-
 transfer_info_t g_transfer0_info =
 {
-    .dest_addr_mode      = TRANSFER_ADDR_MODE_FIXED,
-    .repeat_area         = (transfer_repeat_area_t) 0, // Unused
-    .irq                 = (transfer_irq_t) 0, // Unused
-    .chain_mode          = (transfer_chain_mode_t) 0, // Unused
-    .src_addr_mode       = TRANSFER_ADDR_MODE_INCREMENTED,
-    .size                = (transfer_size_t) 0, // Unused
-    .mode                = TRANSFER_MODE_NORMAL,
-    .p_dest              = (void *) NULL,
-    .p_src               = (void const *) NULL,
-    .num_blocks          = 0, // Unused
-    .length              = 0,
-    .p_extend            = &g_transfer0_extend_info,
+    .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+    .src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED,
+    .mode           = TRANSFER_MODE_NORMAL,
+    .p_dest         = (void *) NULL,
+    .p_src          = (void const *) NULL,
+    .length         = 0,
+    .src_size       = TRANSFER_SIZE_1_BYTE,
+    .dest_size      = TRANSFER_SIZE_1_BYTE,
+    .p_next1_src    = (void const *) NULL,
+    .p_next1_dest   = (void *) NULL,
+    .next1_length   = 1
 };
+
+#ifndef NULL
+extern dmac_link_cfg_t NULL;
+#endif
 
 const dmac_extended_cfg_t g_transfer0_extend =
 {
@@ -444,7 +978,7 @@ const dmac_extended_cfg_t g_transfer0_extend =
 #else
     .dmac_int_irq         = FSP_INVALID_VECTOR,
 #endif
-    .dmac_int_ipl         = (BSP_IRQ_DISABLED),
+    .dmac_int_ipl         = (9),
     .dmac_int_irq_detect_type = (0),
 
     .activation_source   = ELC_EVENT_SCI0_TXI,
@@ -455,13 +989,29 @@ const dmac_extended_cfg_t g_transfer0_extend =
 
     .next_register_operaion = DMAC_REGISTER_SELECT_REVERSE_DISABLE,
 
+    .dmac_mode              = DMAC_MODE_SELECT_REGISTER,
+#ifndef NULL
+    .p_descriptor           = &NULL,
+#else
+    .p_descriptor           = NULL,
+#endif
+
     .transfer_interval      = 0,
-    .channel_scheduling     = DMAC_CHANNEL_SCHEDULING_FIXED,
-
-    .p_callback          = NULL,
+#if 0 == 0
+ #if 7 >= 0
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT0_CHANNEL8_15,
+ #endif
+#else
+ #if 7 >= 0
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL0_7,
+ #else
+    .channel_scheduling     = (dmac_channel_scheduling_t) DMAC_CFG_CHANNEL_PRIORITY_UNIT1_CHANNEL8_15,
+ #endif
+#endif
+    .p_callback          = g_uart0_tx_transfer_callback,
     .p_context           = NULL,
-
-    .p_peripheral_module_handler = sci_uart_txi_dmac_isr,
 };
 const transfer_cfg_t g_transfer0_cfg =
 {
@@ -477,9 +1027,35 @@ const transfer_instance_t g_transfer0 =
 };
 sci_uart_instance_ctrl_t     g_uart0_ctrl;
 
-            baud_setting_t               g_uart0_baud_setting =
+            #define FSP_NOT_DEFINED (1)
+            #if (FSP_NOT_DEFINED) != (g_transfer0)
+
+            /* If the transfer module is DMAC, define a DMAC transfer callback. */
+            extern void sci_uart_tx_dmac_callback(sci_uart_instance_ctrl_t * p_instance_ctrl);
+
+            void g_uart0_tx_transfer_callback (transfer_callback_args_t * p_args)
             {
-                /* Baud rate calculated with 0.160% error. */ .abcse = 0, .abcs = 0, .bgdm = 1, .cks = 0, .brr = 51, .mddr = (uint8_t) 256, .brme = false
+                FSP_PARAMETER_NOT_USED(p_args);
+                sci_uart_tx_dmac_callback(&g_uart0_ctrl);
+            }
+            #endif
+
+            #if (FSP_NOT_DEFINED) != (g_transfer1)
+
+            /* If the transfer module is DMAC, define a DMAC transfer callback. */
+            extern void sci_uart_rx_dmac_callback(sci_uart_instance_ctrl_t * p_instance_ctrl);
+
+            void g_uart0_rx_transfer_callback (transfer_callback_args_t * p_args)
+            {
+                FSP_PARAMETER_NOT_USED(p_args);
+                sci_uart_rx_dmac_callback(&g_uart0_ctrl);
+            }
+            #endif
+            #undef FSP_NOT_DEFINED
+
+            sci_baud_setting_t           g_uart0_baud_setting =
+            {
+                /* Baud rate calculated with 0.160% error. */ .baudrate_bits_b.abcse = 0, .baudrate_bits_b.abcs = 0, .baudrate_bits_b.bgdm = 1, .baudrate_bits_b.cks = 0, .baudrate_bits_b.brr = 51, .baudrate_bits_b.mddr = (uint8_t) 256, .baudrate_bits_b.brme = false
             };
 
             /** UART extended configuration for UARTonSCI HAL driver */
@@ -490,14 +1066,23 @@ sci_uart_instance_ctrl_t     g_uart0_ctrl;
                 .noise_cancel         = SCI_UART_NOISE_CANCELLATION_DISABLE,
                 .rx_fifo_trigger        = SCI_UART_RX_FIFO_TRIGGER_MAX,
                 .p_baud_setting         = &g_uart0_baud_setting,
-                .uart_mode              = UART_MODE_RS232,
-                .ctsrts_en              = SCI_UART_CTSRTS_RTS_OUTPUT,
-#if 0
-                .flow_control_pin       = BSP_IO_PORT_00_PIN_00,
+#if 1
+                .clock_source           = SCI_UART_CLOCK_SOURCE_SCI0ASYNCCLK,
 #else
-                .flow_control_pin       = (bsp_io_port_pin_t) (0xFFFFU),
+                .clock_source           = SCI_UART_CLOCK_SOURCE_PCLKM,
 #endif
-                .sync_bypass            = SCI_UART_SYNCHRONIZER_NOT_BYPASS,
+                .flow_control           = SCI_UART_FLOW_CONTROL_RTS,
+                #if 0xFF != 0xFF
+                .flow_control_pin       = BSP_IO_PORT_FF_PIN_0xFF,
+                #else
+                .flow_control_pin       = (bsp_io_port_pin_t) UINT16_MAX,
+                #endif
+                .rs485_setting          = {
+                    .enable = SCI_UART_RS485_DISABLE,
+                    .polarity = SCI_UART_RS485_DE_POLARITY_HIGH,
+                    .assertion_time = 1,
+                    .negation_time = 1,
+                },
             };
 
             /** UART interface configuration */
@@ -510,18 +1095,8 @@ sci_uart_instance_ctrl_t     g_uart0_ctrl;
                 .p_callback          = uart0_callback,
                 .p_context           = NULL,
                 .p_extend            = &g_uart0_cfg_extend,
-#define FSP_NOT_DEFINED (1)
-#if (FSP_NOT_DEFINED == g_transfer0)
-                .p_transfer_tx       = NULL,
-#else
-                .p_transfer_tx       = &g_transfer0,
-#endif
-#if (FSP_NOT_DEFINED == g_transfer1)
-                .p_transfer_rx       = NULL,
-#else
-                .p_transfer_rx       = &g_transfer1,
-#endif
-#undef FSP_NOT_DEFINED
+                .p_transfer_tx       = g_uart0_P_TRANSFER_TX,
+                .p_transfer_rx       = g_uart0_P_TRANSFER_RX,
                 .rxi_ipl             = (12),
                 .txi_ipl             = (12),
                 .tei_ipl             = (12),
@@ -583,7 +1158,7 @@ extern const canfd_afl_entry_t p_canfd1_afl[CANFD_CFG_AFL_CH1_RULE_NUM];
 canfd_global_cfg_t g_canfd_global_cfg =
 {
     .global_interrupts = CANFD_CFG_GLOBAL_ERR_SOURCES,
-    .global_config     = (CANFD_CFG_TX_PRIORITY | CANFD_CFG_DLC_CHECK | CANFD_CFD_CLOCK_SOURCE | CANFD_CFG_FD_OVERFLOW),
+    .global_config     = (CANFD_CFG_TX_PRIORITY | CANFD_CFG_DLC_CHECK | CANFD_CFD_CLOCK_SOURCE | CANFD_CFG_FD_OVERFLOW | (uint32_t) (CANFD_CFG_TIMER_PRESCALER << R_CANFD_CFDGCFG_ITRCP_Pos)),
     .rx_mb_config      = (CANFD_CFG_RXMB_NUMBER | (CANFD_CFG_RXMB_SIZE << R_CANFD_CFDRMNB_RMPLS_Pos)),
     .global_err_ipl = CANFD_CFG_GLOBAL_ERR_IPL,
     .rx_fifo_ipl    = CANFD_CFG_RX_FIFO_IPL,
@@ -598,6 +1173,15 @@ canfd_global_cfg_t g_canfd_global_cfg =
         ((CANFD_CFG_RXFIFO6_INT_THRESHOLD << R_CANFD_CFDRFCC_RFIGCV_Pos) | (CANFD_CFG_RXFIFO6_DEPTH << R_CANFD_CFDRFCC_RFDC_Pos) | (CANFD_CFG_RXFIFO6_PAYLOAD << R_CANFD_CFDRFCC_RFPLS_Pos) | (CANFD_CFG_RXFIFO6_INT_MODE) | (CANFD_CFG_RXFIFO6_ENABLE)),
         ((CANFD_CFG_RXFIFO7_INT_THRESHOLD << R_CANFD_CFDRFCC_RFIGCV_Pos) | (CANFD_CFG_RXFIFO7_DEPTH << R_CANFD_CFDRFCC_RFDC_Pos) | (CANFD_CFG_RXFIFO7_PAYLOAD << R_CANFD_CFDRFCC_RFPLS_Pos) | (CANFD_CFG_RXFIFO7_INT_MODE) | (CANFD_CFG_RXFIFO7_ENABLE)),
     },
+    .common_fifo_config =
+    {
+        CANFD_CFG_COMMONFIFO0,
+        CANFD_CFG_COMMONFIFO1,
+        CANFD_CFG_COMMONFIFO2,
+        CANFD_CFG_COMMONFIFO3,
+        CANFD_CFG_COMMONFIFO4,
+        CANFD_CFG_COMMONFIFO5,
+    }
 };
 #endif
 
@@ -620,6 +1204,11 @@ const can_cfg_t g_canfd1_cfg =
     .p_extend               = &g_canfd1_extended_cfg,
     .p_context              = NULL,
     .ipl                    = (12),
+#if defined(VECTOR_NUMBER_CAN1_COMFRX)
+    .rx_irq             = VECTOR_NUMBER_CAN1_COMFRX,
+#else
+    .rx_irq             = FSP_INVALID_VECTOR,
+#endif
 #if defined(VECTOR_NUMBER_CAN1_TX)
     .tx_irq             = VECTOR_NUMBER_CAN1_TX,
 #else
@@ -666,7 +1255,7 @@ extern const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM];
 canfd_global_cfg_t g_canfd_global_cfg =
 {
     .global_interrupts = CANFD_CFG_GLOBAL_ERR_SOURCES,
-    .global_config     = (CANFD_CFG_TX_PRIORITY | CANFD_CFG_DLC_CHECK | CANFD_CFD_CLOCK_SOURCE | CANFD_CFG_FD_OVERFLOW),
+    .global_config     = (CANFD_CFG_TX_PRIORITY | CANFD_CFG_DLC_CHECK | CANFD_CFD_CLOCK_SOURCE | CANFD_CFG_FD_OVERFLOW | (uint32_t) (CANFD_CFG_TIMER_PRESCALER << R_CANFD_CFDGCFG_ITRCP_Pos)),
     .rx_mb_config      = (CANFD_CFG_RXMB_NUMBER | (CANFD_CFG_RXMB_SIZE << R_CANFD_CFDRMNB_RMPLS_Pos)),
     .global_err_ipl = CANFD_CFG_GLOBAL_ERR_IPL,
     .rx_fifo_ipl    = CANFD_CFG_RX_FIFO_IPL,
@@ -681,6 +1270,15 @@ canfd_global_cfg_t g_canfd_global_cfg =
         ((CANFD_CFG_RXFIFO6_INT_THRESHOLD << R_CANFD_CFDRFCC_RFIGCV_Pos) | (CANFD_CFG_RXFIFO6_DEPTH << R_CANFD_CFDRFCC_RFDC_Pos) | (CANFD_CFG_RXFIFO6_PAYLOAD << R_CANFD_CFDRFCC_RFPLS_Pos) | (CANFD_CFG_RXFIFO6_INT_MODE) | (CANFD_CFG_RXFIFO6_ENABLE)),
         ((CANFD_CFG_RXFIFO7_INT_THRESHOLD << R_CANFD_CFDRFCC_RFIGCV_Pos) | (CANFD_CFG_RXFIFO7_DEPTH << R_CANFD_CFDRFCC_RFDC_Pos) | (CANFD_CFG_RXFIFO7_PAYLOAD << R_CANFD_CFDRFCC_RFPLS_Pos) | (CANFD_CFG_RXFIFO7_INT_MODE) | (CANFD_CFG_RXFIFO7_ENABLE)),
     },
+    .common_fifo_config =
+    {
+        CANFD_CFG_COMMONFIFO0,
+        CANFD_CFG_COMMONFIFO1,
+        CANFD_CFG_COMMONFIFO2,
+        CANFD_CFG_COMMONFIFO3,
+        CANFD_CFG_COMMONFIFO4,
+        CANFD_CFG_COMMONFIFO5,
+    }
 };
 #endif
 
@@ -703,6 +1301,11 @@ const can_cfg_t g_canfd0_cfg =
     .p_extend               = &g_canfd0_extended_cfg,
     .p_context              = NULL,
     .ipl                    = (12),
+#if defined(VECTOR_NUMBER_CAN0_COMFRX)
+    .rx_irq             = VECTOR_NUMBER_CAN0_COMFRX,
+#else
+    .rx_irq             = FSP_INVALID_VECTOR,
+#endif
 #if defined(VECTOR_NUMBER_CAN0_TX)
     .tx_irq             = VECTOR_NUMBER_CAN0_TX,
 #else

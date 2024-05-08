@@ -22,8 +22,6 @@
             .link[ELC_PERIPHERAL_NONSAFTYGPT_H] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_ADC0_A] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_ADC0_B] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_ADC1_A] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_ADC1_B] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_DSMIF0_CAP0] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_DSMIF0_CAP1] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_DSMIF0_CAP2] = ELC_EVENT_NONE, /* No allocation */
@@ -44,10 +42,6 @@
             .link[ELC_PERIPHERAL_DSMIF1_CDCNT2] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_ENCIF_TRG0] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_ENCIF_TRG1] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_ESC0] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_ESC1] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_GMA0] = ELC_EVENT_NONE, /* No allocation */
-            .link[ELC_PERIPHERAL_GMA1] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_OUTPORTGR1] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_OUTPORTGR2] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_INPORTGR1] = ELC_EVENT_NONE, /* No allocation */
@@ -56,4 +50,10 @@
             .link[ELC_PERIPHERAL_SINGLEPORT1] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_SINGLEPORT2] = ELC_EVENT_NONE, /* No allocation */
             .link[ELC_PERIPHERAL_SINGLEPORT3] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_ESC0] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_ESC1] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_GMA0] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_GMA1] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_ADC1_A] = ELC_EVENT_NONE, /* No allocation */
+            .link[ELC_PERIPHERAL_ADC1_B] = ELC_EVENT_NONE, /* No allocation */
         };

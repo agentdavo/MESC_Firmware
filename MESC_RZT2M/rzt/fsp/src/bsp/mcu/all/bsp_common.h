@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 #ifndef BSP_COMMON_H
 #define BSP_COMMON_H
@@ -53,13 +39,8 @@ FSP_HEADER
 #define BSP_IRQ_DISABLED                       (0xFFU)
 
 /* Vector Number offset */
-#define BSP_VECTOR_NUM_OFFSET                  (32U)
-
-/* Version of this module's code and API. */
-#define BSP_CODE_VERSION_MAJOR                 (1U) // DEPRECATED
-#define BSP_CODE_VERSION_MINOR                 (2U) // DEPRECATED
-#define BSP_API_VERSION_MAJOR                  (1U) // DEPRECATED
-#define BSP_API_VERSION_MINOR                  (2U) // DEPRECATED
+#define BSP_VECTOR_NUM_OFFSET                  (32)
+#define BSP_INTERRUPT_TYPE_OFFSET              (16U)
 
 #define FSP_CONTEXT_SAVE
 #define FSP_CONTEXT_RESTORE
@@ -117,12 +98,10 @@ FSP_HEADER
 #define BSP_PRV_XSPI_CLK_FREQ_12_5_MHZ         (12500000U)   // XSPI_CLK frequency is 12.5 MHz
 #define BSP_PRV_XSPI_CLK_FREQ_NOT_SUPPORTED    (0xFFFFFFFFU) // XSPI_CLK frequency is not supported
 
-#define BSP_PRV_GICD_ADDRESS(cpu_num)    (cpu_num == 0 ? (GICD0) : (GICD1))
-
 /** Macro to log and return error without an assertion. */
 #ifndef FSP_RETURN
 
- #define FSP_RETURN(err)                 FSP_ERROR_LOG((err)); \
+ #define FSP_RETURN(err)    FSP_ERROR_LOG((err)); \
     return err;
 #endif
 
@@ -183,9 +162,6 @@ FSP_HEADER
         (timeout)--;                                                          \
     }
 
-/** Version data structure used by error logger macro. */
-extern const fsp_version_t g_bsp_version;
-
 #ifndef BSP_CFG_IRQ_MASK_LEVEL_FOR_CRITICAL_SECTION
  #define BSP_CFG_IRQ_MASK_LEVEL_FOR_CRITICAL_SECTION    (0U)
 #endif
@@ -193,7 +169,7 @@ extern const fsp_version_t g_bsp_version;
 /* This macro defines a variable for saving previous mask value */
 #ifndef FSP_CRITICAL_SECTION_DEFINE
 
- #define FSP_CRITICAL_SECTION_DEFINE              uint32_t old_mask_level = 0U
+ #define FSP_CRITICAL_SECTION_DEFINE              uintptr_t old_mask_level = 0U
 #endif
 
 /* These macros abstract methods to save and restore the interrupt state. */
@@ -219,6 +195,22 @@ extern const fsp_version_t g_bsp_version;
 
 /** Used to signify that the requested IRQ vector is not defined in this system. */
 #define FSP_INVALID_VECTOR                      ((IRQn_Type) - 33)
+
+/* This macro Enable or Disable interrupts. */
+#define BSP_INTERRUPT_ENABLE                    __asm volatile ("cpsie i"); \
+    __asm volatile ("isb");
+
+#define BSP_INTERRUPT_DISABLE                   __asm volatile ("cpsid i"); \
+    __asm volatile ("isb");
+
+/** In the event of an unrecoverable error the BSP will by default call the __BKPT() intrinsic function which will
+ *  alert the user of the error. The user can override this default behavior by defining their own
+ *  BSP_CFG_HANDLE_UNRECOVERABLE_ERROR macro.
+ */
+#if !defined(BSP_CFG_HANDLE_UNRECOVERABLE_ERROR)
+
+ #define BSP_CFG_HANDLE_UNRECOVERABLE_ERROR(x)    __BKPT((x))
+#endif
 
 /***********************************************************************************************************************
  * Typedef definitions
@@ -262,15 +254,17 @@ typedef enum e_fsp_priv_clock
 /***********************************************************************************************************************
  * Exported global variables
  **********************************************************************************************************************/
+
 extern const uint32_t g_bsp_system_clock_select[][2];
 extern const uint32_t g_bsp_system_clock_select_ckio[][2];
 extern const uint32_t g_bsp_system_clock_select_xspi_clk[][2];
 
+extern IRQn_Type g_current_interrupt_num[];
+extern uint8_t   g_current_interrupt_pointer;
+
 /***********************************************************************************************************************
- * Global variables (defined in other files)
+ * Exported global functions (to be accessed by other files)
  **********************************************************************************************************************/
-extern uint16_t g_current_interrupt_num[];
-extern uint8_t  g_current_interrupt_pointer;
 
 /***********************************************************************************************************************
  * Inline Functions
@@ -284,7 +278,7 @@ extern uint8_t  g_current_interrupt_pointer;
 __STATIC_INLINE IRQn_Type R_FSP_CurrentIrqGet (void)
 {
     /* Return the current interrupt number. */
-    return (IRQn_Type) g_current_interrupt_num[(g_current_interrupt_pointer - 1U)];
+    return g_current_interrupt_num[(g_current_interrupt_pointer - 1U)];
 }
 
 /*******************************************************************************************************************//**
@@ -296,7 +290,7 @@ __STATIC_INLINE uint32_t R_FSP_SystemClockHzGet (fsp_priv_clock_t clock)
 {
     uint32_t clock_hz = 0;
     uint32_t fselcpu0 = R_SYSC_S->SCKCR2_b.FSELCPU0;
-#if BSP_FEATURE_BSP_CPU1_SUPPORTED
+#if (2 == BSP_FEATURE_BSP_CR52_CORE_NUM)
     uint32_t fselcpu1 = R_SYSC_S->SCKCR2_b.FSELCPU1;
 #endif
     switch (clock)
@@ -309,7 +303,7 @@ __STATIC_INLINE uint32_t R_FSP_SystemClockHzGet (fsp_priv_clock_t clock)
 
         case FSP_PRIV_CLOCK_CPU1:
         {
-#if BSP_FEATURE_BSP_CPU1_SUPPORTED
+#if (2 == BSP_FEATURE_BSP_CR52_CORE_NUM)
             clock_hz = g_bsp_system_clock_select[clock][R_SYSC_S->SCKCR2_b.DIVSELSUB] >> fselcpu1;
 #endif
             break;
@@ -423,23 +417,11 @@ __STATIC_INLINE uint32_t R_FSP_SystemClockHzGet (fsp_priv_clock_t clock)
     return clock_hz;
 }
 
-/***********************************************************************************************************************
- * Exported global functions (to be accessed by other files)
- **********************************************************************************************************************/
 #if ((1 == BSP_CFG_ERROR_LOG) || (1 == BSP_CFG_ASSERT))
 
 /** Prototype of default function called before errors are returned in FSP code if BSP_CFG_LOG_ERRORS is set to 1. */
 void fsp_error_log(fsp_err_t err, const char * file, int32_t line);
 
-#endif
-
-/** In the event of an unrecoverable error the BSP will by default call the __BKPT() intrinsic function which will
- *  alert the user of the error. The user can override this default behavior by defining their own
- *  BSP_CFG_HANDLE_UNRECOVERABLE_ERROR macro.
- */
-#if !defined(BSP_CFG_HANDLE_UNRECOVERABLE_ERROR)
-
- #define BSP_CFG_HANDLE_UNRECOVERABLE_ERROR(x)    __BKPT((x))
 #endif
 
 /** @} (end addtogroup BSP_MCU) */

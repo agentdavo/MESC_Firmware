@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes
@@ -76,15 +62,6 @@ static fsp_err_t r_elc_common_parameter_checking(elc_instance_ctrl_t * p_instanc
  * Private global variables
  **********************************************************************************************************************/
 
-/** Version data structure used by error logger macro. */
-static const fsp_version_t s_elc_version =
-{
-    .api_version_minor  = ELC_API_VERSION_MINOR,
-    .api_version_major  = ELC_API_VERSION_MAJOR,
-    .code_version_major = ELC_CODE_VERSION_MAJOR,
-    .code_version_minor = ELC_CODE_VERSION_MINOR
-};
-
 /***********************************************************************************************************************
  * Global Variables
  **********************************************************************************************************************/
@@ -99,7 +76,6 @@ const elc_api_t g_elc_on_elc =
     .linkBreak             = R_ELC_LinkBreak,
     .enable                = R_ELC_Enable,
     .disable               = R_ELC_Disable,
-    .versionGet            = R_ELC_VersionGet
 };
 
 /*******************************************************************************************************************//**
@@ -116,9 +92,6 @@ const elc_api_t g_elc_on_elc =
  *
  * The configuration structure passed in to this function includes links for every event source included in the ELC
  * and sets them all at once. To set or clear an individual link use R_ELC_LinkSet and R_ELC_LinkBreak respectively.
- *
- * Example:
- * @snippet r_elc_example.c R_ELC_Open
  *
  * @retval FSP_SUCCESS             Initialization was successful
  * @retval FSP_ERR_ASSERTION       p_ctrl or p_cfg was NULL
@@ -233,9 +206,6 @@ fsp_err_t R_ELC_SoftwareEventGenerate (elc_ctrl_t * const p_ctrl, elc_software_e
 /*******************************************************************************************************************//**
  * Create a single event link. Implements @ref elc_api_t::linkSet
  *
- * Example:
- * @snippet r_elc_example.c R_ELC_LinkSet
- *
  * @retval FSP_SUCCESS             Initialization was successful
  * @retval FSP_ERR_ASSERTION       p_ctrl was NULL
  * @retval FSP_ERR_NOT_OPEN        The module has not been opened
@@ -314,24 +284,6 @@ fsp_err_t R_ELC_Disable (elc_ctrl_t * const p_ctrl)
     FSP_PARAMETER_NOT_USED(p_ctrl);
 
     return FSP_ERR_UNSUPPORTED;
-}
-
-/*******************************************************************************************************************//**
- * DEPRECATED Get the driver version based on compile time macros. Implements @ref elc_api_t::versionGet
- *
- * @retval     FSP_SUCCESS          Successful close.
- * @retval     FSP_ERR_ASSERTION    p_version is NULL.
- *
- **********************************************************************************************************************/
-fsp_err_t R_ELC_VersionGet (fsp_version_t * const p_version)
-{
-#if ELC_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(NULL != p_version);
-#endif
-
-    p_version->version_id = s_elc_version.version_id;
-
-    return FSP_SUCCESS;
 }
 
 /***********************************************************************************************************************

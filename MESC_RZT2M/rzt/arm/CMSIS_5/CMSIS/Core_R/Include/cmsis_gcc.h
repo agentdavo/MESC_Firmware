@@ -1,18 +1,21 @@
 /**************************************************************************//**
  * @file     cmsis_gcc.h
  * @brief    CMSIS compiler GCC header file
- * @version  V5.3.0 + renesas.0
- * @date     31. August 2021
+ * @date     02. February 2024
  ******************************************************************************/
 /*
- * Copyright (c) 2009-2020 Arm Limited. All rights reserved.
- * Copyright [2020-2021] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
+ * Copyright [2020-2024] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
  *
  * This file is based on the "\CMSIS\Core\Include\cmsis_gcc.h"
  *
  * Changes:
- *    - Add CP15 descriptions by
  * Renesas Electronics Corporation on 2021-08-31
+ *    - Add CP15 descriptions by
+ * Renesas Electronics Corporation on 2024-02-02
+ *    - Added functions related to FPEXC registers.
+ */
+/*
+ * Copyright (c) 2009-2020 Arm Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -53,9 +56,9 @@
 #ifndef   __STATIC_INLINE
   #define __STATIC_INLINE                        static inline
 #endif
-#ifndef   __STATIC_FORCEINLINE                 
+#ifndef   __STATIC_FORCEINLINE
   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
-#endif                                           
+#endif
 #ifndef   __NO_RETURN
   #define __NO_RETURN                            __attribute__((__noreturn__))
 #endif
@@ -133,23 +136,23 @@
   \details This default implementations initialized all data and additional bss
            sections relying on .copy.table and .zero.table specified properly
            in the used linker script.
-  
+
  */
 __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 {
   extern void _start(void) __NO_RETURN;
-  
+
   typedef struct {
     uint32_t const* src;
     uint32_t* dest;
     uint32_t  wlen;
   } __copy_table_t;
-  
+
   typedef struct {
     uint32_t* dest;
     uint32_t  wlen;
   } __zero_table_t;
-  
+
   extern const __copy_table_t __copy_table_start__;
   extern const __copy_table_t __copy_table_end__;
   extern const __zero_table_t __zero_table_start__;
@@ -160,16 +163,16 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
       pTable->dest[i] = pTable->src[i];
     }
   }
- 
+
   for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable) {
     for(uint32_t i=0u; i<pTable->wlen; ++i) {
       pTable->dest[i] = 0u;
     }
   }
- 
+
   _start();
 }
-  
+
 #define __PROGRAM_START           __cmsis_start
 #endif
 
@@ -659,7 +662,7 @@ __STATIC_FORCEINLINE void __TZ_set_FAULTMASK_NS(uint32_t faultMask)
   Devices without ARMv8-M Main Extensions (i.e. Cortex-M23) lack the non-secure
   Stack Pointer Limit register hence zero is returned always in non-secure
   mode.
-  
+
   \details Returns the current value of the Process Stack Pointer Limit (PSPLIM).
   \return               PSPLIM Register value
  */
@@ -704,7 +707,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_PSPLIM_NS(void)
   Devices without ARMv8-M Main Extensions (i.e. Cortex-M23) lack the non-secure
   Stack Pointer Limit register hence the write is silently ignored in non-secure
   mode.
-  
+
   \details Assigns the given value to the Process Stack Pointer Limit (PSPLIM).
   \param [in]    ProcStackPtrLimit  Process Stack Pointer Limit value to set
  */
@@ -841,7 +844,7 @@ __STATIC_FORCEINLINE uint32_t __get_FPSCR(void)
 {
 #if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
      (defined (__FPU_USED   ) && (__FPU_USED    == 1U))     )
-#if __has_builtin(__builtin_arm_get_fpscr) 
+#if __has_builtin(__builtin_arm_get_fpscr)
 // Re-enable using built-in when GCC has been fixed
 // || (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 2)
   /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
@@ -880,6 +883,42 @@ __STATIC_FORCEINLINE void __set_FPSCR(uint32_t fpscr)
 #endif
 }
 
+/**
+ * \brief   Get FPEXC
+ * \details Returns the current value of the Floating Point Exception Control register.
+ * \return               Floating Point Exception Control register value
+ */
+__STATIC_FORCEINLINE uint32_t __get_FPEXC (void)
+{
+#if ((defined(__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
+    (defined(__FPU_USED) && (__FPU_USED == 1U)))
+
+    uint32_t result;
+
+    __ASM volatile ("VMRS %0, fpexc" : "=r" (result));
+
+    return result;
+#else
+
+    return 0U;
+#endif
+}
+
+/**
+ * \brief   Set FPEXC
+ * \details Assigns the given value to the Floating Point Exception Control register.
+ * \param [in]    fpexc  Floating Point Exception Control value to set
+ */
+__STATIC_FORCEINLINE void __set_FPEXC (uint32_t fpexc)
+{
+#if ((defined(__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
+    (defined(__FPU_USED) && (__FPU_USED == 1U)))
+
+    __ASM volatile ("VMSR fpexc, %0" : : "r" (fpexc) : "memory");
+#else
+    (void) fpexc;
+#endif
+}
 
 /*@} end of CMSIS_Core_RegAccFunctions */
 

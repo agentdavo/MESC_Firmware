@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 #ifndef RENESAS_TFU
 #define RENESAS_TFU
@@ -69,12 +55,25 @@ FSP_HEADER
  #error "Compiler not supported!"
 #endif
 
+#if BSP_CFG_USE_TFU_MATHLIB
+ #define sinf(x)                    __sinf(x)
+ #define cosf(x)                    __cosf(x)
+ #define atan2f(y, x)               __atan2f(y, x)
+ #define hypotf(x, y)               __hypotf(x, y)
+ #define atan2hypotf(y, x, a, h)    __atan2hypotf(y, x, a, h)
+ #define sincosf(a, s, c)           __sincosf(a, s, c)
+#endif
+
 /***********************************************************************************************************************
  * Typedef definitions
  **********************************************************************************************************************/
 
 /***********************************************************************************************************************
  * Exported global variables
+ **********************************************************************************************************************/
+
+/***********************************************************************************************************************
+ * Exported global functions (to be accessed by other files)
  **********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -206,19 +205,6 @@ BSP_TFU_INLINE void __atan2hypotf (float y_cord, float x_cord, float * atan2, fl
     /* Read sqrt (x_cord2 + y_cord2) from R_TFU->ATDT0 */
     *hypot = R_TFU->ATDT0 * R_TFU_HYPOT_SCALING_FACTOR;
 }
-
-#if BSP_CFG_USE_TFU_MATHLIB
- #define sinf(x)                    __sinf(x)
- #define cosf(x)                    __cosf(x)
- #define atan2f(y, x)               __atan2f(y, x)
- #define hypotf(x, y)               __hypotf(x, y)
- #define atan2hypotf(y, x, a, h)    __atan2hypotf(y, x, a, h)
- #define sincosf(a, s, c)           __sincosf(a, s, c)
-#endif
-
-/***********************************************************************************************************************
- * Exported global functions (to be accessed by other files)
- **********************************************************************************************************************/
 
 /** @} (end addtogroup BSP_MCU) */
 

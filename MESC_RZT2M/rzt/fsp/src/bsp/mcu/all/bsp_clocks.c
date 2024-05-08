@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes   <System Includes> , "Project Includes"
@@ -29,7 +15,7 @@
 
 /* Key code for writing PRCR register. */
 #define BSP_PRV_PRCR_KEY                                    (0xA500U)
-#define BSP_PRV_PRCR_CGC_UNLOCK                             ((BSP_PRV_PRCR_KEY) | 0x1U)
+#define BSP_PRV_PRCR_CGC_UNLOCK                             ((BSP_PRV_PRCR_KEY) | 0x3U)
 #define BSP_PRV_PRCR_LOCK                                   ((BSP_PRV_PRCR_KEY) | 0x0U)
 
 /* Key code for writing  PCMD register. */
@@ -53,7 +39,7 @@
 
 /* Calculate the value to write to SCKCR2. */
 #define BSP_PRV_STARTUP_SCKCR2_FSELCPU0_BITS                (BSP_CFG_FSELCPU0 & 3U)
-#if BSP_FEATURE_BSP_CPU1_SUPPORTED
+#if (2 == BSP_FEATURE_BSP_CR52_CORE_NUM)
  #define BSP_PRV_STARTUP_SCKCR2_FSELCPU1_BITS               ((BSP_CFG_FSELCPU1 & 3U) << 2U)
 #else
  #define BSP_PRV_STARTUP_SCKCR2_FSELCPU1_BITS               (0U)
@@ -87,7 +73,7 @@
 
 #define BSP_PRV_STARTUP_SCKCR2_FSELCPU0_ICLK_MUL2           (BSP_CLOCKS_FSELCPU0_ICLK_MUL2 << \
                                                              R_SYSC_S_SCKCR2_FSELCPU0_Pos)
-#if BSP_FEATURE_BSP_CPU1_SUPPORTED
+#if (2 == BSP_FEATURE_BSP_CR52_CORE_NUM)
  #define BSP_PRV_STARTUP_SCKCR2_FSELCPU1_ICLK_MUL2          (BSP_CLOCKS_FSELCPU1_ICLK_MUL2 << \
                                                              R_SYSC_S_SCKCR2_FSELCPU1_Pos)
 #endif
@@ -137,9 +123,9 @@ static void bsp_prv_clock_set_hard_reset(void);
 void SystemCoreClockUpdate (void)
 {
     uint32_t devselsub = R_SYSC_S->SCKCR2_b.DIVSELSUB;
-#if (0 == BSP_CFG_CPU)
+#if (0 == BSP_CFG_CORE_CR52)
     uint32_t fselcpu = R_SYSC_S->SCKCR2_b.FSELCPU0;
-#elif (1 == BSP_CFG_CPU)
+#elif (1 == BSP_CFG_CORE_CR52)
     uint32_t fselcpu = R_SYSC_S->SCKCR2_b.FSELCPU1;
 #endif
 
@@ -423,7 +409,7 @@ void bsp_prv_clock_temporaliy_set_system_clock (uint32_t sckcr2)
             ((sckcr2_cpu_clock & ~R_SYSC_S_SCKCR2_FSELCPU0_Msk) | BSP_PRV_STARTUP_SCKCR2_FSELCPU0_ICLK_MUL2);
     }
 
-#if BSP_FEATURE_BSP_CPU1_SUPPORTED
+#if (2 == BSP_FEATURE_BSP_CR52_CORE_NUM)
 
     /* Check if FSELCPU1 bit of sckcr2 variable is 00b and CPU1 clock is 800MHz. (Or 600MHz) */
     if (!(BSP_PRV_SCKCR2_FSELCPU1_MASK & sckcr2))

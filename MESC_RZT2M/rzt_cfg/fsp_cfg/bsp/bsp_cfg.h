@@ -25,4 +25,13 @@
 
             #define BSP_CFG_SOFT_RESET_SUPPORTED (0)
             #define BSP_CFG_EARLY_INIT (0)
+
+            #define BSP_CFG_MULTIPLEX_INTERRUPT_SUPPORTED (0)
+            #if BSP_CFG_MULTIPLEX_INTERRUPT_SUPPORTED
+             #define BSP_CFG_MULTIPLEX_INTERRUPT_ENABLE         BSP_INTERRUPT_ENABLE
+             #define BSP_CFG_MULTIPLEX_INTERRUPT_DISABLE        BSP_INTERRUPT_DISABLE
+            #else
+             #define BSP_CFG_MULTIPLEX_INTERRUPT_ENABLE
+             #define BSP_CFG_MULTIPLEX_INTERRUPT_DISABLE
+            #endif
 #endif /* BSP_CFG_H_ */

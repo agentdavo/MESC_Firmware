@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 #ifndef R_POE3_H
 #define R_POE3_H
@@ -38,12 +24,56 @@ FSP_HEADER
 /***********************************************************************************************************************
  * Macro definitions
  **********************************************************************************************************************/
-#define POE3_CODE_VERSION_MAJOR    (1U) // DEPRECATED
-#define POE3_CODE_VERSION_MINOR    (2U) // DEPRECATED
 
 /***********************************************************************************************************************
  * Typedef definitions
  **********************************************************************************************************************/
+
+/** High-impedance output mode */
+typedef enum e_poe3_hiz_mode
+{
+    POE3_HIZ_MODE_FALLING_EDGE = 0,                           ///< Accepts a request on the falling edge of POE3 pin input.
+    POE3_HIZ_MODE_CLOCK_SOURCE_DIV_8_16_TIME_PULSE_LOW   = 1, ///< Accepts a request when POE3 pin input has been sampled 16 times at clock source divided by 8 clock pulses and all are low level.
+    POE3_HIZ_MODE_CLOCK_SOURCE_DIV_16_16_TIME_PULSE_LOW  = 2, ///< Accepts a request when POE3 pin input has been sampled 16 times at clock source divided by 16 clock pulses and all are low level.
+    POE3_HIZ_MODE_CLOCK_SOURCE_DIV_128_16_TIME_PULSE_LOW = 3  ///< Accepts a request when POE3 pin input has been sampled 16 times at clock source divided by 128 clock pulses and all are low level.
+} poe3_hiz_mode_t;
+
+/** POEn# input signal setting */
+typedef struct st_poe3_poe_input_setting
+{
+    poe3_hiz_mode_t mode;              ///< High-impedance output mode
+    bool            interrupt_enable;  ///< Interrupt enable
+} poe3_poe_input_setting_t;
+
+/* Extended configuration. */
+typedef struct st_poe3_extended_cfg
+{
+    poe3_poe_input_setting_t poe0;        ///< Settings for the POE0# pin input
+    poe3_poe_input_setting_t poe4;        ///< Settings for the POE4# pin input
+    poe3_poe_input_setting_t poe8;        ///< Settings for the POE8# pin input
+    poe3_poe_input_setting_t poe10;       ///< Settings for the POE10# pin input
+    poe3_poe_input_setting_t poe11;       ///< Settings for the POE11# pin input
+
+    uint32_t mtu0_control_channel_mask;   ///< Additional MTU0 pin control request condition
+    uint32_t mtu3_4_control_channel_mask; ///< Additional MTU3/4 pin control request condition
+    uint32_t mtu6_7_control_channel_mask; ///< Additional MTU6/7 pin control request condition
+
+#if BSP_FEATURE_POE3_ERROR_SIGNAL_TYPE == 2
+    bool dsmif0_error_1;                  ///< High impedance output when the DSMIF0 Error 1 is error
+    bool dsmif1_error_1;                  ///< High impedance output when the DSMIF1 Error 1 is error
+#endif
+    bool dsmif0_error;                    ///< High impedance output when the DSMIF0 is error
+    bool dsmif1_error;                    ///< High impedance output when the DSMIF1 is error
+
+    uint8_t   oei1_ipl;                   ///< Output Enable Interrupt 1 interrupt priority
+    IRQn_Type oei1_irq;                   ///< Output Enable Interrupt 1 interrupt number assigned to this instance
+    uint8_t   oei2_ipl;                   ///< Output Enable Interrupt 2 interrupt priority
+    IRQn_Type oei2_irq;                   ///< Output Enable Interrupt 2 interrupt number assigned to this instance
+    uint8_t   oei3_ipl;                   ///< Output Enable Interrupt 3 interrupt priority
+    IRQn_Type oei3_irq;                   ///< Output Enable Interrupt 3 interrupt number assigned to this instance
+    uint8_t   oei4_ipl;                   ///< Output Enable Interrupt 4 interrupt priority
+    IRQn_Type oei4_irq;                   ///< Output Enable Interrupt 4 interrupt number assigned to this instance
+} poe3_extended_cfg_t;
 
 /** Channel control block. DO NOT INITIALIZE.  Initialization occurs when @ref poe3_api_t::open is called. */
 typedef struct st_poe3_instance_ctrl
@@ -75,7 +105,10 @@ fsp_err_t R_POE3_StatusGet(poe3_ctrl_t * const p_ctrl, poe3_status_t * const p_s
 fsp_err_t R_POE3_OutputDisable(poe3_ctrl_t * const p_ctrl);
 fsp_err_t R_POE3_Reset(poe3_ctrl_t * const p_ctrl);
 fsp_err_t R_POE3_Close(poe3_ctrl_t * const p_ctrl);
-fsp_err_t R_POE3_VersionGet(fsp_version_t * const p_version);
+fsp_err_t R_POE3_CallbackSet(poe3_ctrl_t * const          p_ctrl,
+                             void (                     * p_callback)(poe3_callback_args_t *),
+                             void const * const           p_context,
+                             poe3_callback_args_t * const p_callback_memory);
 
 /*******************************************************************************************************************//**
  * @} (end defgroup POE3)

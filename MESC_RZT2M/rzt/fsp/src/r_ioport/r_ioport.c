@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes
@@ -82,15 +68,6 @@ static void r_ioport_event_config(const ioport_extend_cfg_t * p_extend_cfg_data)
  * Private global variables
  **********************************************************************************************************************/
 
-/* Version data structure used by error logger macro. */
-static const fsp_version_t g_ioport_version =
-{
-    .api_version_minor  = IOPORT_API_VERSION_MINOR,
-    .api_version_major  = IOPORT_API_VERSION_MAJOR,
-    .code_version_major = IOPORT_CODE_VERSION_MAJOR,
-    .code_version_minor = IOPORT_CODE_VERSION_MINOR
-};
-
 /***********************************************************************************************************************
  * Global Variables
  **********************************************************************************************************************/
@@ -111,7 +88,6 @@ const ioport_api_t g_ioport_on_ioport =
     .portEventOutputWrite = R_IOPORT_PortEventOutputWrite,
     .portRead             = R_IOPORT_PortRead,
     .portWrite            = R_IOPORT_PortWrite,
-    .versionGet           = R_IOPORT_VersionGet,
 };
 
 /*******************************************************************************************************************//**
@@ -260,7 +236,7 @@ fsp_err_t R_IOPORT_PinRead (ioport_ctrl_t * const p_ctrl, bsp_io_port_pin_t pin,
     FSP_PARAMETER_NOT_USED(p_ctrl);
 #endif
 
-    *p_pin_value = (bsp_io_level_t) R_BSP_PinRead(pin);
+    *p_pin_value = (bsp_io_level_t) R_BSP_FastPinRead(R_BSP_IoRegionGet(pin), pin);
 
     return FSP_SUCCESS;
 }
@@ -293,23 +269,23 @@ fsp_err_t R_IOPORT_PortRead (ioport_ctrl_t * const p_ctrl, bsp_io_port_t port, i
     ioport_size_t        safe_value;
     ioport_size_t        nsafe_value;
 
-    /* Get the RSELP register value */
-    ioport_size_t rslep_value = (ioport_size_t) R_PTADR->RSELP[port];
-
     /* Get port number */
     uint32_t port_num = (IOPORT_PRV_PORT_BITS & (ioport_size_t) port) >> IOPORT_PRV_PORT_OFFSET;
+
+    /* Get the RSELP register value */
+    ioport_size_t rselp_value = (ioport_size_t) R_PTADR->RSELP[port_num];
 
     /* Get the port register address in non safety region */
     p_ioport_regs = IOPORT_PRV_PORT_ADDRESS(IOPORT_REGION_SEL_NSAFE);
 
     /* Read the specified port states in non safety region */
-    nsafe_value = (ioport_size_t) (p_ioport_regs->PIN[port_num] & rslep_value);
+    nsafe_value = (ioport_size_t) (p_ioport_regs->PIN[port_num] & rselp_value);
 
     /* Get the port register address in safety region */
     p_ioport_regs = IOPORT_PRV_PORT_ADDRESS(IOPORT_REGION_SEL_SAFE);
 
     /* Read the specified port states in safety region */
-    safe_value = (ioport_size_t) (p_ioport_regs->PIN[port_num] & ~(rslep_value));
+    safe_value = (ioport_size_t) (p_ioport_regs->PIN[port_num] & ~(rselp_value));
 
     /* Read the specified port states */
     *p_port_value = nsafe_value | safe_value;
@@ -357,10 +333,10 @@ fsp_err_t R_IOPORT_PortWrite (ioport_ctrl_t * const p_ctrl, bsp_io_port_t port, 
     uint32_t port_num = (IOPORT_PRV_PORT_BITS & (ioport_size_t) port) >> IOPORT_PRV_PORT_OFFSET;
 
     /* Get the RSELP register value */
-    ioport_size_t rslep_value = R_PTADR->RSELP[port_num];
+    ioport_size_t rselp_value = R_PTADR->RSELP[port_num];
 
     /* Set value to non safety region register */
-    write_mask = rslep_value & mask;
+    write_mask = rselp_value & mask;
     if (write_mask)
     {
         /* Get the port register address */
@@ -374,7 +350,7 @@ fsp_err_t R_IOPORT_PortWrite (ioport_ctrl_t * const p_ctrl, bsp_io_port_t port, 
     }
 
     /* Set value to safety region register */
-    write_mask = (ioport_size_t) ((~rslep_value) & mask);
+    write_mask = (ioport_size_t) ((~rselp_value) & mask);
     if (write_mask)
     {
         /* Get the port register address */
@@ -730,27 +706,6 @@ fsp_err_t R_IOPORT_PinEventOutputWrite (ioport_ctrl_t * const p_ctrl, bsp_io_por
     }
 
     R_BSP_PinAccessDisable();          // Lock Register Write Protection
-
-    return FSP_SUCCESS;
-}
-
-/*******************************************************************************************************************//**
- * DEPRECATED Returns IOPort HAL driver version. Implements @ref ioport_api_t::versionGet.
- *
- * @retval FSP_SUCCESS        Version information read
- * @retval FSP_ERR_ASSERTION  The parameter p_data is NULL
- *
- * @note This function is reentrant.
- **********************************************************************************************************************/
-fsp_err_t R_IOPORT_VersionGet (fsp_version_t * p_data)
-{
-#if (1 == IOPORT_CFG_PARAM_CHECKING_ENABLE)
-
-    /* Verify parameters are valid */
-    FSP_ASSERT(NULL != p_data);
-#endif
-
-    *p_data = g_ioport_version;
 
     return FSP_SUCCESS;
 }

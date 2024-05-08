@@ -1,17 +1,18 @@
 /**************************************************************************//**
  * @file     cmsis_compiler.h
  * @brief    CMSIS compiler generic header file
- * @version  V5.1.0 + renesas.0
  * @date     31. August 2021
  ******************************************************************************/
 /*
- * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
  * Copyright [2020-2021] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
  *
  * This file is based on the "\CMSIS\Core\Include\cmsis_compliler.h"
  *
  * Changes:
  *    - No Changes.
+ */
+/*
+ * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *

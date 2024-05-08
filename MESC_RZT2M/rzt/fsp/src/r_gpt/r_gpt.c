@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes
@@ -135,15 +121,6 @@ void gpt_capture_b_isr(void);
  * Private global variables
  **********************************************************************************************************************/
 
-/* Version data structure used by error logger macro. */
-static const fsp_version_t g_gpt_version =
-{
-    .api_version_minor  = TIMER_API_VERSION_MINOR,
-    .api_version_major  = TIMER_API_VERSION_MAJOR,
-    .code_version_major = GPT_CODE_VERSION_MAJOR,
-    .code_version_minor = GPT_CODE_VERSION_MINOR
-};
-
 /***********************************************************************************************************************
  * Global Variables
  **********************************************************************************************************************/
@@ -163,7 +140,6 @@ const timer_api_t g_timer_on_gpt =
     .statusGet    = R_GPT_StatusGet,
     .callbackSet  = R_GPT_CallbackSet,
     .close        = R_GPT_Close,
-    .versionGet   = R_GPT_VersionGet
 };
 
 /*******************************************************************************************************************//**
@@ -182,9 +158,6 @@ const timer_api_t g_timer_on_gpt =
  * in an ISR after the requested period has elapsed.
  *
  * The GPT implementation of the general timer can accept a gpt_extended_cfg_t extension parameter.
- *
- * Example:
- * @snippet r_gpt_example.c R_GPT_Open
  *
  * @retval FSP_SUCCESS                    Initialization was successful and timer has started.
  * @retval FSP_ERR_ASSERTION              A required input pointer is NULL or the source divider is invalid.
@@ -240,9 +213,6 @@ fsp_err_t R_GPT_Open (timer_ctrl_t * const p_ctrl, timer_cfg_t const * const p_c
 /*******************************************************************************************************************//**
  * Stops timer. Implements @ref timer_api_t::stop.
  *
- * Example:
- * @snippet r_gpt_example.c R_GPT_Stop
- *
  * @retval FSP_SUCCESS                 Timer successfully stopped.
  * @retval FSP_ERR_ASSERTION           p_ctrl was NULL.
  * @retval FSP_ERR_NOT_OPEN            The instance is not opened.
@@ -263,9 +233,6 @@ fsp_err_t R_GPT_Stop (timer_ctrl_t * const p_ctrl)
 
 /*******************************************************************************************************************//**
  * Starts timer. Implements @ref timer_api_t::start.
- *
- * Example:
- * @snippet r_gpt_example.c R_GPT_Start
  *
  * @retval FSP_SUCCESS                 Timer successfully started.
  * @retval FSP_ERR_ASSERTION           p_ctrl was NULL.
@@ -312,9 +279,6 @@ fsp_err_t R_GPT_Reset (timer_ctrl_t * const p_ctrl)
 /*******************************************************************************************************************//**
  * Enables external event triggers that start, stop, clear, or capture the counter. Implements @ref timer_api_t::enable.
  *
- * Example:
- * @snippet r_gpt_example.c R_GPT_Enable
- *
  * @retval FSP_SUCCESS                 External events successfully enabled.
  * @retval FSP_ERR_ASSERTION           p_ctrl was NULL.
  * @retval FSP_ERR_NOT_OPEN            The instance is not opened.
@@ -358,9 +322,6 @@ fsp_err_t R_GPT_Enable (timer_ctrl_t * const p_ctrl)
  *
  * @note The timer could be running after R_GPT_Disable(). To ensure it is stopped, call R_GPT_Stop().
  *
- * Example:
- * @snippet r_gpt_example.c R_GPT_Disable
- *
  * @retval FSP_SUCCESS                 External events successfully disabled.
  * @retval FSP_ERR_ASSERTION           p_ctrl was NULL.
  * @retval FSP_ERR_NOT_OPEN            The instance is not opened.
@@ -390,9 +351,6 @@ fsp_err_t R_GPT_Disable (timer_ctrl_t * const p_ctrl)
  * @warning If periodic output is used, the duty cycle buffer registers are updated after the period buffer register.
  * If this function is called while the timer is running and a GPT overflow occurs during processing, the duty cycle
  * will not be the desired 50% duty cycle until the counter overflow after processing completes.
- *
- * Example:
- * @snippet r_gpt_example.c R_GPT_PeriodSet
  *
  * @retval FSP_SUCCESS                 Period value written successfully.
  * @retval FSP_ERR_ASSERTION           p_ctrl was NULL.
@@ -427,8 +385,8 @@ fsp_err_t R_GPT_PeriodSet (timer_ctrl_t * const p_ctrl, uint32_t const period_co
     /* Set a 50% duty cycle so the period of the waveform on the output pin matches the requested period. */
     if (TIMER_MODE_PERIODIC == p_instance_ctrl->p_cfg->mode)
     {
-        /* The  GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used. Reference
-         * "19.3.3 PWM Output Operating Mode" in the RZT2M manual R01UH0916EJ0063. To get a duty cycle
+        /* The  GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used (see
+         * Section "PWM Output Operating Mode" in the RZ microprocessor User's Manual for details). To get a duty cycle
          * as close to 50% as possible, duty cycle (register) = (period (counts) / 2) - 1. */
         uint32_t duty_cycle_50_percent = (period_counts >> 1) - 1U;
         p_instance_ctrl->p_reg->GTCCR[GPT_PRV_GTCCRC] = duty_cycle_50_percent;
@@ -458,9 +416,6 @@ fsp_err_t R_GPT_PeriodSet (timer_ctrl_t * const p_ctrl, uint32_t const period_co
  *
  * Duty cycle is updated in the buffer register. The updated duty cycle is reflected after the next cycle end (counter
  * overflow).
- *
- * Example:
- * @snippet r_gpt_example.c R_GPT_DutyCycleSet
  *
  * @param[in] p_ctrl                   Pointer to instance control block.
  * @param[in] duty_cycle_counts        Duty cycle to set in counts.
@@ -556,9 +511,6 @@ fsp_err_t R_GPT_DutyCycleSet (timer_ctrl_t * const p_ctrl, uint32_t const duty_c
 /*******************************************************************************************************************//**
  * Get timer information and store it in provided pointer p_info. Implements @ref timer_api_t::infoGet.
  *
- * Example:
- * @snippet r_gpt_example.c R_GPT_InfoGet
- *
  * @retval FSP_SUCCESS                 Period, count direction, frequency, and ELC event written to caller's
  *                                     structure successfully.(External clock(GTETRGA - GTETRGD) cannot be acquired.)
  * @retval FSP_ERR_ASSERTION           p_ctrl or p_info was NULL.
@@ -595,9 +547,6 @@ fsp_err_t R_GPT_InfoGet (timer_ctrl_t * const p_ctrl, timer_info_t * const p_inf
 
 /*******************************************************************************************************************//**
  * Get current timer status and store it in provided pointer p_status. Implements @ref timer_api_t::statusGet.
- *
- * Example:
- * @snippet r_gpt_example.c R_GPT_StatusGet
  *
  * @retval FSP_SUCCESS                 Current timer state and counter value set successfully.
  * @retval FSP_ERR_ASSERTION           p_ctrl or p_status was NULL.
@@ -762,23 +711,23 @@ fsp_err_t R_GPT_AdcTriggerSet (timer_ctrl_t * const    p_ctrl,
  * @retval  FSP_ERR_ASSERTION            A required pointer is NULL.
  * @retval  FSP_ERR_NOT_OPEN             The control block has not been opened.
  **********************************************************************************************************************/
-fsp_err_t R_GPT_CallbackSet (timer_ctrl_t * const          p_api_ctrl,
+fsp_err_t R_GPT_CallbackSet (timer_ctrl_t * const          p_ctrl,
                              void (                      * p_callback)(timer_callback_args_t *),
                              void const * const            p_context,
                              timer_callback_args_t * const p_callback_memory)
 {
-    gpt_instance_ctrl_t * p_ctrl = (gpt_instance_ctrl_t *) p_api_ctrl;
+    gpt_instance_ctrl_t * p_instance_ctrl = (gpt_instance_ctrl_t *) p_ctrl;
 
 #if GPT_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(p_ctrl);
+    FSP_ASSERT(p_instance_ctrl);
     FSP_ASSERT(p_callback);
-    FSP_ERROR_RETURN(GPT_OPEN == p_ctrl->open, FSP_ERR_NOT_OPEN);
+    FSP_ERROR_RETURN(GPT_OPEN == p_instance_ctrl->open, FSP_ERR_NOT_OPEN);
 #endif
 
     /* Store callback and context */
-    p_ctrl->p_callback        = p_callback;
-    p_ctrl->p_context         = p_context;
-    p_ctrl->p_callback_memory = p_callback_memory;
+    p_instance_ctrl->p_callback        = p_callback;
+    p_instance_ctrl->p_context         = p_context;
+    p_instance_ctrl->p_callback_memory = p_callback_memory;
 
     return FSP_SUCCESS;
 }
@@ -817,25 +766,6 @@ fsp_err_t R_GPT_Close (timer_ctrl_t * const p_ctrl)
     gpt_disable_interrupt(p_instance_ctrl);
 
     return err;
-}
-
-/*******************************************************************************************************************//**
- * DEPRECATED Sets driver version based on compile time macros. Implements @ref timer_api_t::versionGet.
- *
- * @retval FSP_SUCCESS                 Version stored in p_version.
- * @retval FSP_ERR_ASSERTION           p_version was NULL.
- **********************************************************************************************************************/
-fsp_err_t R_GPT_VersionGet (fsp_version_t * const p_version)
-{
-#if GPT_CFG_PARAM_CHECKING_ENABLE
-
-    /* Verify parameters are valid */
-    FSP_ASSERT(NULL != p_version);
-#endif
-
-    p_version->version_id = g_gpt_version.version_id;
-
-    return FSP_SUCCESS;
 }
 
 /** @} (end addtogroup GPT) */
@@ -987,8 +917,8 @@ static void gpt_hardware_initialize (gpt_instance_ctrl_t * const p_instance_ctrl
 
     if (TIMER_MODE_PERIODIC == p_cfg->mode)
     {
-        /* The  GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used. Reference
-         * "19.3.3 PWM Output Operating Mode" in the RZT2M manual R01UH0916EJ0063. To get a duty cycle
+        /* The  GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used (see
+         * Section "PWM Output Operating Mode" in the RZ microprocessor User's Manual for details). To get a duty cycle
          * as close to 50% as possible, duty cycle (register) = (period (counts) / 2) - 1. */
         uint32_t duty_cycle_50_percent = (p_cfg->period_counts >> 1) - 1U;
         duty_regs.gtccr_buffer = duty_cycle_50_percent;
@@ -1107,8 +1037,8 @@ static void gpt_hardware_initialize (gpt_instance_ctrl_t * const p_instance_ctrl
     p_instance_ctrl->p_reg->GTIOR = gtior;
 
     /* Configure duty cycle and force timer to count up. GTUDDTYC must be set, then cleared to force the count
-     * direction to be reflected when counting starts. Reference section 19.2.13 "General PWM Timer Count Direction
-     * and Duty Setting Register (GTUDDTYC)" in the RZT2M manual R01UH0916EJ0063. */
+     * direction to be reflected when counting starts (see Section "General PWM Timer Count Direction
+     * and Duty Setting Register (GTUDDTYC)" in the RZ microprocessor User's Manual for details). */
     p_instance_ctrl->p_reg->GTUDDTYC = gtuddtyc | 3U;
     p_instance_ctrl->p_reg->GTUDDTYC = gtuddtyc | 1U;
 
@@ -1144,7 +1074,8 @@ static void gpt_counter_initialize (gpt_instance_ctrl_t * const p_instance_ctrl,
     /* GTPR, GTCCRn, GTIOR, GTSSR, GTPSR, GTCSR, GTUPSR, GTDNSR, GTPBR, and GTUDDTYC are set by this driver. */
 
     /* Initialization sets all register required for up counting as described in hardware manual
-     * (19.3.1.1 Counter Operation in the RZT2M manual R01UH0916EJ0063) and other registers required by the driver. */
+     * (see Section "Counter Operation" in the RZ microprocessor User's Manual for details) and
+     * other registers required by the driver. */
 
     /* Dividers for GPT are half the enum value. */
     uint32_t gtcr_tpcs = p_cfg->source_div;
@@ -1166,8 +1097,8 @@ static void gpt_counter_initialize (gpt_instance_ctrl_t * const p_instance_ctrl,
     }
 #endif
 
-    /* Counter must be stopped to update TPCS. Reference section 19.2.12 "General PWM Timer Control Register (GTCR)"
-     * in the RZT2M R01UH0916EJ0063 manual. */
+    /* Counter must be stopped to update TPCS (see Section "General PWM Timer Control Register (GTCR)"
+     * in the RZ microprocessor User's Manual for details). */
     p_instance_ctrl->p_reg->GTCR = gtcr;
 
     gpt_hardware_events_disable(p_instance_ctrl);
@@ -1369,8 +1300,8 @@ static void gpt_calculate_duty_cycle (gpt_instance_ctrl_t * const p_instance_ctr
         else
  #endif
         {
-            /* The GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used. Reference
-             * "19.3.3 PWM Output Operating Mode" in the RZT2M manual R01UH0916EJ0063. */
+            /* The GTIOCA/GTIOCB pins transition 1 cycle after compare match when buffer operation is used (see
+             * Section "PWM Output Operating Mode" in the RZ microprocessor User's Manual for details). */
             temp_duty_cycle--;
             p_duty_reg->gtccr_buffer = temp_duty_cycle;
         }
@@ -1494,8 +1425,10 @@ static void r_gpt_call_callback (gpt_instance_ctrl_t * p_ctrl, timer_event_t eve
  **********************************************************************************************************************/
 static void r_gpt_capture_common_isr (gpt_prv_capture_event_t event)
 {
+    GPT_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
-    FSP_CONTEXT_SAVE
+    FSP_CONTEXT_SAVE;
 
     IRQn_Type irq = R_FSP_CurrentIrqGet();
 
@@ -1532,7 +1465,9 @@ static void r_gpt_capture_common_isr (gpt_prv_capture_event_t event)
     }
 
     /* Restore context if RTOS is used */
-    FSP_CONTEXT_RESTORE
+    FSP_CONTEXT_RESTORE;
+
+    GPT_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 /*******************************************************************************************************************//**
@@ -1540,6 +1475,8 @@ static void r_gpt_capture_common_isr (gpt_prv_capture_event_t event)
  **********************************************************************************************************************/
 void gpt_counter_overflow_isr (void)
 {
+    GPT_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
@@ -1573,6 +1510,8 @@ void gpt_counter_overflow_isr (void)
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
+
+    GPT_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 #if GPT_PRV_EXTRA_FEATURES_ENABLED == GPT_CFG_OUTPUT_SUPPORT_ENABLE
@@ -1582,6 +1521,8 @@ void gpt_counter_overflow_isr (void)
  **********************************************************************************************************************/
 void gpt_counter_underflow_isr (void)
 {
+    GPT_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
@@ -1595,6 +1536,8 @@ void gpt_counter_underflow_isr (void)
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
+
+    GPT_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 #endif
@@ -1604,6 +1547,8 @@ void gpt_counter_underflow_isr (void)
  **********************************************************************************************************************/
 void gpt_dead_time_isr (void)
 {
+    GPT_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
@@ -1617,6 +1562,8 @@ void gpt_dead_time_isr (void)
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
+
+    GPT_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 /*******************************************************************************************************************//**

@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes   <System Includes> , "Project Includes"
@@ -33,10 +19,6 @@
 
 /***********************************************************************************************************************
  * Typedef definitions
- **********************************************************************************************************************/
-
-/***********************************************************************************************************************
- * Private function prototypes
  **********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,8 +43,8 @@
  *              At 200 MHz one cycle takes 1/200 microsecond or 5 nanoseconds.@n
  *              At 800 MHz one cycle takes 1/800 microsecond or 1.25 nanoseconds.@n
  *              Therefore one run through bsp_prv_software_delay_loop() takes:
- *              ~ (1.25 * BSP_DELAY_LOOP_CYCLES) or 500 ns.
- *              A delay of 2 us therefore requires 2000ns/500ns or 4 loops.
+ *              ~ (1.25 * BSP_DELAY_LOOP_CYCLES) or 5 ns.
+ *              A delay of 2 us therefore requires 2000ns/5ns or 400 loops.
  *
  *              The 'theoretical' maximum delay that may be obtained is determined by a full 32 bit loop count and the system clock rate.
  *              @200MHz:  ((0xFFFFFFFF loops * 4 cycles /loop) / 200000000) = 85 seconds.
@@ -76,10 +58,22 @@
  *              overhead associated with executing the code to just get to this point has certainly satisfied the requested delay.
  *
  *
- * @note This function calls bsp_cpu_clock_get() which ultimately calls R_CGC_SystemClockFreqGet() and therefore requires
- *       that the BSP has already initialized the CGC (which it does as part of the Sysinit).
- *       Care should be taken to ensure this remains the case if in the future this function were to be called as part
- *       of the BSP initialization.
+ * @note R_BSP_SoftwareDelay() obtains the system clock value by reading the SystemCoreClock variable.
+ *       Therefore, R_BSP_SoftwareDelay() cannot be used until after the SystemCoreClock has been updated.
+ *       The SystemCoreClock is updated by executing SystemCoreClockUpdate() in startup;
+ *       users cannot call R_BSP_SoftwareDelay() inside R_BSP_WarmStart(BSP_WARM_START_RESET) and
+ *       R_BSP_WarmStart(BSP_WARM_START_POST_CLOCK) since they are invoked before SystemCoreClockUpdate() in startup.
+ *
+ * @note This function will delay for **at least** the specified duration. Due to overhead in calculating the correct number
+ *       of loops to delay, very small delay values (generally 1-5 microseconds) may be significantly longer than specified.
+ *       Approximate overhead for this function is as follows:
+ *           - CR52: 94-117 cycles
+ *
+ * @note If more accurate microsecond timing must be performed in software it is recommended to use
+ *       bsp_prv_software_delay_loop() directly. In this case, use BSP_DELAY_LOOP_CYCLES or BSP_DELAY_LOOPS_CALCULATE()
+ *       to convert a calculated delay cycle count to a number of software delay loops.
+ *
+ * @note Delays may be longer than expected when compiler optimization is turned off.
  **********************************************************************************************************************/
 
 void R_BSP_SoftwareDelay (uint32_t delay, bsp_delay_units_t units)
@@ -93,7 +87,7 @@ void R_BSP_SoftwareDelay (uint32_t delay, bsp_delay_units_t units)
 
     cpu_hz = SystemCoreClock;                                                         /** Get the system clock frequency in Hz. */
 
-    /* BSP_DELAY_SIGNIFICANT_DIGITS to keep the decimal point.　*/
+    /* BSP_DELAY_SIGNIFICANT_DIGITS to keep the decimal point. */
     ns_per_cycle = BSP_DELAY_NS_PER_SECOND / (cpu_hz / BSP_DELAY_SIGNIFICANT_DIGITS); /** Get the # of nanoseconds/cycle. */
 
     /* We want to get the time in total nanoseconds but need to be conscious of overflowing 32 bits. We also do not want to do 64 bit */
@@ -145,19 +139,7 @@ void R_BSP_SoftwareDelay (uint32_t delay, bsp_delay_units_t units)
  *        prologue/epilogue sequences generated by the compiler.
  * @param[in]     loop_cnt  The number of loops to iterate.
  **********************************************************************************************************************/
-BSP_ATTRIBUTE_STACKLESS void bsp_prv_software_delay_loop (__attribute__((unused)) uint32_t loop_cnt)
+void bsp_prv_software_delay_loop (uint32_t loop_cnt)
 {
-    __asm volatile ("sw_delay_loop:         \n"
-
-#if defined(__ICCARM__) || defined(__ARMCC_VERSION)
-                    "   subs r0, #1         \n"   ///< 1 cycle
-#elif defined(__GNUC__)
-                    "   sub r0, r0, #1      \n"   ///< 1 cycle
-#endif
-
-                    "   cmp r0, #0          \n"   ///< 1 cycle
-
-                    "   bne sw_delay_loop   \n"   ///< 2 cycles
-
-                    "   bx lr               \n"); ///< 2 cycles
+    r_bsp_software_delay_loop(loop_cnt);
 }

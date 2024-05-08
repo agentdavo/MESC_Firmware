@@ -1,6 +1,8 @@
 {
   "definedMacros": [
-    "_RZT_CORE=CR52_0"
+    "_RENESAS_RZT_",
+    "_RZT_CORE=CR52_0",
+    "_RZT_ORDINAL=1"
   ],
   "sourcePaths": [
     "rzt",
@@ -15,8 +17,9 @@
     "rzt/fsp/inc",
     "rzt/fsp/inc/api",
     "rzt/fsp/inc/instances",
+    "rzt/fsp/src/bsp/mcu/all/cr",
     "rzt/fsp/src/rm_freertos_plus_tcp",
-    "rzt/fsp/src/rm_freertos_port",
+    "rzt/fsp/src/rm_freertos_port/cr",
     "rzt_cfg/aws",
     "rzt_cfg/fsp_cfg",
     "rzt_cfg/fsp_cfg/bsp",
@@ -24,10 +27,12 @@
     "src"
   ],
   "libraryPaths": [],
+  "libraryNames": [],
   "objectFiles": [],
   "linkerScript": "script/fsp_ram_execution.ld",
   "targetDeviceName": "R9A07G075M24GBG",
-  "isPreBuildContentGenEnabled": false,
+  "entrySymbol": "system_init",
+  "isPreBuildContentGenEnabled": true,
   "isPostBuildContentGenEnabled": true,
   "isTargetDeviceSupportsTrustZone": false,
   "buildOptionsMap": {}

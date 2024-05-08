@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "bsp_api.h"
 #include "r_ethsw.h"
-#include "r_ethsw_api.h"
+#include "r_ether_switch_api.h"
 #include "r_ether_selector.h"
 #include "r_ether_selector_api.h"
 #include "r_ether_phy.h"
@@ -18,13 +18,13 @@
 #include "bsp_pin_cfg.h"
 FSP_HEADER
 /** ether on ethsw Instance. */
-extern const ethsw_instance_t g_ethsw0;
+extern const ether_switch_instance_t g_ethsw0;
 
 /** Access the Ethernet PHY instance using these structures when calling API functions directly (::p_api is not used). */
 extern ethsw_instance_ctrl_t g_ethsw0_ctrl;
-extern const ethsw_cfg_t g_ethsw0_cfg;
+extern const ether_switch_cfg_t g_ethsw0_cfg;
 #ifndef gmac_callback_ethsw
-void gmac_callback_ethsw(ethsw_callback_args_t * const p_arg);
+void gmac_callback_ethsw(ether_switch_callback_args_t * const p_arg);
 #endif
 /** ether_selector on ether_selector Instance. */
 extern const ether_selector_instance_t g_ether_selector2;
@@ -32,6 +32,14 @@ extern const ether_selector_instance_t g_ether_selector2;
 /** Access the Ethernet Selector instance using these structures when calling API functions directly (::p_api is not used). */
 extern ether_selector_instance_ctrl_t g_ether_selector2_ctrl;
 extern const ether_selector_cfg_t g_ether_selector2_cfg;
+#ifndef ETHER_PHY_LSI_TYPE_KIT_COMPONENT
+  #define ETHER_PHY_LSI_TYPE_KIT_COMPONENT ETHER_PHY_LSI_TYPE_DEFAULT
+#endif
+
+#ifndef NULL
+void NULL(ether_phy_instance_ctrl_t * p_instance_ctrl);
+#endif
+
 /** ether_phy on ether_phy Instance. */
 extern const ether_phy_instance_t g_ether_phy2;
 
@@ -44,6 +52,14 @@ extern const ether_selector_instance_t g_ether_selector1;
 /** Access the Ethernet Selector instance using these structures when calling API functions directly (::p_api is not used). */
 extern ether_selector_instance_ctrl_t g_ether_selector1_ctrl;
 extern const ether_selector_cfg_t g_ether_selector1_cfg;
+#ifndef ETHER_PHY_LSI_TYPE_KIT_COMPONENT
+  #define ETHER_PHY_LSI_TYPE_KIT_COMPONENT ETHER_PHY_LSI_TYPE_DEFAULT
+#endif
+
+#ifndef NULL
+void NULL(ether_phy_instance_ctrl_t * p_instance_ctrl);
+#endif
+
 /** ether_phy on ether_phy Instance. */
 extern const ether_phy_instance_t g_ether_phy1;
 
@@ -56,6 +72,14 @@ extern const ether_selector_instance_t g_ether_selector0;
 /** Access the Ethernet Selector instance using these structures when calling API functions directly (::p_api is not used). */
 extern ether_selector_instance_ctrl_t g_ether_selector0_ctrl;
 extern const ether_selector_cfg_t g_ether_selector0_cfg;
+#ifndef ETHER_PHY_LSI_TYPE_KIT_COMPONENT
+  #define ETHER_PHY_LSI_TYPE_KIT_COMPONENT ETHER_PHY_LSI_TYPE_DEFAULT
+#endif
+
+#ifndef NULL
+void NULL(ether_phy_instance_ctrl_t * p_instance_ctrl);
+#endif
+
 /** ether_phy on ether_phy Instance. */
 extern const ether_phy_instance_t g_ether_phy0;
 

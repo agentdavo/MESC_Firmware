@@ -1,18 +1,19 @@
 /**************************************************************************//**
  * @file     core_cr52.h
  * @brief    CMSIS Cortex-R52 Core Peripheral Access Layer Header File
- * @version  V5.2.0 + renesas.0
  * @date     31. August 2021
  ******************************************************************************/
 /*
- * Copyright (c) 2009-2020 Arm Limited. All rights reserved.
  * Copyright [2020-2021] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
  *
  * This file is based on the "\CMSIS\Core\Include\core_armv8mml.h"
  *
  * Changes:
- *    - Changed to be related to Cortex-R52 by
  * Renesas Electronics Corporation on 2021-08-31
+ *    - Changed to be related to Cortex-R52 by
+ */
+/*
+ * Copyright (c) 2009-2020 Arm Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *

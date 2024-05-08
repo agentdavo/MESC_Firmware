@@ -2,48 +2,51 @@
 #include "common_data.h"
 #if defined(BSP_MCU_GROUP_RA6M4) && (BSP_TZ_SECURE_BUILD != 1) && (BSP_TZ_NONSECURE_BUILD != 1)
 #define ETHER_BUFFER_PLACE_IN_SECTION BSP_PLACE_IN_SECTION(".ns_buffer.eth")
-#elif defined(BSP_MCU_GROUP_RZT2M) || defined(BSP_MCU_GROUP_RZT2L)
+#elif defined(BSP_MCU_GROUP_RZT2ME) || defined(BSP_MCU_GROUP_RZT2M) || defined(BSP_MCU_GROUP_RZT2L)
 #define ETHER_BUFFER_PLACE_IN_SECTION BSP_PLACE_IN_SECTION(".noncache_buffer.eth")
 #else
 #define ETHER_BUFFER_PLACE_IN_SECTION
 #endif
 ethsw_instance_ctrl_t g_ethsw0_ctrl;
 
-const ethsw_cfg_t g_ethsw0_cfg =
-{
-    .channel                   = 0,
-
-    .specific_tag              = ETHSW_SPECIFIC_TAG_DISABLE,
-    .specific_tag_id           = 0xE001,
-
-    .phylink                   = ETHSW_PHYLINK_DISABLE,
-
-#if defined(VECTOR_NUMBER_ETHSW_INTR)
-    .irq                       = VECTOR_NUMBER_ETHSW_INTR,
-#else
-    .irq                       = FSP_INVALID_VECTOR,
-#endif
-    .ipl                       = (12),
-    .p_callback                = gmac_callback_ethsw,
-    .p_context                 = &g_ether0_ctrl,
-    .p_extend                  = NULL,
+const ethsw_extend_cfg_t g_ethsw0_extend_cfg =
+            {
+    .specific_tag    = ETHSW_SPECIFIC_TAG_DISABLE,
+    .specific_tag_id = 0xE001,
+    .phylink         = ETHSW_PHYLINK_DISABLE,
 
 };
+
+const ether_switch_cfg_t g_ethsw0_cfg =
+{
+    .channel    = 0,
+
+#if defined(VECTOR_NUMBER_ETHSW_INTR)
+    .irq        = VECTOR_NUMBER_ETHSW_INTR,
+#else
+    .irq        = FSP_INVALID_VECTOR,
+#endif
+    .ipl        = (12),
+    .p_callback = gmac_callback_ethsw,
+    .p_context  = &g_ether0_ctrl,
+    .p_extend   = &g_ethsw0_extend_cfg
+};
+
 /* Instance structure to use this module. */
-const ethsw_instance_t g_ethsw0 =
+const ether_switch_instance_t g_ethsw0 =
 {
     .p_ctrl        = &g_ethsw0_ctrl,
     .p_cfg         = &g_ethsw0_cfg,
-    .p_api         = &g_ethsw_on_ethsw
+    .p_api         = &g_ether_switch_on_ethsw
 };
 ether_selector_instance_ctrl_t g_ether_selector2_ctrl;
 
 const ether_selector_cfg_t g_ether_selector2_cfg =
 {
-	.port                      = 2,
+    .channel                   = 2,
     .phylink                   = ETHER_SELECTOR_PHYLINK_POLARITY_LOW,
     .interface                 = ETHER_SELECTOR_INTERFACE_RGMII,
-    .speed                     = ETHER_SELECTOR_SPEED_100MBPS,
+    .speed                     = ETHER_SELECTOR_SPEED_100_MBPS,
     .duplex                    = ETHER_SELECTOR_DUPLEX_FULL,
     .ref_clock                 = ETHER_SELECTOR_REF_CLOCK_INPUT,
     .p_extend                  = NULL,
@@ -58,21 +61,17 @@ const ether_selector_instance_t g_ether_selector2 =
 };
 ether_phy_instance_ctrl_t g_ether_phy2_ctrl;
 
-
 const ether_phy_extend_cfg_t g_ether_phy2_extend =
 {
-    .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
-    .mdio_type          = ETHER_PHY_MDIO_GMAC,
-
-    .bps                = ETHER_PHY_SPEED_10_100,
-    .duplex             = ETHER_PHY_DUPLEX_FULL,
-    .auto_negotiation   = ETHER_PHY_AUTO_NEGOTIATION_ON,
-
-    .phy_reset_pin      = BSP_IO_PORT_20_PIN_7,
-    .phy_reset_time     = 15000,
-
+    .port_type           = ETHER_PHY_PORT_TYPE_ETHERNET,
+    .mdio_type           = ETHER_PHY_MDIO_GMAC,
+    .bps                 = ETHER_PHY_SPEED_10_100,
+    .duplex              = ETHER_PHY_DUPLEX_FULL,
+    .auto_negotiation    = ETHER_PHY_AUTO_NEGOTIATION_ON,
+    .phy_reset_pin       = BSP_IO_PORT_20_PIN_7,
+    .phy_reset_time      = 15000,
     .p_selector_instance = (ether_selector_instance_t *)&g_ether_selector2,
+    .p_target_init       = NULL,
 };
 
 const ether_phy_cfg_t g_ether_phy2_cfg =
@@ -82,6 +81,7 @@ const ether_phy_cfg_t g_ether_phy2_cfg =
     .phy_lsi_address           = 0,
     .phy_reset_wait_time       = 0x00020000,
     .mii_bit_access_wait_time  = 0,                         // Unused
+    .phy_lsi_type              = ETHER_PHY_LSI_TYPE_KIT_COMPONENT,
     .flow_control              = ETHER_PHY_FLOW_CONTROL_DISABLE,
     .mii_type                  = (ether_phy_mii_type_t) 0,  // Unused
     .p_context                 = NULL,
@@ -99,10 +99,10 @@ ether_selector_instance_ctrl_t g_ether_selector1_ctrl;
 
 const ether_selector_cfg_t g_ether_selector1_cfg =
 {
-	.port                      = 1,
+    .channel                   = 1,
     .phylink                   = ETHER_SELECTOR_PHYLINK_POLARITY_LOW,
     .interface                 = ETHER_SELECTOR_INTERFACE_RGMII,
-    .speed                     = ETHER_SELECTOR_SPEED_100MBPS,
+    .speed                     = ETHER_SELECTOR_SPEED_100_MBPS,
     .duplex                    = ETHER_SELECTOR_DUPLEX_FULL,
     .ref_clock                 = ETHER_SELECTOR_REF_CLOCK_INPUT,
     .p_extend                  = NULL,
@@ -117,21 +117,17 @@ const ether_selector_instance_t g_ether_selector1 =
 };
 ether_phy_instance_ctrl_t g_ether_phy1_ctrl;
 
-
 const ether_phy_extend_cfg_t g_ether_phy1_extend =
 {
-    .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
-    .mdio_type          = ETHER_PHY_MDIO_GMAC,
-
-    .bps                = ETHER_PHY_SPEED_10_100,
-    .duplex             = ETHER_PHY_DUPLEX_FULL,
-    .auto_negotiation   = ETHER_PHY_AUTO_NEGOTIATION_ON,
-
-    .phy_reset_pin      = BSP_IO_PORT_20_PIN_7,
-    .phy_reset_time     = 15000,
-
+    .port_type           = ETHER_PHY_PORT_TYPE_ETHERNET,
+    .mdio_type           = ETHER_PHY_MDIO_GMAC,
+    .bps                 = ETHER_PHY_SPEED_10_100,
+    .duplex              = ETHER_PHY_DUPLEX_FULL,
+    .auto_negotiation    = ETHER_PHY_AUTO_NEGOTIATION_ON,
+    .phy_reset_pin       = BSP_IO_PORT_20_PIN_7,
+    .phy_reset_time      = 15000,
     .p_selector_instance = (ether_selector_instance_t *)&g_ether_selector1,
+    .p_target_init       = NULL,
 };
 
 const ether_phy_cfg_t g_ether_phy1_cfg =
@@ -141,6 +137,7 @@ const ether_phy_cfg_t g_ether_phy1_cfg =
     .phy_lsi_address           = 0,
     .phy_reset_wait_time       = 0x00020000,
     .mii_bit_access_wait_time  = 0,                         // Unused
+    .phy_lsi_type              = ETHER_PHY_LSI_TYPE_KIT_COMPONENT,
     .flow_control              = ETHER_PHY_FLOW_CONTROL_DISABLE,
     .mii_type                  = (ether_phy_mii_type_t) 0,  // Unused
     .p_context                 = NULL,
@@ -158,10 +155,10 @@ ether_selector_instance_ctrl_t g_ether_selector0_ctrl;
 
 const ether_selector_cfg_t g_ether_selector0_cfg =
 {
-	.port                      = 0,
+    .channel                   = 0,
     .phylink                   = ETHER_SELECTOR_PHYLINK_POLARITY_LOW,
     .interface                 = ETHER_SELECTOR_INTERFACE_RGMII,
-    .speed                     = ETHER_SELECTOR_SPEED_100MBPS,
+    .speed                     = ETHER_SELECTOR_SPEED_100_MBPS,
     .duplex                    = ETHER_SELECTOR_DUPLEX_FULL,
     .ref_clock                 = ETHER_SELECTOR_REF_CLOCK_INPUT,
     .p_extend                  = NULL,
@@ -176,21 +173,17 @@ const ether_selector_instance_t g_ether_selector0 =
 };
 ether_phy_instance_ctrl_t g_ether_phy0_ctrl;
 
-
 const ether_phy_extend_cfg_t g_ether_phy0_extend =
 {
-    .port_type          = ETHER_PHY_PORT_TYPE_ETHERNET,
-    .phy_chip           = (ether_phy_chip_t) ETHER_PHY_CHIP_VSC8541,
-    .mdio_type          = ETHER_PHY_MDIO_GMAC,
-
-    .bps                = ETHER_PHY_SPEED_10_100,
-    .duplex             = ETHER_PHY_DUPLEX_FULL,
-    .auto_negotiation   = ETHER_PHY_AUTO_NEGOTIATION_ON,
-
-    .phy_reset_pin      = BSP_IO_PORT_20_PIN_7,
-    .phy_reset_time     = 15000,
-
+    .port_type           = ETHER_PHY_PORT_TYPE_ETHERNET,
+    .mdio_type           = ETHER_PHY_MDIO_GMAC,
+    .bps                 = ETHER_PHY_SPEED_10_100,
+    .duplex              = ETHER_PHY_DUPLEX_FULL,
+    .auto_negotiation    = ETHER_PHY_AUTO_NEGOTIATION_ON,
+    .phy_reset_pin       = BSP_IO_PORT_20_PIN_7,
+    .phy_reset_time      = 15000,
     .p_selector_instance = (ether_selector_instance_t *)&g_ether_selector0,
+    .p_target_init       = NULL,
 };
 
 const ether_phy_cfg_t g_ether_phy0_cfg =
@@ -200,6 +193,7 @@ const ether_phy_cfg_t g_ether_phy0_cfg =
     .phy_lsi_address           = 0,
     .phy_reset_wait_time       = 0x00020000,
     .mii_bit_access_wait_time  = 0,                         // Unused
+    .phy_lsi_type              = ETHER_PHY_LSI_TYPE_KIT_COMPONENT,
     .flow_control              = ETHER_PHY_FLOW_CONTROL_DISABLE,
     .mii_type                  = (ether_phy_mii_type_t) 0,  // Unused
     .p_context                 = NULL,
@@ -236,7 +230,18 @@ const ether_phy_instance_t *g_ether0_phy_instance[BSP_FEATURE_GMAC_MAX_PORTS] =
 
             gmac_instance_ctrl_t g_ether0_ctrl;
 
+#define ETHER_MAC_ADDRESS_INVALID (0)
+#define ETHER_MAC_ADDRESS_VALID   (1)
+
             uint8_t g_ether0_mac_address[6] = { 0x00,0x11,0x22,0x33,0x44,0x55 };
+
+#if ETHER_MAC_ADDRESS_INVALID == ETHER_MAC_ADDRESS_VALID
+            uint8_t g_ether0_mac_address_1[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+#endif
+
+#if ETHER_MAC_ADDRESS_INVALID == ETHER_MAC_ADDRESS_VALID
+            uint8_t g_ether0_mac_address_2[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+#endif
 
             __attribute__((__aligned__(16))) gmac_instance_descriptor_t g_ether0_tx_descriptors[8] ETHER_BUFFER_PLACE_IN_SECTION;
             __attribute__((__aligned__(16))) gmac_instance_descriptor_t g_ether0_rx_descriptors[8] ETHER_BUFFER_PLACE_IN_SECTION;
@@ -296,8 +301,19 @@ uint8_t *pp_g_ether0_ether_buffers[( 8 + 8 )] = {
                 .pp_phy_instance         = (ether_phy_instance_t const *(*)[BSP_FEATURE_GMAC_MAX_PORTS]) g_ether0_phy_instance,
 
 #if defined(GMAC_IMPLEMENT_ETHSW)
-                .p_ethsw_instance        = &g_ethsw0
+                .p_ethsw_instance        = &g_ethsw0,
 #endif // GMAC_IMPLEMENT_ETHSW
+
+#if ETHER_MAC_ADDRESS_INVALID == ETHER_MAC_ADDRESS_VALID
+                .p_mac_address1          = g_ether0_mac_address_1,
+#else
+                .p_mac_address1          = NULL,
+#endif
+#if ETHER_MAC_ADDRESS_INVALID == ETHER_MAC_ADDRESS_VALID
+                .p_mac_address2          = g_ether0_mac_address_2
+#else
+                .p_mac_address2          = NULL,
+#endif
             };
 
             const ether_cfg_t g_ether0_cfg =

@@ -4,10 +4,11 @@
         #include "bsp_api.h"
                 /* Number of interrupts allocated */
         #ifndef VECTOR_DATA_IRQ_COUNT
-        #define VECTOR_DATA_IRQ_COUNT    (38)
+        #define VECTOR_DATA_IRQ_COUNT    (48)
         #endif
         /* ISR prototypes */
         void R_IRQ1_isr(void);
+        void dmac_int_isr(void);
         void r_mtu_tgiv3_interrupt(void);
         void r_mtu_tgiv6_interrupt(void);
         void gmac_isr_pmt(void);
@@ -24,6 +25,7 @@
         void canfd_rx_fifo_isr(void);
         void canfd_error_isr(void);
         void canfd_channel_tx_isr(void);
+        void canfd_common_fifo_rx_isr(void);
         void spi_rxi_isr(void);
         void spi_txi_isr(void);
         void spi_eri_isr(void);
@@ -36,6 +38,14 @@
 
         /* Vector table allocations */
         #define VECTOR_NUMBER_INTCPU0 ((IRQn_Type) 0) /* INTCPU0 (Software interrupt 0) */
+        #define VECTOR_NUMBER_DMAC0_INT0 ((IRQn_Type) 21) /* DMAC0_INT0 (DMAC0 transfer completion 0) */
+        #define VECTOR_NUMBER_DMAC0_INT1 ((IRQn_Type) 22) /* DMAC0_INT1 (DMAC0 transfer completion 1) */
+        #define VECTOR_NUMBER_DMAC0_INT2 ((IRQn_Type) 23) /* DMAC0_INT2 (DMAC0 transfer completion 2) */
+        #define VECTOR_NUMBER_DMAC0_INT3 ((IRQn_Type) 24) /* DMAC0_INT3 (DMAC0 transfer completion 3) */
+        #define VECTOR_NUMBER_DMAC0_INT4 ((IRQn_Type) 25) /* DMAC0_INT4 (DMAC0 transfer completion 4) */
+        #define VECTOR_NUMBER_DMAC0_INT5 ((IRQn_Type) 26) /* DMAC0_INT5 (DMAC0 transfer completion 5) */
+        #define VECTOR_NUMBER_DMAC0_INT6 ((IRQn_Type) 27) /* DMAC0_INT6 (DMAC0 transfer completion 6) */
+        #define VECTOR_NUMBER_DMAC0_INT7 ((IRQn_Type) 28) /* DMAC0_INT7 (DMAC0 transfer completion 7) */
         #define VECTOR_NUMBER_TGIA3 ((IRQn_Type) 84) /* TGIA3 (MTU3.TGRA input capture/compare match) */
         #define VECTOR_NUMBER_TGIA6 ((IRQn_Type) 97) /* TGIA6 (MTU6.TGRA input capture/compare match) */
         #define VECTOR_NUMBER_GMAC_PMT ((IRQn_Type) 251) /* GMAC_PMT (GMAC1 power management) */
@@ -53,8 +63,10 @@
         #define VECTOR_NUMBER_CAN_GLERR ((IRQn_Type) 317) /* CAN_GLERR (CANFD Global error interrupt) */
         #define VECTOR_NUMBER_CAN0_TX ((IRQn_Type) 318) /* CAN0_TX (CANFD0 Channel TX interrupt) */
         #define VECTOR_NUMBER_CAN0_CHERR ((IRQn_Type) 319) /* CAN0_CHERR (CANFD0 Channel CAN error interrupt) */
+        #define VECTOR_NUMBER_CAN0_COMFRX ((IRQn_Type) 320) /* CAN0_COMFRX (CANFD0 Common RX FIFO or TXQ interrupt) */
         #define VECTOR_NUMBER_CAN1_TX ((IRQn_Type) 321) /* CAN1_TX (CANFD1 Channel TX interrupt) */
         #define VECTOR_NUMBER_CAN1_CHERR ((IRQn_Type) 322) /* CAN1_CHERR (CANFD1 Channel CAN error interrupt) */
+        #define VECTOR_NUMBER_CAN1_COMFRX ((IRQn_Type) 323) /* CAN1_COMFRX (CANFD1 Common RX FIFO or TXQ interrupt) */
         #define VECTOR_NUMBER_SPI0_SPRI ((IRQn_Type) 324) /* SPI0_SPRI (SPI0 Reception buffer full) */
         #define VECTOR_NUMBER_SPI0_SPTI ((IRQn_Type) 325) /* SPI0_SPTI (SPI0 Transmit buffer empty) */
         #define VECTOR_NUMBER_SPI0_SPEI ((IRQn_Type) 327) /* SPI0_SPEI (SPI0 errors) */
@@ -98,6 +110,14 @@
             VirtualTimerInt = -5,
             NonSecurePhysicalTimerInt = -2,
             INTCPU0_IRQn = 0, /* INTCPU0 (Software interrupt 0) */
+            DMAC0_INT0_IRQn = 21, /* DMAC0_INT0 (DMAC0 transfer completion 0) */
+            DMAC0_INT1_IRQn = 22, /* DMAC0_INT1 (DMAC0 transfer completion 1) */
+            DMAC0_INT2_IRQn = 23, /* DMAC0_INT2 (DMAC0 transfer completion 2) */
+            DMAC0_INT3_IRQn = 24, /* DMAC0_INT3 (DMAC0 transfer completion 3) */
+            DMAC0_INT4_IRQn = 25, /* DMAC0_INT4 (DMAC0 transfer completion 4) */
+            DMAC0_INT5_IRQn = 26, /* DMAC0_INT5 (DMAC0 transfer completion 5) */
+            DMAC0_INT6_IRQn = 27, /* DMAC0_INT6 (DMAC0 transfer completion 6) */
+            DMAC0_INT7_IRQn = 28, /* DMAC0_INT7 (DMAC0 transfer completion 7) */
             TGIA3_IRQn = 84, /* TGIA3 (MTU3.TGRA input capture/compare match) */
             TGIA6_IRQn = 97, /* TGIA6 (MTU6.TGRA input capture/compare match) */
             GMAC_PMT_IRQn = 251, /* GMAC_PMT (GMAC1 power management) */
@@ -115,8 +135,10 @@
             CAN_GLERR_IRQn = 317, /* CAN_GLERR (CANFD Global error interrupt) */
             CAN0_TX_IRQn = 318, /* CAN0_TX (CANFD0 Channel TX interrupt) */
             CAN0_CHERR_IRQn = 319, /* CAN0_CHERR (CANFD0 Channel CAN error interrupt) */
+            CAN0_COMFRX_IRQn = 320, /* CAN0_COMFRX (CANFD0 Common RX FIFO or TXQ interrupt) */
             CAN1_TX_IRQn = 321, /* CAN1_TX (CANFD1 Channel TX interrupt) */
             CAN1_CHERR_IRQn = 322, /* CAN1_CHERR (CANFD1 Channel CAN error interrupt) */
+            CAN1_COMFRX_IRQn = 323, /* CAN1_COMFRX (CANFD1 Common RX FIFO or TXQ interrupt) */
             SPI0_SPRI_IRQn = 324, /* SPI0_SPRI (SPI0 Reception buffer full) */
             SPI0_SPTI_IRQn = 325, /* SPI0_SPTI (SPI0 Transmit buffer empty) */
             SPI0_SPEI_IRQn = 327, /* SPI0_SPEI (SPI0 errors) */

@@ -1,13 +1,12 @@
 /* generated HAL source file - do not edit */
 #include "hal_data.h"
 
-
-
 /* Macros to tie dynamic ELC links to ADC_TRIGGER_SYNC_ELC option in adc_trigger_t. */
 #define ADC_TRIGGER_ADC0_A      ADC_TRIGGER_SYNC_ELC
 #define ADC_TRIGGER_ADC0_B      ADC_TRIGGER_SYNC_ELC
 #define ADC_TRIGGER_ADC1_A      ADC_TRIGGER_SYNC_ELC
 #define ADC_TRIGGER_ADC1_B      ADC_TRIGGER_SYNC_ELC
+
 
 
 
@@ -39,8 +38,23 @@ const adc_instance_t g_tsu0 =
 };
 dsmif_channel_cfg_t g_dsmif1_channel_cfg2 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -51,20 +65,89 @@ dsmif_channel_cfg_t g_dsmif1_channel_cfg2 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_12
 dsmif_channel_cfg_t g_dsmif1_channel_cfg1 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -75,20 +158,89 @@ dsmif_channel_cfg_t g_dsmif1_channel_cfg1 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_11
 dsmif_channel_cfg_t g_dsmif1_channel_cfg0 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -99,14 +251,68 @@ dsmif_channel_cfg_t g_dsmif1_channel_cfg0 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_10
 dsmif_instance_ctrl_t g_dsmif1_ctrl;
@@ -126,6 +332,9 @@ const dsmif_extended_cfg_t g_dsmif1_cfg_extend =
     .cap_trig_b          = DSMIF_CAPTURE_TRIGGER_NOT,
     .cnt_init_trig       = DSMIF_COUNTER_INIT_TRIGGER_NOT,
     .edge                = DSMIF_CLOCK_EDGE_NEGATIVE,
+#if (1 == BSP_FEATURE_DSMIF_DATA_FORMAT_SEL)
+    .dfs                 = 0,
+#endif
 #ifndef DSMIF_CHANNEL_10
 #define DSMIF_UNIT0_MASK_10   (0)
 #define DSMIF_UNIT1_MASK_10   (0)
@@ -178,8 +387,23 @@ const adc_instance_t g_dsmif1 =
 };
 dsmif_channel_cfg_t g_dsmif0_channel_cfg2 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -190,20 +414,89 @@ dsmif_channel_cfg_t g_dsmif0_channel_cfg2 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_02
 dsmif_channel_cfg_t g_dsmif0_channel_cfg1 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -214,20 +507,89 @@ dsmif_channel_cfg_t g_dsmif0_channel_cfg1 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_01
 dsmif_channel_cfg_t g_dsmif0_channel_cfg0 =
 {
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_ISR)
+    .ioel                =
+    {
+        0,
+        0,
+        0
+    },
+    .ioeh                =
+    {
+        0,
+        0,
+        0
+    },
+#else
     .ioel                = 0,
     .ioeh                = 0,
+#endif
     .ise                 = 0,
     .iue                 = 0,
     .ckdir               = DSMIF_CLOCK_CTRL_SLAVE,
@@ -238,14 +600,68 @@ dsmif_channel_cfg_t g_dsmif0_channel_cfg0 =
     .sde                 = 0,
     .ocsinc              = DSMIF_FILTER_ORDER_3RD,
     .ocdec               = 3,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .ocmptbl             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+    .ocmptbh             =
+    {
+        0x0,
+        0x0,
+        0x0
+    },
+#else
     .ocmptbl             = 0x0,
     .ocmptbh             = 0x0,
+#endif
     .scntl               = 0x0,
     .scnth               = 0x0,
+#if (3 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
+    .odel                =
+    {
+        0,
+        0,
+        0
+    },
+    .odeh                =
+    {
+        0,
+        0,
+        0
+    },
+#endif
+#if (4 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_NOTIFY)
+    .owne                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .owfe                =
+    {
+        0,
+        0,
+        0,
+        0
+    },
+    .ownm0_2             =
+    {
+        0,
+        0,
+        0
+    },
+    .ownm3               = 0,
+#endif
+#if (1 == BSP_FEATURE_DSMIF_OVERCURRENT_DETECT_CONTROL)
     .odel                = 0,
     .odeh                = 0,
-    .cmsh                = (dsimf_data_shift_t)18,
-    .ocsh                = (dsimf_data_shift_t)18
+#endif
+    .cmsh                = (dsmif_data_shift_t)18,
+    .ocsh                = (dsmif_data_shift_t)18
 };
 #define DSMIF_CHANNEL_00
 dsmif_instance_ctrl_t g_dsmif0_ctrl;
@@ -265,6 +681,9 @@ const dsmif_extended_cfg_t g_dsmif0_cfg_extend =
     .cap_trig_b          = DSMIF_CAPTURE_TRIGGER_NOT,
     .cnt_init_trig       = DSMIF_COUNTER_INIT_TRIGGER_NOT,
     .edge                = DSMIF_CLOCK_EDGE_NEGATIVE,
+#if (1 == BSP_FEATURE_DSMIF_DATA_FORMAT_SEL)
+    .dfs                 = 0,
+#endif
 #ifndef DSMIF_CHANNEL_00
 #define DSMIF_UNIT0_MASK_00   (0)
 #define DSMIF_UNIT1_MASK_00   (0)
@@ -315,468 +734,6 @@ const adc_instance_t g_dsmif0 =
     .p_cfg         = &g_dsmif0_cfg,
     .p_api         = &g_adc_on_dsmif
 };
-mtu3_instance_ctrl_t g_timer10_ctrl;
-#if 0
-const mtu3_extended_uvw_cfg_t g_timer10_uvw_extend =
-{
-    .tgru_val                       = 0x0000,
-    .tgrv_val                       = 0x0000,
-    .tgrw_val                       = 0x0000,
-    .mtu3_clk_div_u                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_v                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_w                 = MTU3_DIV_UVW_PCLKH_1,
-    .output_pin_level_u             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_v             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_w             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .noise_filter_mtioc_setting_uvw = (mtu3_noise_filter_setting_uvw_t)(MTU3_NOISE_FILTER_UVW_DISABLE),
-    .noise_filter_mtioc_clk_uvw     = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-
-    .capture_u_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_v_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_w_ipl                  = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIU5)
-    .capture_u_irq                  = VECTOR_NUMBER_TGIU5,
-#else
-    .capture_u_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIV5)
-    .capture_v_irq                  = VECTOR_NUMBER_TGIV5,
-#else
-    .capture_v_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIW5)
-    .capture_w_irq                  = VECTOR_NUMBER_TGIW5,
-#else
-    .capture_w_irq                  = FSP_INVALID_VECTOR,
-#endif
-};
-const mtu3_extended_pwm_cfg_t g_timer10_pwm_extend =
-{
-    .interrupt_skip_mode_a          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .interrupt_skip_mode_b          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .adc_a_compare_match            = 0x0000,
-    .adc_b_compare_match            = 0x0000,
-    .interrupt_skip_count_tciv4     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia3     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tciv7     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia6     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr4an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr7an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-};
-#endif
-const mtu3_extended_cfg_t g_timer10_extend =
-{
-    .tgra_val            = 0x0000,
-    .tgrb_val            = 0x0000,
-    .tgrc_val            = 0x0000,
-    .tgrd_val            = 0x0000,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
-    .clk_edge            = MTU3_CLOCK_EDGE_RISING,
-    .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
-    .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
-                             .output_pin_level_b = MTU3_IO_PIN_LEVEL_NO_OUTPUT
-                           },
-    .capture_a_ipl       = (BSP_IRQ_DISABLED),
-    .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIA2)
-    .capture_a_irq       = VECTOR_NUMBER_TGIA2,
-#else
-    .capture_a_irq       = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIB2)
-    .capture_b_irq       = VECTOR_NUMBER_TGIB2,
-#else
-    .capture_b_irq       = FSP_INVALID_VECTOR,
-#endif
-    .noise_filter_mtioc_setting  = (mtu3_noise_filter_setting_t)( MTU3_NOISE_FILTER_DISABLE),
-    .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-    .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
-    .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
-    .p_uvw_cfg                   = &g_timer10_uvw_extend,
-    .p_pwm_cfg                   = &g_timer10_pwm_extend,
-#else
-    .p_uvw_cfg                   = NULL,
-    .p_pwm_cfg                   = NULL,
-#endif
-};
-const timer_cfg_t g_timer10_cfg =
-{
-    .mode                = TIMER_MODE_PERIODIC,
-    .channel             = 2,
-    .p_callback          = NULL,
-    .p_context           = NULL,
-    .p_extend            = &g_timer10_extend,
-    .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TCIV2)
-    .cycle_end_irq       = VECTOR_NUMBER_TCIV2,
-#else
-    .cycle_end_irq       = FSP_INVALID_VECTOR,
-#endif
-};
-/* Instance structure to use this module. */
-const timer_instance_t g_timer10 =
-{
-    .p_ctrl        = &g_timer10_ctrl,
-    .p_cfg         = &g_timer10_cfg,
-    .p_api         = &g_timer_on_mtu3
-};
-mtu3_instance_ctrl_t g_timer9_ctrl;
-#if 0
-const mtu3_extended_uvw_cfg_t g_timer9_uvw_extend =
-{
-    .tgru_val                       = 0x0000,
-    .tgrv_val                       = 0x0000,
-    .tgrw_val                       = 0x0000,
-    .mtu3_clk_div_u                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_v                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_w                 = MTU3_DIV_UVW_PCLKH_1,
-    .output_pin_level_u             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_v             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_w             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .noise_filter_mtioc_setting_uvw = (mtu3_noise_filter_setting_uvw_t)(MTU3_NOISE_FILTER_UVW_DISABLE),
-    .noise_filter_mtioc_clk_uvw     = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-
-    .capture_u_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_v_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_w_ipl                  = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIU5)
-    .capture_u_irq                  = VECTOR_NUMBER_TGIU5,
-#else
-    .capture_u_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIV5)
-    .capture_v_irq                  = VECTOR_NUMBER_TGIV5,
-#else
-    .capture_v_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIW5)
-    .capture_w_irq                  = VECTOR_NUMBER_TGIW5,
-#else
-    .capture_w_irq                  = FSP_INVALID_VECTOR,
-#endif
-};
-const mtu3_extended_pwm_cfg_t g_timer9_pwm_extend =
-{
-    .interrupt_skip_mode_a          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .interrupt_skip_mode_b          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .adc_a_compare_match            = 0x0000,
-    .adc_b_compare_match            = 0x0000,
-    .interrupt_skip_count_tciv4     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia3     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tciv7     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia6     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr4an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr7an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-};
-#endif
-const mtu3_extended_cfg_t g_timer9_extend =
-{
-    .tgra_val            = 0x0000,
-    .tgrb_val            = 0x0000,
-    .tgrc_val            = 0x0000,
-    .tgrd_val            = 0x0000,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
-    .clk_edge            = MTU3_CLOCK_EDGE_RISING,
-    .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
-    .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
-                             .output_pin_level_b = MTU3_IO_PIN_LEVEL_NO_OUTPUT
-                           },
-    .capture_a_ipl       = (BSP_IRQ_DISABLED),
-    .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIA2)
-    .capture_a_irq       = VECTOR_NUMBER_TGIA2,
-#else
-    .capture_a_irq       = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIB2)
-    .capture_b_irq       = VECTOR_NUMBER_TGIB2,
-#else
-    .capture_b_irq       = FSP_INVALID_VECTOR,
-#endif
-    .noise_filter_mtioc_setting  = (mtu3_noise_filter_setting_t)( MTU3_NOISE_FILTER_DISABLE),
-    .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-    .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
-    .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 0
-    .p_uvw_cfg                   = &g_timer9_uvw_extend,
-    .p_pwm_cfg                   = &g_timer9_pwm_extend,
-#else
-    .p_uvw_cfg                   = NULL,
-    .p_pwm_cfg                   = NULL,
-#endif
-};
-const timer_cfg_t g_timer9_cfg =
-{
-    .mode                = TIMER_MODE_PERIODIC,
-    .channel             = 2,
-    .p_callback          = NULL,
-    .p_context           = NULL,
-    .p_extend            = &g_timer9_extend,
-    .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TCIV2)
-    .cycle_end_irq       = VECTOR_NUMBER_TCIV2,
-#else
-    .cycle_end_irq       = FSP_INVALID_VECTOR,
-#endif
-};
-/* Instance structure to use this module. */
-const timer_instance_t g_timer9 =
-{
-    .p_ctrl        = &g_timer9_ctrl,
-    .p_cfg         = &g_timer9_cfg,
-    .p_api         = &g_timer_on_mtu3
-};
-mtu3_phase_count_instance_ctrl_t g_mtu_phase_count_ch2_ctrl;
-const mtu3_phase_count_cfg_t g_mtu_phase_count_ch2_cfg =
-{
-    .counting_mode       = MTU3_PHASE_COUNTING_MODE_1,
-    .bit_mode            = MTU3_BIT_MODE_NORMAL_16BIT,
-    .external_clock      = MTU3_EXTERAL_CLOCK_MTCLKC_D,
-    .channel             = 2,
-    .p_timer_instance    = &g_timer9,
-    .channel_mask        = (1 << 2),
-    .p_context           = NULL,
-    .p_extend            = NULL,
-};
-/* Instance structure to use this module. */
-const mtu3_phase_count_instance_t g_mtu_phase_count_ch2 =
-{
-    .p_ctrl        = &g_mtu_phase_count_ch2_ctrl,
-    .p_cfg         = &g_mtu_phase_count_ch2_cfg,
-    .p_api         = &g_mtu3_phase_count_on_mtu3_phase_count
-};
-mtu3_instance_ctrl_t g_timer8_ctrl;
-#if 1
-const mtu3_extended_uvw_cfg_t g_timer8_uvw_extend =
-{
-    .tgru_val                       = 0x0000,
-    .tgrv_val                       = 0x0000,
-    .tgrw_val                       = 0x0000,
-    .mtu3_clk_div_u                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_v                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_w                 = MTU3_DIV_UVW_PCLKH_1,
-    .output_pin_level_u             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_v             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_w             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .noise_filter_mtioc_setting_uvw = (mtu3_noise_filter_setting_uvw_t)(MTU3_NOISE_FILTER_UVW_DISABLE),
-    .noise_filter_mtioc_clk_uvw     = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-
-    .capture_u_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_v_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_w_ipl                  = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIU5)
-    .capture_u_irq                  = VECTOR_NUMBER_TGIU5,
-#else
-    .capture_u_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIV5)
-    .capture_v_irq                  = VECTOR_NUMBER_TGIV5,
-#else
-    .capture_v_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIW5)
-    .capture_w_irq                  = VECTOR_NUMBER_TGIW5,
-#else
-    .capture_w_irq                  = FSP_INVALID_VECTOR,
-#endif
-};
-const mtu3_extended_pwm_cfg_t g_timer8_pwm_extend =
-{
-    .interrupt_skip_mode_a          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .interrupt_skip_mode_b          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .adc_a_compare_match            = 0x0000,
-    .adc_b_compare_match            = 0x0000,
-    .interrupt_skip_count_tciv4     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia3     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tciv7     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia6     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr4an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr7an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-};
-#endif
-const mtu3_extended_cfg_t g_timer8_extend =
-{
-    .tgra_val            = 0x0000,
-    .tgrb_val            = 0x0000,
-    .tgrc_val            = 0x0000,
-    .tgrd_val            = 0x0000,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
-    .clk_edge            = MTU3_CLOCK_EDGE_RISING,
-    .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
-    .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
-                             .output_pin_level_b = MTU3_IO_PIN_LEVEL_NO_OUTPUT
-                           },
-    .capture_a_ipl       = (BSP_IRQ_DISABLED),
-    .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIA2)
-    .capture_a_irq       = VECTOR_NUMBER_TGIA2,
-#else
-    .capture_a_irq       = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIB2)
-    .capture_b_irq       = VECTOR_NUMBER_TGIB2,
-#else
-    .capture_b_irq       = FSP_INVALID_VECTOR,
-#endif
-    .noise_filter_mtioc_setting  = (mtu3_noise_filter_setting_t)( MTU3_NOISE_FILTER_DISABLE),
-    .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-    .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
-    .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 1
-    .p_uvw_cfg                   = &g_timer8_uvw_extend,
-    .p_pwm_cfg                   = &g_timer8_pwm_extend,
-#else
-    .p_uvw_cfg                   = NULL,
-    .p_pwm_cfg                   = NULL,
-#endif
-};
-const timer_cfg_t g_timer8_cfg =
-{
-    .mode                = TIMER_MODE_PERIODIC,
-    .channel             = 2,
-    .p_callback          = NULL,
-    .p_context           = NULL,
-    .p_extend            = &g_timer8_extend,
-    .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TCIV2)
-    .cycle_end_irq       = VECTOR_NUMBER_TCIV2,
-#else
-    .cycle_end_irq       = FSP_INVALID_VECTOR,
-#endif
-};
-/* Instance structure to use this module. */
-const timer_instance_t g_timer8 =
-{
-    .p_ctrl        = &g_timer8_ctrl,
-    .p_cfg         = &g_timer8_cfg,
-    .p_api         = &g_timer_on_mtu3
-};
-mtu3_instance_ctrl_t g_timer7_ctrl;
-#if 1
-const mtu3_extended_uvw_cfg_t g_timer7_uvw_extend =
-{
-    .tgru_val                       = 0x0000,
-    .tgrv_val                       = 0x0000,
-    .tgrw_val                       = 0x0000,
-    .mtu3_clk_div_u                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_v                 = MTU3_DIV_UVW_PCLKH_1,
-    .mtu3_clk_div_w                 = MTU3_DIV_UVW_PCLKH_1,
-    .output_pin_level_u             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_v             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .output_pin_level_w             = MTU3_IO_PIN_LEVEL_UVW_NO_FUNC,
-    .noise_filter_mtioc_setting_uvw = (mtu3_noise_filter_setting_uvw_t)(MTU3_NOISE_FILTER_UVW_DISABLE),
-    .noise_filter_mtioc_clk_uvw     = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-
-    .capture_u_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_v_ipl                  = (BSP_IRQ_DISABLED),
-    .capture_w_ipl                  = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIU5)
-    .capture_u_irq                  = VECTOR_NUMBER_TGIU5,
-#else
-    .capture_u_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIV5)
-    .capture_v_irq                  = VECTOR_NUMBER_TGIV5,
-#else
-    .capture_v_irq                  = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIW5)
-    .capture_w_irq                  = VECTOR_NUMBER_TGIW5,
-#else
-    .capture_w_irq                  = FSP_INVALID_VECTOR,
-#endif
-};
-const mtu3_extended_pwm_cfg_t g_timer7_pwm_extend =
-{
-    .interrupt_skip_mode_a          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .interrupt_skip_mode_b          = MTU3_INTERRUPT_SKIP_MODE_1,
-    .adc_a_compare_match            = 0x0000,
-    .adc_b_compare_match            = 0x0000,
-    .interrupt_skip_count_tciv4     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia3     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tciv7     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgia6     = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr4an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-    .interrupt_skip_count_tgr7an_bn = MTU3_INTERRUPT_SKIP_COUNT_0,
-};
-#endif
-const mtu3_extended_cfg_t g_timer7_extend =
-{
-    .tgra_val            = 0x0000,
-    .tgrb_val            = 0x0000,
-    .tgrc_val            = 0x0000,
-    .tgrd_val            = 0x0000,
-    .mtu3_clk_div        = MTU3_DIV_PCLKH_1,
-    .clk_edge            = MTU3_CLOCK_EDGE_RISING,
-    .mtu3_clear          = MTU3_TCNT_CLEAR_DISABLE,
-    .mtioc_ctrl_setting  = { .output_pin_level_a = MTU3_IO_PIN_LEVEL_NO_OUTPUT,
-                             .output_pin_level_b = MTU3_IO_PIN_LEVEL_NO_OUTPUT
-                           },
-    .capture_a_ipl       = (BSP_IRQ_DISABLED),
-    .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TGIA1)
-    .capture_a_irq       = VECTOR_NUMBER_TGIA1,
-#else
-    .capture_a_irq       = FSP_INVALID_VECTOR,
-#endif
-#if defined(VECTOR_NUMBER_TGIB1)
-    .capture_b_irq       = VECTOR_NUMBER_TGIB1,
-#else
-    .capture_b_irq       = FSP_INVALID_VECTOR,
-#endif
-    .noise_filter_mtioc_setting  = (mtu3_noise_filter_setting_t)( MTU3_NOISE_FILTER_DISABLE),
-    .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
-    .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
-    .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 1
-    .p_uvw_cfg                   = &g_timer7_uvw_extend,
-    .p_pwm_cfg                   = &g_timer7_pwm_extend,
-#else
-    .p_uvw_cfg                   = NULL,
-    .p_pwm_cfg                   = NULL,
-#endif
-};
-const timer_cfg_t g_timer7_cfg =
-{
-    .mode                = TIMER_MODE_PERIODIC,
-    .channel             = 1,
-    .p_callback          = NULL,
-    .p_context           = NULL,
-    .p_extend            = &g_timer7_extend,
-    .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_TCIV1)
-    .cycle_end_irq       = VECTOR_NUMBER_TCIV1,
-#else
-    .cycle_end_irq       = FSP_INVALID_VECTOR,
-#endif
-};
-/* Instance structure to use this module. */
-const timer_instance_t g_timer7 =
-{
-    .p_ctrl        = &g_timer7_ctrl,
-    .p_cfg         = &g_timer7_cfg,
-    .p_api         = &g_timer_on_mtu3
-};
-mtu3_phase_count_instance_ctrl_t g_mtu_phase_count_ch1_ctrl;
-const mtu3_phase_count_cfg_t g_mtu_phase_count_ch1_cfg =
-{
-    .counting_mode       = MTU3_PHASE_COUNTING_MODE_1,
-    .bit_mode            = MTU3_BIT_MODE_NORMAL_16BIT,
-    .external_clock      = MTU3_EXTERAL_CLOCK_MTCLKA_B,
-    .channel             = 1,
-    .p_timer_instance    = &g_timer7,
-    .channel_mask        = (1 << 1),
-    .p_context           = NULL,
-    .p_extend            = NULL,
-};
-/* Instance structure to use this module. */
-const mtu3_phase_count_instance_t g_mtu_phase_count_ch1 =
-{
-    .p_ctrl        = &g_mtu_phase_count_ch1_ctrl,
-    .p_cfg         = &g_mtu_phase_count_ch1_cfg,
-    .p_api         = &g_mtu3_phase_count_on_mtu3_phase_count
-};
 adc_instance_ctrl_t g_adc1_ctrl;
 const adc_extended_cfg_t g_adc1_cfg_extend =
 {
@@ -789,6 +746,34 @@ const adc_extended_cfg_t g_adc1_cfg_extend =
     .adc_start_trigger_c_enabled = 0,
     .adc_start_trigger_c  = ADC_ACTIVE_TRIGGER_DISABLED,
     .adc_elc_ctrl        = ADC_ELC_SINGLE_SCAN,
+#if ((1 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE) || (2 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE))
+#if defined(VECTOR_NUMBER_ADC1_CMPAI)
+    .window_a_irq        = VECTOR_NUMBER_ADC1_CMPAI,
+#else
+    .window_a_irq        = FSP_INVALID_VECTOR,
+#endif
+    .window_a_ipl        = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC1_CMPBI)
+    .window_b_irq      = VECTOR_NUMBER_ADC1_CMPBI,
+#else
+    .window_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .window_b_ipl      = (BSP_IRQ_DISABLED),
+#endif
+#if (3 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE)
+#if defined(VECTOR_NUMBER_ADC121_CMPAI)
+    .window_a_irq        = VECTOR_NUMBER_ADC121_CMPAI,
+#else
+    .window_a_irq        = FSP_INVALID_VECTOR,
+#endif
+    .window_a_ipl        = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC121_CMPBI)
+    .window_b_irq      = VECTOR_NUMBER_ADC121_CMPBI,
+#else
+    .window_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .window_b_ipl      = (BSP_IRQ_DISABLED),
+#endif
 };
 const adc_cfg_t g_adc1_cfg =
 {
@@ -800,6 +785,7 @@ const adc_cfg_t g_adc1_cfg =
     .p_callback          = adc1_sample_callback,
     .p_context           = NULL,
     .p_extend            = &g_adc1_cfg_extend,
+#if ((1 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE) || (2 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE))
 #if defined(VECTOR_NUMBER_ADC1_ADI)
     .scan_end_irq        = VECTOR_NUMBER_ADC1_ADI,
 #else
@@ -818,7 +804,42 @@ const adc_cfg_t g_adc1_cfg =
     .scan_end_c_irq      = FSP_INVALID_VECTOR,
 #endif
     .scan_end_c_ipl      = (BSP_IRQ_DISABLED),
+#endif
+#if (3 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE)
+#if defined(VECTOR_NUMBER_ADC121_ADI)
+    .scan_end_irq        = VECTOR_NUMBER_ADC121_ADI,
+#else
+    .scan_end_irq        = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_ipl        = (7),
+#if defined(VECTOR_NUMBER_ADC121_GBADI)
+    .scan_end_b_irq      = VECTOR_NUMBER_ADC121_GBADI,
+#else
+    .scan_end_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_b_ipl      = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC121_GCADI)
+    .scan_end_c_irq      = VECTOR_NUMBER_ADC121_GCADI,
+#else
+    .scan_end_c_irq      = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_c_ipl      = (BSP_IRQ_DISABLED),
+#endif
 };
+#if ((0) | (0))
+const adc_window_cfg_t g_adc1_window_cfg =
+{
+    .compare_mask        =  0,
+    .compare_mode_mask   =  0,
+    .compare_cfg         = (0) | (0) | (0),
+    .compare_ref_low     = 0,
+    .compare_ref_high    = 0,
+    .compare_b_channel   = (ADC_WINDOW_B_CHANNEL_0),
+    .compare_b_mode      = (ADC_WINDOW_B_MODE_LESS_THAN_OR_OUTSIDE),
+    .compare_b_ref_low   = 0,
+    .compare_b_ref_high  = 0,
+};
+#endif
 const adc_channel_cfg_t g_adc1_channel_cfg =
 {
     .scan_mask           = ADC_MASK_CHANNEL_0 | ADC_MASK_CHANNEL_1 | ADC_MASK_CHANNEL_2 | ADC_MASK_CHANNEL_3 | ADC_MASK_CHANNEL_4 | ADC_MASK_CHANNEL_5 | ADC_MASK_CHANNEL_6 | ADC_MASK_CHANNEL_7 |  0,
@@ -828,6 +849,11 @@ const adc_channel_cfg_t g_adc1_channel_cfg =
     .sample_hold_mask    =  0,
     .sample_hold_states  = 24,
     .scan_mask_group_c   =  0,
+#if ((0) | (0))
+    .p_window_cfg        = (adc_window_cfg_t *) &g_adc1_window_cfg,
+#else
+    .p_window_cfg        = NULL,
+#endif
 };
 /* Instance structure to use this module. */
 const adc_instance_t g_adc1 =
@@ -849,6 +875,34 @@ const adc_extended_cfg_t g_adc0_cfg_extend =
     .adc_start_trigger_c_enabled = 0,
     .adc_start_trigger_c  = ADC_ACTIVE_TRIGGER_DISABLED,
     .adc_elc_ctrl        = ADC_ELC_SINGLE_SCAN,
+#if ((1 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE) || (2 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE))
+#if defined(VECTOR_NUMBER_ADC0_CMPAI)
+    .window_a_irq        = VECTOR_NUMBER_ADC0_CMPAI,
+#else
+    .window_a_irq        = FSP_INVALID_VECTOR,
+#endif
+    .window_a_ipl        = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC0_CMPBI)
+    .window_b_irq      = VECTOR_NUMBER_ADC0_CMPBI,
+#else
+    .window_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .window_b_ipl      = (BSP_IRQ_DISABLED),
+#endif
+#if (3 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE)
+#if defined(VECTOR_NUMBER_ADC120_CMPAI)
+    .window_a_irq        = VECTOR_NUMBER_ADC120_CMPAI,
+#else
+    .window_a_irq        = FSP_INVALID_VECTOR,
+#endif
+    .window_a_ipl        = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC120_CMPBI)
+    .window_b_irq      = VECTOR_NUMBER_ADC120_CMPBI,
+#else
+    .window_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .window_b_ipl      = (BSP_IRQ_DISABLED),
+#endif
 };
 const adc_cfg_t g_adc0_cfg =
 {
@@ -860,6 +914,7 @@ const adc_cfg_t g_adc0_cfg =
     .p_callback          = adc0_sample_callback,
     .p_context           = NULL,
     .p_extend            = &g_adc0_cfg_extend,
+#if ((1 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE) || (2 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE))
 #if defined(VECTOR_NUMBER_ADC0_ADI)
     .scan_end_irq        = VECTOR_NUMBER_ADC0_ADI,
 #else
@@ -878,7 +933,42 @@ const adc_cfg_t g_adc0_cfg =
     .scan_end_c_irq      = FSP_INVALID_VECTOR,
 #endif
     .scan_end_c_ipl      = (BSP_IRQ_DISABLED),
+#endif
+#if (3 == BSP_FEATURE_ADC_REGISTER_MASK_TYPE)
+#if defined(VECTOR_NUMBER_ADC120_ADI)
+    .scan_end_irq        = VECTOR_NUMBER_ADC120_ADI,
+#else
+    .scan_end_irq        = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_ipl        = (7),
+#if defined(VECTOR_NUMBER_ADC120_GBADI)
+    .scan_end_b_irq      = VECTOR_NUMBER_ADC120_GBADI,
+#else
+    .scan_end_b_irq      = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_b_ipl      = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_ADC120_GCADI)
+    .scan_end_c_irq      = VECTOR_NUMBER_ADC120_GCADI,
+#else
+    .scan_end_c_irq      = FSP_INVALID_VECTOR,
+#endif
+    .scan_end_c_ipl      = (BSP_IRQ_DISABLED),
+#endif
 };
+#if ((0) | (0))
+const adc_window_cfg_t g_adc0_window_cfg =
+{
+    .compare_mask        =  0,
+    .compare_mode_mask   =  0,
+    .compare_cfg         = (0) | (0) | (0),
+    .compare_ref_low     = 0,
+    .compare_ref_high    = 0,
+    .compare_b_channel   = (ADC_WINDOW_B_CHANNEL_0),
+    .compare_b_mode      = (ADC_WINDOW_B_MODE_LESS_THAN_OR_OUTSIDE),
+    .compare_b_ref_low   = 0,
+    .compare_b_ref_high  = 0,
+};
+#endif
 const adc_channel_cfg_t g_adc0_channel_cfg =
 {
     .scan_mask           = ADC_MASK_CHANNEL_0 | ADC_MASK_CHANNEL_1 | ADC_MASK_CHANNEL_2 | ADC_MASK_CHANNEL_3 | ADC_MASK_CHANNEL_4 | ADC_MASK_CHANNEL_5 | ADC_MASK_CHANNEL_6 | ADC_MASK_CHANNEL_7 |  0,
@@ -888,6 +978,11 @@ const adc_channel_cfg_t g_adc0_channel_cfg =
     .sample_hold_mask    =  0,
     .sample_hold_states  = 24,
     .scan_mask_group_c   =  0,
+#if ((0) | (0))
+    .p_window_cfg        = (adc_window_cfg_t *) &g_adc0_window_cfg,
+#else
+    .p_window_cfg        = NULL,
+#endif
 };
 /* Instance structure to use this module. */
 const adc_instance_t g_adc0 =
@@ -898,97 +993,163 @@ const adc_instance_t g_adc0 =
     .p_api     = &g_adc_on_adc
 };
 poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl;
+/* Setting structure for pwm pin. */
+static const poe3_pwm_pin_setting_t g_mtu3_three_phase_poe_pwm_pin_setting[] =
+{
+    { .pwm_pin_select    = POE3_PIN_SELECT_0,
+      .hiz_output_enable = false
+    },
+    { .pwm_pin_select    = POE3_PIN_SELECT_0,
+      .hiz_output_enable = false
+    },
+    { .pwm_pin_select    = POE3_PIN_SELECT_0,
+      .hiz_output_enable = false
+    },
+    { .pwm_pin_select    = POE3_PIN_SELECT_0,
+      .hiz_output_enable = false
+    },
+};
+/* Setting structure for complementary pwm pin. */
+static const poe3_complementary_pwm_setting_t g_mtu3_three_phase_poe_complementary_pwm_setting[] =
+{
+    {
+        .pin_setting[0] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .hiz_output_enable             = true
+                          },
+        .pin_setting[1] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .hiz_output_enable             = true
+                          },
+        .pin_setting[2] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_LOW,
+                            .hiz_output_enable             = true
+                          },
+    },
+    {
+        .pin_setting[0] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .hiz_output_enable             = true
+                          },
+        .pin_setting[1] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .hiz_output_enable             = true
+                          },
+        .pin_setting[2] = { .positive_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .negative_pwm_pin_select       = POE3_PIN_SELECT_0,
+                            .positive_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .negative_pwm_pin_active_level = POE3_ACTIVE_LEVEL_SETTING_NONE,
+                            .hiz_output_enable             = true
+                          }
+    },
+};
+/* Setting structure for short circuit output. */
+static const poe3_output_short_circuit_setting_t g_mtu3_three_phase_poe_short_circuit[] =
+{
+    { .interrupt_enable  = false,
+      .hiz_output_enable = false
+    },
+
+    { .interrupt_enable  = false,
+      .hiz_output_enable = false
+    },
+};
+/** POE3 extended configuration for POE3 HAL driver */
+static const poe3_extended_cfg_t g_mtu3_three_phase_poe_extended_cfg =
+{
+    .poe0  = { .mode             = POE3_HIZ_MODE_FALLING_EDGE,
+               .interrupt_enable = false,
+             },
+    .poe4  = { .mode             = POE3_HIZ_MODE_FALLING_EDGE,
+               .interrupt_enable = false,
+             },
+    .poe8  = { .mode             = POE3_HIZ_MODE_FALLING_EDGE,
+               .interrupt_enable = false,
+             },
+    .poe10 = { .mode            = POE3_HIZ_MODE_FALLING_EDGE,
+              .interrupt_enable = false,
+             },
+    .poe11 = { .mode            = POE3_HIZ_MODE_FALLING_EDGE,
+              .interrupt_enable = false,
+             },
+
+    .mtu0_control_channel_mask   = ( 0U),
+    .mtu3_4_control_channel_mask = ( 0U),
+    .mtu6_7_control_channel_mask = ( 0U),
+
+#if BSP_FEATURE_POE3_ERROR_SIGNAL_TYPE == 2
+    .dsmif0_error_1 = false,
+    .dsmif1_error_1 = false,
+#endif
+    .dsmif0_error   = false,
+    .dsmif1_error   = false,
+
+    .oei1_ipl = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_OEI1)
+    .oei1_irq = VECTOR_NUMBER_OEI1,
+#else
+    .oei1_irq = FSP_INVALID_VECTOR,
+#endif
+
+    .oei2_ipl = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_OEI2)
+    .oei2_irq = VECTOR_NUMBER_OEI2,
+#else
+    .oei2_irq = FSP_INVALID_VECTOR,
+#endif
+
+    .oei3_ipl = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_OEI3)
+    .oei3_irq = VECTOR_NUMBER_OEI3,
+#else
+    .oei3_irq = FSP_INVALID_VECTOR,
+#endif
+
+    .oei4_ipl = (BSP_IRQ_DISABLED),
+#if defined(VECTOR_NUMBER_OEI4)
+    .oei4_irq = VECTOR_NUMBER_OEI4,
+#else
+    .oei4_irq = FSP_INVALID_VECTOR,
+#endif
+};
+
 /** POE3 setting. */
 const poe3_cfg_t g_mtu3_three_phase_poe_cfg =
 {
-    .poe0                  = {
-                                 .mode                  = POE3_HIZ_MODE_FALLING_EDGE,
-                                 .interrupt             = POE3_INTERRUPT_ENABLE_DISABLED,
-                                 .mtioc3b_mtioc3d       = {
-                                                              .mtioc3b_pin_select   = POE3_MTIOC3B_PIN_SELECT_P17_6,
-                                                              .mtioc3d_pin_select   = POE3_MTIOC3D_PIN_SELECT_P18_1,
-                                                              .mtioc3b_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .mtioc3d_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          },
-                                 .mtioc4b_mtioc4d       = {
-                                                              .mtioc4b_pin_select   = POE3_MTIOC4B_PIN_SELECT_P18_2,
-                                                              .mtioc4d_pin_select   = POE3_MTIOC4D_PIN_SELECT_P18_3,
-                                                              .mtioc4b_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .mtioc4d_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          },
-                                 .mtioc4a_mtioc4c       = {
-                                                              .mtioc4a_pin_select   = POE3_MTIOC4A_PIN_SELECT_P17_7,
-                                                              .mtioc4c_pin_select   = POE3_MTIOC4C_PIN_SELECT_P18_0,
-                                                              .mtioc4a_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .mtioc4c_active_level = POE3_ACTIVE_LEVEL_LOW,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          }
-                             },
-    .poe4                  = {
-                                 .mode                  = POE3_HIZ_MODE_FALLING_EDGE,
-                                 .interrupt             = POE3_INTERRUPT_ENABLE_DISABLED,
-                                 .mtioc6b_mtioc6d       = {
-                                                              .mtioc6b_pin_select   = POE3_MTIOC6B_PIN_SELECT_P19_3,
-                                                              .mtioc6d_pin_select   = POE3_MTIOC6D_PIN_SELECT_P19_6,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          },
-                                 .mtioc7b_mtioc7d       = {
-                                                              .mtioc7b_pin_select   = POE3_MTIOC7B_PIN_SELECT_P19_7,
-                                                              .mtioc7d_pin_select   = POE3_MTIOC7D_PIN_SELECT_P20_0,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          },
-                                 .mtioc7a_mtioc7c       = {
-                                                              .mtioc7a_pin_select   = POE3_MTIOC7A_PIN_SELECT_P19_4,
-                                                              .mtioc7c_pin_select   = POE3_MTIOC7C_PIN_SELECT_P19_5,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_ENABLED
-                                                          }
-                             },
-    .poe8                  = {
-                                 .mode                  = POE3_HIZ_MODE_FALLING_EDGE,
-                                 .interrupt             = POE3_INTERRUPT_ENABLE_DISABLED,
-                                 .mtioc0a               = {
-                                                              .pin_select           = POE3_MTIOC0A_PIN_SELECT_P13_2,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                                                          },
-                                 .mtioc0b               = {
-                                                              .pin_select           = POE3_MTIOC0B_PIN_SELECT_P11_5,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                                                          },
-                                 .mtioc0c               = {
-                                                              .pin_select           = POE3_MTIOC0C_PIN_SELECT_P13_3,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                                                          },
-                                 .mtioc0d               = {
-                                                              .pin_select           = POE3_MTIOC0D_PIN_SELECT_P13_4,
-                                                              .hiz_output           = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                                                          }
-                             },
-    .oscillation_stop      = POE3_HIZ_OUTPUT_ENABLE_DISABLED,
-#if BSP_FEATURE_POE3_ERROR_SIGNAL_TYPE == 2
-    .dsmif0_error_1        = POE3_HIZ_OUTPUT_ENABLE_DISABLED,
-    .dsmif1_error_1        = POE3_HIZ_OUTPUT_ENABLE_DISABLED,
-#endif
-    .dsmif0_error          = POE3_HIZ_OUTPUT_ENABLE_DISABLED,
-    .dsmif1_error          = POE3_HIZ_OUTPUT_ENABLE_DISABLED,
-    .short_circuit1        = { .interrupt  = POE3_INTERRUPT_ENABLE_DISABLED,
-                               .hiz_output = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                             },
-    .short_circuit2        = { .interrupt  = POE3_INTERRUPT_ENABLE_DISABLED,
-                               .hiz_output = POE3_HIZ_OUTPUT_ENABLE_DISABLED
-                             },
-    .p_context             = NULL,
+    .pwm_pin           = sizeof(g_mtu3_three_phase_poe_pwm_pin_setting) / sizeof(g_mtu3_three_phase_poe_pwm_pin_setting[0]),
+    .p_pwm_pin_setting = &g_mtu3_three_phase_poe_pwm_pin_setting[0],
+
+    .complementary_pwm_pin           = sizeof(g_mtu3_three_phase_poe_complementary_pwm_setting) / sizeof(g_mtu3_three_phase_poe_complementary_pwm_setting[0]),
+    .p_complementary_pwm_pin_setting = &g_mtu3_three_phase_poe_complementary_pwm_setting[0],
+
+    .short_circuit           = sizeof(g_mtu3_three_phase_poe_short_circuit) / sizeof(g_mtu3_three_phase_poe_short_circuit[0]),
+    .p_short_circuit_setting = &g_mtu3_three_phase_poe_short_circuit[0],
+
+    .oscillation_stop_hiz_output_enable = false,
+
+    .p_context  = NULL,
+    .p_callback = NULL,
+    .p_extend   = &g_mtu3_three_phase_poe_extended_cfg,
 };
 /* Instance structure to use this module. */
 const poe3_instance_t g_mtu3_three_phase_poe =
 {
-    .p_ctrl                = &g_mtu3_three_phase_poe_ctrl,
-    .p_cfg                 = &g_mtu3_three_phase_poe_cfg,
-    .p_api                 = &g_poe30_on_poe3
+    .p_ctrl = &g_mtu3_three_phase_poe_ctrl,
+    .p_cfg  = &g_mtu3_three_phase_poe_cfg,
+    .p_api  = &g_poe30_on_poe3
 };
 mtu3_instance_ctrl_t g_timer6_ctrl;
-#if 1
+#if 0
 const mtu3_extended_uvw_cfg_t g_timer6_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1050,6 +1211,9 @@ const mtu3_extended_cfg_t g_timer6_extend =
                            },
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
+    .bit_mode            = MTU3_BIT_MODE_NORMAL_32BIT,
+    .counting_mode       = MTU3_PHASE_COUNTING_MODE_NONE,
+    .external_clock      = MTU3_EXTERNAL_CLOCK_MTCLKA_B,
 #if defined(VECTOR_NUMBER_TGIA7)
     .capture_a_irq       = VECTOR_NUMBER_TGIA7,
 #else
@@ -1064,7 +1228,12 @@ const mtu3_extended_cfg_t g_timer6_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 1
+    .adc_request_enable          = 0,
+    .mtu3_elc_event_operation    ={.mtu0_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu3_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu4_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE
+                                  },
+#if 0
     .p_uvw_cfg                   = &g_timer6_uvw_extend,
     .p_pwm_cfg                   = &g_timer6_pwm_extend,
 #else
@@ -1094,7 +1263,7 @@ const timer_instance_t g_timer6 =
     .p_api         = &g_timer_on_mtu3
 };
 mtu3_instance_ctrl_t g_timer5_ctrl;
-#if 1
+#if 0
 const mtu3_extended_uvw_cfg_t g_timer5_uvw_extend =
 {
     .tgru_val                       = 0x0000,
@@ -1156,6 +1325,9 @@ const mtu3_extended_cfg_t g_timer5_extend =
                            },
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
+    .bit_mode            = MTU3_BIT_MODE_NORMAL_32BIT,
+    .counting_mode       = MTU3_PHASE_COUNTING_MODE_NONE,
+    .external_clock      = MTU3_EXTERNAL_CLOCK_MTCLKA_B,
 #if defined(VECTOR_NUMBER_TGIA6)
     .capture_a_irq       = VECTOR_NUMBER_TGIA6,
 #else
@@ -1170,7 +1342,12 @@ const mtu3_extended_cfg_t g_timer5_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
-#if 1
+    .adc_request_enable          = 0,
+    .mtu3_elc_event_operation    ={.mtu0_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu3_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu4_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE
+                                  },
+#if 0
     .p_uvw_cfg                   = &g_timer5_uvw_extend,
     .p_pwm_cfg                   = &g_timer5_pwm_extend,
 #else
@@ -1303,6 +1480,9 @@ const mtu3_extended_cfg_t g_timer4_extend =
                            },
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
+    .bit_mode            = MTU3_BIT_MODE_NORMAL_32BIT,
+    .counting_mode       = MTU3_PHASE_COUNTING_MODE_NONE,
+    .external_clock      = MTU3_EXTERNAL_CLOCK_MTCLKA_B,
 #if defined(VECTOR_NUMBER_TGIA4)
     .capture_a_irq       = VECTOR_NUMBER_TGIA4,
 #else
@@ -1317,6 +1497,11 @@ const mtu3_extended_cfg_t g_timer4_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
+    .adc_request_enable          = 0,
+    .mtu3_elc_event_operation    ={.mtu0_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu3_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu4_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE
+                                  },
 #if 1
     .p_uvw_cfg                   = &g_timer4_uvw_extend,
     .p_pwm_cfg                   = &g_timer4_pwm_extend,
@@ -1409,6 +1594,9 @@ const mtu3_extended_cfg_t g_timer3_extend =
                            },
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
+    .bit_mode            = MTU3_BIT_MODE_NORMAL_32BIT,
+    .counting_mode       = MTU3_PHASE_COUNTING_MODE_NONE,
+    .external_clock      = MTU3_EXTERNAL_CLOCK_MTCLKA_B,
 #if defined(VECTOR_NUMBER_TGIA3)
     .capture_a_irq       = VECTOR_NUMBER_TGIA3,
 #else
@@ -1423,6 +1611,11 @@ const mtu3_extended_cfg_t g_timer3_extend =
     .noise_filter_mtioc_clk      = MTU3_NOISE_FILTER_CLOCK_PCLKH_DIV_1,
     .noise_filter_mtclk_setting  = (mtu3_noise_filter_mtclk_setting_t)( MTU3_NOISE_FILTER_EXTERNAL_DISABLE),
     .noise_filter_mtclk_clk      = MTU3_NOISE_FILTER_EXTERNAL_CLOCK_PCLKH_DIV_1,
+    .adc_request_enable          = 0,
+    .mtu3_elc_event_operation    ={.mtu0_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu3_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE,
+                                   .mtu4_elc_operation = MTU3_EVENT_OPERATION_SELECT_DISABLE
+                                  },
 #if 1
     .p_uvw_cfg                   = &g_timer3_uvw_extend,
     .p_pwm_cfg                   = &g_timer3_pwm_extend,
@@ -1498,8 +1691,8 @@ gpt_instance_ctrl_t g_gpt2_slowLoop_ctrl;
 const gpt_extended_pwm_cfg_t g_gpt2_slowLoop_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT2_UDF)
-    .trough_irq          = VECTOR_NUMBER_GPT2_UDF,
+#if defined(VECTOR_NUMBER_GPT0_UDF)
+    .trough_irq          = VECTOR_NUMBER_GPT0_UDF,
 #else
     .trough_irq          = FSP_INVALID_VECTOR,
 #endif
@@ -1536,19 +1729,24 @@ const gpt_extended_cfg_t g_gpt2_slowLoop_extend =
     .start_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
     .stop_source         = (gpt_source_t) ( GPT_SOURCE_NONE),
     .clear_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
+#if (0 == (0))
     .count_up_source     = (gpt_source_t) ( GPT_SOURCE_NONE),
     .count_down_source   = (gpt_source_t) ( GPT_SOURCE_NONE),
+#else
+    .count_up_source     = (gpt_source_t) ((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0x000FFFFU),
+    .count_down_source   = (gpt_source_t) (((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0xFFFF0000U) >> 16),
+#endif
     .capture_a_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_b_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT2_CCMPA)
-    .capture_a_irq       = VECTOR_NUMBER_GPT2_CCMPA,
+#if defined(VECTOR_NUMBER_GPT0_CCMPA)
+    .capture_a_irq       = VECTOR_NUMBER_GPT0_CCMPA,
 #else
     .capture_a_irq       = FSP_INVALID_VECTOR,
 #endif
-#if defined(VECTOR_NUMBER_GPT2_CCMPB)
-    .capture_b_irq       = VECTOR_NUMBER_GPT2_CCMPB,
+#if defined(VECTOR_NUMBER_GPT0_CCMPB)
+    .capture_b_irq       = VECTOR_NUMBER_GPT0_CCMPB,
 #else
     .capture_b_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1560,8 +1758,8 @@ const gpt_extended_cfg_t g_gpt2_slowLoop_extend =
     .p_pwm_cfg                   = NULL,
 #endif
     .dead_time_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT2_DTE)
-    .dead_time_irq       = VECTOR_NUMBER_GPT2_DTE,
+#if defined(VECTOR_NUMBER_GPT0_DTE)
+    .dead_time_irq       = VECTOR_NUMBER_GPT0_DTE,
 #else
     .dead_time_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1571,13 +1769,13 @@ const timer_cfg_t g_gpt2_slowLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
-    .channel             = 2,
+    .channel             = GPT_CHANNEL_UNIT0_0,
     .p_callback          = NULL,
     .p_context           = NULL,
     .p_extend            = &g_gpt2_slowLoop_extend,
     .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT2_OVF)
-    .cycle_end_irq       = VECTOR_NUMBER_GPT2_OVF,
+#if defined(VECTOR_NUMBER_GPT0_OVF)
+    .cycle_end_irq       = VECTOR_NUMBER_GPT0_OVF,
 #else
     .cycle_end_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1594,8 +1792,8 @@ gpt_instance_ctrl_t g_gpt1_fastLoop_ctrl;
 const gpt_extended_pwm_cfg_t g_gpt1_fastLoop_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT1_UDF)
-    .trough_irq          = VECTOR_NUMBER_GPT1_UDF,
+#if defined(VECTOR_NUMBER_GPT0_UDF)
+    .trough_irq          = VECTOR_NUMBER_GPT0_UDF,
 #else
     .trough_irq          = FSP_INVALID_VECTOR,
 #endif
@@ -1632,19 +1830,24 @@ const gpt_extended_cfg_t g_gpt1_fastLoop_extend =
     .start_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
     .stop_source         = (gpt_source_t) ( GPT_SOURCE_NONE),
     .clear_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
+#if (0 == (0))
     .count_up_source     = (gpt_source_t) ( GPT_SOURCE_NONE),
     .count_down_source   = (gpt_source_t) ( GPT_SOURCE_NONE),
+#else
+    .count_up_source     = (gpt_source_t) ((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0x000FFFFU),
+    .count_down_source   = (gpt_source_t) (((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0xFFFF0000U) >> 16),
+#endif
     .capture_a_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_b_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
     .capture_b_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT1_CCMPA)
-    .capture_a_irq       = VECTOR_NUMBER_GPT1_CCMPA,
+#if defined(VECTOR_NUMBER_GPT0_CCMPA)
+    .capture_a_irq       = VECTOR_NUMBER_GPT0_CCMPA,
 #else
     .capture_a_irq       = FSP_INVALID_VECTOR,
 #endif
-#if defined(VECTOR_NUMBER_GPT1_CCMPB)
-    .capture_b_irq       = VECTOR_NUMBER_GPT1_CCMPB,
+#if defined(VECTOR_NUMBER_GPT0_CCMPB)
+    .capture_b_irq       = VECTOR_NUMBER_GPT0_CCMPB,
 #else
     .capture_b_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1656,8 +1859,8 @@ const gpt_extended_cfg_t g_gpt1_fastLoop_extend =
     .p_pwm_cfg                   = NULL,
 #endif
     .dead_time_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT1_DTE)
-    .dead_time_irq       = VECTOR_NUMBER_GPT1_DTE,
+#if defined(VECTOR_NUMBER_GPT0_DTE)
+    .dead_time_irq       = VECTOR_NUMBER_GPT0_DTE,
 #else
     .dead_time_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1667,13 +1870,13 @@ const timer_cfg_t g_gpt1_fastLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
-    .channel             = 1,
+    .channel             = GPT_CHANNEL_UNIT0_0,
     .p_callback          = NULL,
     .p_context           = NULL,
     .p_extend            = &g_gpt1_fastLoop_extend,
     .cycle_end_ipl       = (BSP_IRQ_DISABLED),
-#if defined(VECTOR_NUMBER_GPT1_OVF)
-    .cycle_end_irq       = VECTOR_NUMBER_GPT1_OVF,
+#if defined(VECTOR_NUMBER_GPT0_OVF)
+    .cycle_end_irq       = VECTOR_NUMBER_GPT0_OVF,
 #else
     .cycle_end_irq       = FSP_INVALID_VECTOR,
 #endif
@@ -1728,8 +1931,13 @@ const gpt_extended_cfg_t g_gpt0_hyperLoop_extend =
     .start_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
     .stop_source         = (gpt_source_t) ( GPT_SOURCE_NONE),
     .clear_source        = (gpt_source_t) ( GPT_SOURCE_NONE),
+#if (0 == (0))
     .count_up_source     = (gpt_source_t) ( GPT_SOURCE_NONE),
     .count_down_source   = (gpt_source_t) ( GPT_SOURCE_NONE),
+#else
+    .count_up_source     = (gpt_source_t) ((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0x000FFFFU),
+    .count_down_source   = (gpt_source_t) (((GPT_PHASE_COUNTING_MODE_1_UP | (GPT_PHASE_COUNTING_MODE_1_DN << 16)) & 0xFFFF0000U) >> 16),
+#endif
     .capture_a_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_b_source    = (gpt_source_t) ( GPT_SOURCE_NONE),
     .capture_a_ipl       = (BSP_IRQ_DISABLED),
@@ -1763,7 +1971,7 @@ const timer_cfg_t g_gpt0_hyperLoop_cfg =
 {
     .mode                = TIMER_MODE_PERIODIC,
     /* Actual period: 10.73741824 seconds. Actual duty: 50%. */ .period_counts = (uint32_t) 0x100000000, .duty_cycle_counts = 0x80000000, .source_div = (timer_source_div_t)0,
-    .channel             = 0,
+    .channel             = GPT_CHANNEL_UNIT0_0,
     .p_callback          = NULL,
     .p_context           = NULL,
     .p_extend            = &g_gpt0_hyperLoop_extend,

@@ -1,21 +1,27 @@
 /**************************************************************************//**
  * @file     cmsis_iccarm.h
  * @brief    CMSIS compiler ICCARM (IAR Compiler for Arm) header file
- * @version  V5.2.0 + renesas.0
- * @date     31. August 2021
+ * @date     02. February 2024
  ******************************************************************************/
-
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 //
-// Copyright (c) 2017-2019 IAR Systems
-// Copyright (c) 2017-2019 Arm Limited. All rights reserved. 
-// Copyright [2020-2021] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
+// Copyright [2020-2024] Renesas Electronics Corporation and/or its affiliates. All Rights Reserved.
 //
 // This file is based on the "\CMSIS\Core\Include\cmsis_iccarm.h"
 //
 // Changes:
-//    - Changed to be related to Cortex-R52 by
 // Renesas Electronics Corporation on 2021-08-31
+//    - Changed to be related to Cortex-R52 by
+// Renesas Electronics Corporation on 2024-02-02
+//    - Added functions related to FPEXC registers.
+//    - Moved the process of defining compiler macros for CPU architectures to renesas.h.
+//
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+//
+// Copyright (c) 2017-2019 IAR Systems
+// Copyright (c) 2017-2019 Arm Limited. All rights reserved.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -60,53 +66,6 @@
     #define __ALIGNED(x)
   #endif
 #endif
-
-
-/* Define compiler macros for CPU architecture, used in CMSIS 5.
- */
-#if __ARM_ARCH_6M__ || __ARM_ARCH_7M__ || __ARM_ARCH_7EM__ || __ARM_ARCH_8M_BASE__ || __ARM_ARCH_8M_MAIN__
-/* Macros already defined */
-#else
-  #if defined(__ARM8M_MAINLINE__) || defined(__ARM8EM_MAINLINE__)
-    #define __ARM_ARCH_8M_MAIN__ 1
-  #elif defined(__ARM8M_BASELINE__)
-    #define __ARM_ARCH_8M_BASE__ 1
-  #elif defined(__ARM_ARCH_PROFILE) && __ARM_ARCH_PROFILE == 'M'
-    #if __ARM_ARCH == 6
-      #define __ARM_ARCH_6M__ 1
-    #elif __ARM_ARCH == 7
-      #if __ARM_FEATURE_DSP
-        #define __ARM_ARCH_7EM__ 1
-      #else
-        #define __ARM_ARCH_7M__ 1
-      #endif
-    #endif /* __ARM_ARCH */
-  #endif /* __ARM_ARCH_PROFILE == 'M' */
-#endif
-
-/* Alternativ core deduction for older ICCARM's */
-#if !defined(__ARM_ARCH_6M__) && !defined(__ARM_ARCH_7M__) && !defined(__ARM_ARCH_7EM__) && \
-    !defined(__ARM_ARCH_8M_BASE__) && !defined(__ARM_ARCH_8M_MAIN__)
-  #if defined(__ARM6M__) && (__CORE__ == __ARM6M__)
-    #define __ARM_ARCH_6M__ 1
-  #elif defined(__ARM7M__) && (__CORE__ == __ARM7M__)
-    #define __ARM_ARCH_7M__ 1
-  #elif defined(__ARM7EM__) && (__CORE__ == __ARM7EM__)
-    #define __ARM_ARCH_7EM__  1
-  #elif defined(__ARM8M_BASELINE__) && (__CORE == __ARM8M_BASELINE__)
-    #define __ARM_ARCH_8M_BASE__ 1
-  #elif defined(__ARM8M_MAINLINE__) && (__CORE == __ARM8M_MAINLINE__)
-    #define __ARM_ARCH_8M_MAIN__ 1
-  #elif defined(__ARM8EM_MAINLINE__) && (__CORE == __ARM8EM_MAINLINE__)
-    #define __ARM_ARCH_8M_MAIN__ 1
-  #elif defined(__ARM8R__) && (__CORE__ == __ARM8R__)
-    #define __ARM_ARCH_8R__ 1
-  #else
-    #error "Unknown target."
-  #endif
-#endif
-
-
 
 #if defined(__ARM_ARCH_6M__) && __ARM_ARCH_6M__==1
   #define __IAR_M0_FAMILY  1
@@ -315,9 +274,15 @@ __packed struct  __iar_u32 { uint32_t v; };
        (defined (__FPU_USED   ) && (__FPU_USED    == 1U))     )
     #define __get_FPSCR()             (__arm_rsr("FPSCR"))
     #define __set_FPSCR(VALUE)        (__arm_wsr("FPSCR", (VALUE)))
-  #else
-    #define __get_FPSCR()             ( 0 )
-    #define __set_FPSCR(VALUE)        ((void)VALUE)
+
+    #define __get_FPEXC()             (__arm_rsr("FPEXC"))
+    #define __set_FPEXC(VALUE)        (__arm_wsr("FPEXC", (VALUE)))
+   #else
+    #define __get_FPSCR()             (0)
+    #define __set_FPSCR(VALUE)        ((void) VALUE)
+
+    #define __get_FPEXC()             (0)
+    #define __set_FPEXC(VALUE)        ((void) VALUE)
   #endif
 
   #define __get_IPSR()                (__arm_rsr("IPSR"))
@@ -589,6 +554,9 @@ __packed struct  __iar_u32 { uint32_t v; };
     #undef __set_FPSCR
     #define __get_FPSCR()       (0)
     #define __set_FPSCR(VALUE)  ((void)VALUE)
+
+    #define __get_FPEXC()       (0)
+    #define __set_FPEXC(VALUE)  ((void) VALUE)
   #endif
 
   #pragma diag_suppress=Pe940

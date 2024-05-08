@@ -41,3 +41,4 @@
                 CS5_SPACE_START  = 0x7C000000;
                 CS5_SPACE_LENGTH = 0x4000000;
                     RAM_NS_BUFFER_LENGTH = 0x8100;
+                CR52_0 = 1;

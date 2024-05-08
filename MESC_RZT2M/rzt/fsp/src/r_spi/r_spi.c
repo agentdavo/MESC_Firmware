@@ -1,22 +1,8 @@
-/***********************************************************************************************************************
- * Copyright [2020-2023] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
- *
- * This software and documentation are supplied by Renesas Electronics Corporation and/or its affiliates and may only
- * be used with products of Renesas Electronics Corp. and its affiliates ("Renesas").  No other uses are authorized.
- * Renesas products are sold pursuant to Renesas terms and conditions of sale.  Purchasers are solely responsible for
- * the selection and use of Renesas products and Renesas assumes no liability.  No license, express or implied, to any
- * intellectual property right is granted by Renesas.  This software is protected under all applicable laws, including
- * copyright laws. Renesas reserves the right to change or discontinue this software and/or this documentation.
- * THE SOFTWARE AND DOCUMENTATION IS DELIVERED TO YOU "AS IS," AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND
- * TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY,
- * INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE
- * SOFTWARE OR DOCUMENTATION.  RENESAS SHALL HAVE NO LIABILITY ARISING OUT OF ANY SECURITY VULNERABILITY OR BREACH.
- * TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE OR
- * DOCUMENTATION (OR ANY PERSON OR ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER,
- * INCLUDING, WITHOUT LIMITATION, ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY
- * LOST PROFITS, OTHER ECONOMIC DAMAGE, PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH LOSS, DAMAGES, CLAIMS OR COSTS.
- **********************************************************************************************************************/
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 /***********************************************************************************************************************
  * Includes
@@ -33,36 +19,28 @@
  **********************************************************************************************************************/
 
 /** "SPI" in ASCII, used to determine if channel is open. */
-#define SPI_OPEN                         (0x52535049ULL)
+#define SPI_OPEN                        (0x52535049ULL)
 
 /** SPI base register access macro.  */
 #define SPI_REG(channel)    ((R_SPI0_Type *) ((uint32_t) R_SPI0 +                       \
                                               ((uint32_t) R_SPI1 - (uint32_t) R_SPI0) * \
                                               (channel)))
 
-#define SPI_DMAC_RX_TRANSFER_SETTINGS    ((TRANSFER_MODE_NORMAL << TRANSFER_SETTINGS_MODE_BITS) |         \
-                                          (TRANSFER_ADDR_MODE_FIXED << TRANSFER_SETTINGS_SRC_ADDR_BITS) | \
-                                          (TRANSFER_ADDR_MODE_INCREMENTED << TRANSFER_SETTINGS_DEST_ADDR_BITS))
-
-#define SPI_DMAC_TX_TRANSFER_SETTINGS    ((TRANSFER_MODE_NORMAL << TRANSFER_SETTINGS_MODE_BITS) |               \
-                                          (TRANSFER_ADDR_MODE_INCREMENTED << TRANSFER_SETTINGS_SRC_ADDR_BITS) | \
-                                          (TRANSFER_ADDR_MODE_FIXED << TRANSFER_SETTINGS_DEST_ADDR_BITS))
-
-#define SPI_CLK_N_DIV_MULTIPLIER         (512U)  ///< Maximum divider for N=0
-#define SPI_CLK_MAX_DIV                  (4096U) ///< Maximum SPI CLK divider
-#define SPI_CLK_MIN_DIV                  (2U)    ///< Minimum SPI CLK divider
-#define SPI_SPDR_BYTE_VALUE_MASK         (0xFFU)
-#define SPI_SPDR_HALFWARD_VALUE_MASK     (0xFFFFU)
-#define SPI_SPDCR2_TTRG_DMA_VALUE        (0x0U)
-#define SPI_SPDCR2_RTRG_DMA_VALUE        (0x0U)
+#define SPI_CLK_N_DIV_MULTIPLIER        (512U)  ///< Maximum divider for N=0
+#define SPI_CLK_MAX_DIV                 (4096U) ///< Maximum SPI CLK divider
+#define SPI_CLK_MIN_DIV                 (2U)    ///< Minimum SPI CLK divider
+#define SPI_SPDR_BYTE_VALUE_MASK        (0xFFU)
+#define SPI_SPDR_HALFWARD_VALUE_MASK    (0xFFFFU)
+#define SPI_SPDCR2_TTRG_DMA_VALUE       (0x0U)
+#define SPI_SPDCR2_RTRG_DMA_VALUE       (0x0U)
 
 /* Clock frequency 96MHz. */
-#define SPI_CLOCK_96MHZ                  (96000000)
+#define SPI_CLOCK_96MHZ                 (96000000)
 
 /* Worst case ratio of (CPUnCLK/PCLKSPIn) = 10.666... -> 11 bytes approximately.
  * A synchronization delay time of 3PCLKSPIn is required for signal propagation.
  */
-#define SPI_PERIPHERAL_REG_MAX_WAIT      (0x0BU * 0x03U)
+#define SPI_PERIPHERAL_REG_MAX_WAIT     (0x0BU * 0x03U)
 
 /* This macro is used for status poring of SPPSR.SPEPS.
  * Reference section "SPI Operation" in the RZ microprocessor manual.
@@ -81,37 +59,29 @@
  * Typedef definitions
  **********************************************************************************************************************/
 
-/* Frame data length */
-typedef enum e_spi_spcmd_bit_length
-{
-    SPI_SPCMD_BIT_LENGTH_8  = (0x7),   /**< 00111 = 8 bits data length */
-    SPI_SPCMD_BIT_LENGTH_16 = (0xF),   /**< 01111 = 16 bits data length */
-    SPI_SPCMD_BIT_LENGTH_32 = (0x1F)   /**< 11111 = 32 bits data length */
-} spi_spcmd_bit_length_t;
-
 /***********************************************************************************************************************
  * Private function declarations
  **********************************************************************************************************************/
 static fsp_err_t r_spi_transfer_config(spi_cfg_t const * const p_cfg);
-static void      r_spi_hw_config(spi_instance_ctrl_t * p_ctrl);
-static void      r_spi_gic_config(spi_instance_ctrl_t * p_ctrl);
+static void      r_spi_hw_config(spi_instance_ctrl_t * p_instance_ctrl);
+static void      r_spi_gic_config(spi_instance_ctrl_t * p_instance_ctrl);
 
-static void      r_spi_bit_width_config(spi_instance_ctrl_t * p_ctrl);
-static void      r_spi_start_transfer(spi_instance_ctrl_t * p_ctrl);
-static fsp_err_t r_spi_write_read_common(spi_ctrl_t * const    p_api_ctrl,
+static void      r_spi_bit_width_config(spi_instance_ctrl_t * p_instance_ctrl);
+static void      r_spi_start_transfer(spi_instance_ctrl_t * p_instance_ctrl);
+static fsp_err_t r_spi_write_read_common(spi_ctrl_t * const    p_ctrl,
                                          void const          * p_src,
                                          void                * p_dest,
                                          uint32_t const        length,
                                          spi_bit_width_t const bit_width);
 
-static void r_spi_receive(spi_instance_ctrl_t * p_ctrl);
-static void r_spi_transmit(spi_instance_ctrl_t * p_ctrl);
-static void r_spi_call_callback(spi_instance_ctrl_t * p_ctrl, spi_event_t event);
+static void r_spi_receive(spi_instance_ctrl_t * p_instance_ctrl);
+static void r_spi_transmit(spi_instance_ctrl_t * p_instance_ctrl);
+static void r_spi_call_callback(spi_instance_ctrl_t * p_instance_ctrl, spi_event_t event);
 
-static void spi_rxi_common(spi_instance_ctrl_t * p_ctrl);
+static void spi_rxi_common(spi_instance_ctrl_t * p_instance_ctrl);
 
 #if SPI_TRANSMIT_FROM_RXI_ISR == 0
-static void spi_txi_common(spi_instance_ctrl_t * p_ctrl);
+static void spi_txi_common(spi_instance_ctrl_t * p_instance_ctrl);
 
 #endif
 
@@ -123,24 +93,12 @@ void spi_txi_isr(void);
 void spi_tei_isr(void);
 void spi_eri_isr(void);
 
-#if SPI_DMAC_SUPPORT_ENABLE == 1
-void spi_rxi_dmac_isr(IRQn_Type irq);
-void spi_txi_dmac_isr(IRQn_Type irq);
-
-#endif
+void spi_tx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
+void spi_rx_dmac_callback(spi_instance_ctrl_t * p_instance_ctrl);
 
 /***********************************************************************************************************************
  * Private global variables
  **********************************************************************************************************************/
-
-/* Version data structure used by error logger macro. */
-static const fsp_version_t module_version =
-{
-    .api_version_major  = SPI_API_VERSION_MAJOR,
-    .api_version_minor  = SPI_API_VERSION_MINOR,
-    .code_version_major = SPI_CODE_VERSION_MAJOR,
-    .code_version_minor = SPI_CODE_VERSION_MINOR
-};
 
 /***********************************************************************************************************************
  * Global variables
@@ -154,7 +112,6 @@ const spi_api_t g_spi_on_spi =
     .write       = R_SPI_Write,
     .writeRead   = R_SPI_WriteRead,
     .close       = R_SPI_Close,
-    .versionGet  = R_SPI_VersionGet,
     .callbackSet = R_SPI_CallbackSet
 };
 
@@ -186,15 +143,15 @@ const spi_api_t g_spi_on_spi =
  *             function calls: @ref transfer_api_t::open
  * @note       This function is reentrant.
  **********************************************************************************************************************/
-fsp_err_t R_SPI_Open (spi_ctrl_t * p_api_ctrl, spi_cfg_t const * const p_cfg)
+fsp_err_t R_SPI_Open (spi_ctrl_t * p_ctrl, spi_cfg_t const * const p_cfg)
 {
     fsp_err_t err = FSP_SUCCESS;
 
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) p_api_ctrl;
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) p_ctrl;
 
 #if SPI_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(NULL != p_ctrl);
-    FSP_ERROR_RETURN(SPI_OPEN != p_ctrl->open, FSP_ERR_ALREADY_OPEN);
+    FSP_ASSERT(NULL != p_instance_ctrl);
+    FSP_ERROR_RETURN(SPI_OPEN != p_instance_ctrl->open, FSP_ERR_ALREADY_OPEN);
     FSP_ASSERT(NULL != p_cfg);
     FSP_ASSERT(NULL != p_cfg->p_callback);
     FSP_ASSERT(NULL != p_cfg->p_extend);
@@ -240,7 +197,7 @@ fsp_err_t R_SPI_Open (spi_ctrl_t * p_api_ctrl, spi_cfg_t const * const p_cfg)
  #endif
 
  #if SPI_DMAC_SUPPORT_ENABLE == 1
-    if ((NULL != p_ctrl->p_cfg->p_transfer_rx) || (NULL != p_ctrl->p_cfg->p_transfer_tx))
+    if ((NULL != p_cfg->p_transfer_rx) || (NULL != p_cfg->p_transfer_tx))
     {
         /* DMAC activation is not available for safety channel. */
         FSP_ERROR_RETURN(BSP_FEATURE_SPI_SAFETY_CHANNEL != p_cfg->channel, FSP_ERR_INVALID_ARGUMENT);
@@ -257,29 +214,29 @@ fsp_err_t R_SPI_Open (spi_ctrl_t * p_api_ctrl, spi_cfg_t const * const p_cfg)
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 
     /* Get the register address of the channel. */
-    p_ctrl->p_cfg             = p_cfg;
-    p_ctrl->p_callback        = p_cfg->p_callback;
-    p_ctrl->p_context         = p_cfg->p_context;
-    p_ctrl->p_callback_memory = NULL;
+    p_instance_ctrl->p_cfg             = p_cfg;
+    p_instance_ctrl->p_callback        = p_cfg->p_callback;
+    p_instance_ctrl->p_context         = p_cfg->p_context;
+    p_instance_ctrl->p_callback_memory = NULL;
 
     if (p_cfg->channel != BSP_FEATURE_SPI_SAFETY_CHANNEL)
     {
         /* Non-Safety Peripheral */
-        p_ctrl->p_regs = SPI_REG(p_ctrl->p_cfg->channel);
+        p_instance_ctrl->p_regs = SPI_REG(p_instance_ctrl->p_cfg->channel);
     }
     else
     {
         /* Safety Peripheral */
-        p_ctrl->p_regs = (R_SPI0_Type *) BSP_FEATURE_SPI_SAFETY_CHANNEL_BASE_ADDRESS;
+        p_instance_ctrl->p_regs = (R_SPI0_Type *) BSP_FEATURE_SPI_SAFETY_CHANNEL_BASE_ADDRESS;
     }
 
     /* Configure hardware registers according to the r_spi_api configuration structure. */
-    r_spi_hw_config(p_ctrl);
+    r_spi_hw_config(p_instance_ctrl);
 
     /* Enable interrupts in GIC. */
-    r_spi_gic_config(p_ctrl);
+    r_spi_gic_config(p_instance_ctrl);
 
-    p_ctrl->open = SPI_OPEN;
+    p_instance_ctrl->open = SPI_OPEN;
 
     return err;
 }
@@ -296,12 +253,9 @@ fsp_err_t R_SPI_Open (spi_ctrl_t * p_api_ctrl, spi_cfg_t const * const p_cfg)
  * @retval  FSP_ERR_NOT_OPEN              The channel has not been opened. Open channel first.
  * @retval  FSP_ERR_IN_USE                A transfer is already in progress.
  **********************************************************************************************************************/
-fsp_err_t R_SPI_Read (spi_ctrl_t * const    p_api_ctrl,
-                      void                * p_dest,
-                      uint32_t const        length,
-                      spi_bit_width_t const bit_width)
+fsp_err_t R_SPI_Read (spi_ctrl_t * const p_ctrl, void * p_dest, uint32_t const length, spi_bit_width_t const bit_width)
 {
-    return r_spi_write_read_common(p_api_ctrl, NULL, p_dest, length, bit_width);
+    return r_spi_write_read_common(p_ctrl, NULL, p_dest, length, bit_width);
 }
 
 /*******************************************************************************************************************//**
@@ -317,12 +271,12 @@ fsp_err_t R_SPI_Read (spi_ctrl_t * const    p_api_ctrl,
  * @retval  FSP_ERR_NOT_OPEN                The channel has not been opened. Open the channel first.
  * @retval  FSP_ERR_IN_USE                  A transfer is already in progress.
  **********************************************************************************************************************/
-fsp_err_t R_SPI_Write (spi_ctrl_t * const    p_api_ctrl,
+fsp_err_t R_SPI_Write (spi_ctrl_t * const    p_ctrl,
                        void const          * p_src,
                        uint32_t const        length,
                        spi_bit_width_t const bit_width)
 {
-    return r_spi_write_read_common(p_api_ctrl, p_src, NULL, length, bit_width);
+    return r_spi_write_read_common(p_ctrl, p_src, NULL, length, bit_width);
 }
 
 /*******************************************************************************************************************//**
@@ -338,7 +292,7 @@ fsp_err_t R_SPI_Write (spi_ctrl_t * const    p_api_ctrl,
  * @retval  FSP_ERR_NOT_OPEN              The channel has not been opened. Open the channel first.
  * @retval  FSP_ERR_IN_USE                A transfer is already in progress.
  *********************************************************************************************************************/
-fsp_err_t R_SPI_WriteRead (spi_ctrl_t * const    p_api_ctrl,
+fsp_err_t R_SPI_WriteRead (spi_ctrl_t * const    p_ctrl,
                            void const          * p_src,
                            void                * p_dest,
                            uint32_t const        length,
@@ -349,7 +303,7 @@ fsp_err_t R_SPI_WriteRead (spi_ctrl_t * const    p_api_ctrl,
     FSP_ASSERT(p_dest != NULL);
 #endif
 
-    return r_spi_write_read_common(p_api_ctrl, p_src, p_dest, length, bit_width);
+    return r_spi_write_read_common(p_ctrl, p_src, p_dest, length, bit_width);
 }
 
 /*******************************************************************************************************************//**
@@ -360,23 +314,23 @@ fsp_err_t R_SPI_WriteRead (spi_ctrl_t * const    p_api_ctrl,
  * @retval  FSP_ERR_ASSERTION            A required pointer is NULL.
  * @retval  FSP_ERR_NOT_OPEN             The control block has not been opened.
  **********************************************************************************************************************/
-fsp_err_t R_SPI_CallbackSet (spi_ctrl_t * const          p_api_ctrl,
+fsp_err_t R_SPI_CallbackSet (spi_ctrl_t * const          p_ctrl,
                              void (                    * p_callback)(spi_callback_args_t *),
                              void const * const          p_context,
                              spi_callback_args_t * const p_callback_memory)
 {
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) p_api_ctrl;
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) p_ctrl;
 
 #if (SPI_CFG_PARAM_CHECKING_ENABLE)
-    FSP_ASSERT(p_ctrl);
+    FSP_ASSERT(p_instance_ctrl);
     FSP_ASSERT(p_callback);
-    FSP_ERROR_RETURN(SPI_OPEN == p_ctrl->open, FSP_ERR_NOT_OPEN);
+    FSP_ERROR_RETURN(SPI_OPEN == p_instance_ctrl->open, FSP_ERR_NOT_OPEN);
 #endif
 
     /* Store callback and context */
-    p_ctrl->p_callback        = p_callback;
-    p_ctrl->p_context         = p_context;
-    p_ctrl->p_callback_memory = p_callback_memory;
+    p_instance_ctrl->p_callback        = p_callback;
+    p_instance_ctrl->p_context         = p_context;
+    p_instance_ctrl->p_callback_memory = p_callback_memory;
 
     return FSP_SUCCESS;
 }
@@ -393,64 +347,47 @@ fsp_err_t R_SPI_CallbackSet (spi_ctrl_t * const          p_api_ctrl,
  * @retval  FSP_ERR_ASSERTION        A required pointer argument is NULL.
  * @retval  FSP_ERR_NOT_OPEN         The channel has not been opened. Open the channel first.
  **********************************************************************************************************************/
-fsp_err_t R_SPI_Close (spi_ctrl_t * const p_api_ctrl)
+fsp_err_t R_SPI_Close (spi_ctrl_t * const p_ctrl)
 {
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) p_api_ctrl;
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) p_ctrl;
 
 #if SPI_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(NULL != p_ctrl);
-    FSP_ERROR_RETURN(SPI_OPEN == p_ctrl->open, FSP_ERR_NOT_OPEN);
+    FSP_ASSERT(NULL != p_instance_ctrl);
+    FSP_ERROR_RETURN(SPI_OPEN == p_instance_ctrl->open, FSP_ERR_NOT_OPEN);
 #endif
 
 #if SPI_DMAC_SUPPORT_ENABLE == 1
-    if (NULL != p_ctrl->p_cfg->p_transfer_rx)
+    if (NULL != p_instance_ctrl->p_cfg->p_transfer_rx)
     {
-        p_ctrl->p_cfg->p_transfer_rx->p_api->close(p_ctrl->p_cfg->p_transfer_rx->p_ctrl);
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_api->close(p_instance_ctrl->p_cfg->p_transfer_rx->p_ctrl);
     }
 
-    if (NULL != p_ctrl->p_cfg->p_transfer_tx)
+    if (NULL != p_instance_ctrl->p_cfg->p_transfer_tx)
     {
-        p_ctrl->p_cfg->p_transfer_tx->p_api->close(p_ctrl->p_cfg->p_transfer_tx->p_ctrl);
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_api->close(p_instance_ctrl->p_cfg->p_transfer_tx->p_ctrl);
     }
 #endif
 
     /* Disable interrupts in GIC. */
-    R_BSP_IrqDisable(p_ctrl->p_cfg->txi_irq);
-    R_BSP_IrqDisable(p_ctrl->p_cfg->rxi_irq);
-    R_BSP_IrqDisable(p_ctrl->p_cfg->tei_irq);
-    R_BSP_IrqDisable(p_ctrl->p_cfg->eri_irq);
+    R_BSP_IrqDisable(p_instance_ctrl->p_cfg->txi_irq);
+    R_BSP_IrqDisable(p_instance_ctrl->p_cfg->rxi_irq);
+    R_BSP_IrqDisable(p_instance_ctrl->p_cfg->tei_irq);
+    R_BSP_IrqDisable(p_instance_ctrl->p_cfg->eri_irq);
 
     /* Disable the SPI Transfer. */
-    p_ctrl->p_regs->SPCR_b.SPE = 0U;
+    p_instance_ctrl->p_regs->SPCR_b.SPE = 0U;
 
     /* Clear the status register. */
-    p_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
-                            (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
+    p_instance_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
+                                     (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
 
     /* Remove power to the channel. */
     /* Disable the clock to the SPI channel. */
     R_BSP_RegisterProtectDisable(BSP_REG_PROTECT_LPC_RESET);
-    R_BSP_MODULE_STOP(FSP_IP_SPI, p_ctrl->p_cfg->channel);
+    R_BSP_MODULE_STOP(FSP_IP_SPI, p_instance_ctrl->p_cfg->channel);
     R_BSP_RegisterProtectEnable(BSP_REG_PROTECT_LPC_RESET);
 
-    p_ctrl->open = 0;
-
-    return FSP_SUCCESS;
-}
-
-/*******************************************************************************************************************//**
- * DEPRECATED This function gets the version information of the underlying driver. Implements @ref spi_api_t::versionGet.
- *
- * @retval      FSP_SUCCESS            Successful version get.
- * @retval      FSP_ERR_ASSERTION      The parameter p_version is NULL.
- **********************************************************************************************************************/
-fsp_err_t R_SPI_VersionGet (fsp_version_t * p_version)
-{
-#if SPI_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(p_version != NULL);
-#endif
-
-    p_version->version_id = module_version.version_id;
+    p_instance_ctrl->open = 0;
 
     return FSP_SUCCESS;
 }
@@ -461,15 +398,27 @@ fsp_err_t R_SPI_VersionGet (fsp_version_t * p_version)
  * maximum bitrate. If the desired bitrate is slower than the minimum bitrate, than an error is returned.
  *
  * @param[in] bitrate             Desired bitrate
+ * @param[in] clock_source        SPI communication clock source to be used
  * @param[out] spck_div           Memory location to store bitrate register settings.
  *
  * @retval FSP_SUCCESS            Valid spbr and brdv values were calculated
  * @retval FSP_ERR_UNSUPPORTED    Bitrate is not achievable
  **********************************************************************************************************************/
-fsp_err_t R_SPI_CalculateBitrate (uint32_t bitrate, rspck_div_setting_t * spck_div)
+fsp_err_t R_SPI_CalculateBitrate (uint32_t bitrate, spi_clock_source_t clock_source, rspck_div_setting_t * spck_div)
 {
     /* desired_divider = Smallest integer greater than or equal to SPI_CLK / bitrate. */
-    uint32_t desired_divider = (SPI_CLOCK_96MHZ + bitrate - 1) / bitrate;
+    uint32_t desired_divider;
+    if (SPI_CLOCK_SOURCE_PCLKM == clock_source)
+    {
+        desired_divider = R_FSP_SystemClockHzGet(FSP_PRIV_CLOCK_PCLKM);
+    }
+    else
+    {
+        desired_divider =
+            R_FSP_SystemClockHzGet((fsp_priv_clock_t) ((uint8_t) FSP_PRIV_CLOCK_PCLKSPI0 + (uint8_t) clock_source));
+    }
+
+    desired_divider = (desired_divider + bitrate - 1) / bitrate;
 
     /* Can't achieve bitrate slower than desired. */
     if (desired_divider > SPI_CLK_MAX_DIV)
@@ -551,8 +500,10 @@ static fsp_err_t r_spi_transfer_config (spi_cfg_t const * const p_cfg)
     void * p_spdr = (void *) &(SPI_REG(p_cfg->channel)->SPDR);
     if (p_transfer_tx)
     {
-        p_transfer_tx->p_cfg->p_info->transfer_settings_word = SPI_DMAC_TX_TRANSFER_SETTINGS;
-        p_transfer_tx->p_cfg->p_info->p_dest                 = p_spdr;
+        p_transfer_tx->p_cfg->p_info->mode           = TRANSFER_MODE_NORMAL;
+        p_transfer_tx->p_cfg->p_info->src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED;
+        p_transfer_tx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_FIXED;
+        p_transfer_tx->p_cfg->p_info->p_dest         = p_spdr;
 
         err = p_transfer_tx->p_api->open(p_transfer_tx->p_ctrl, p_transfer_tx->p_cfg);
         FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
@@ -561,8 +512,10 @@ static fsp_err_t r_spi_transfer_config (spi_cfg_t const * const p_cfg)
     const transfer_instance_t * p_transfer_rx = p_cfg->p_transfer_rx;
     if (p_transfer_rx)
     {
-        p_transfer_rx->p_cfg->p_info->transfer_settings_word = SPI_DMAC_RX_TRANSFER_SETTINGS;
-        p_transfer_rx->p_cfg->p_info->p_src = p_spdr;
+        p_transfer_rx->p_cfg->p_info->mode           = TRANSFER_MODE_NORMAL;
+        p_transfer_rx->p_cfg->p_info->src_addr_mode  = TRANSFER_ADDR_MODE_FIXED;
+        p_transfer_rx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED;
+        p_transfer_rx->p_cfg->p_info->p_src          = p_spdr;
 
         err = p_transfer_rx->p_api->open(p_transfer_rx->p_ctrl, p_transfer_rx->p_cfg);
 
@@ -582,9 +535,9 @@ static fsp_err_t r_spi_transfer_config (spi_cfg_t const * const p_cfg)
 /*******************************************************************************************************************//**
  * Hardware configuration for settings given by the configuration structure.
  *
- * @param[in]  p_ctrl          pointer to control structure.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  **********************************************************************************************************************/
-static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_hw_config (spi_instance_ctrl_t * p_instance_ctrl)
 {
     uint32_t spcr   = 0;
     uint32_t sslp   = 0;
@@ -593,13 +546,13 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
     uint32_t spckd  = 0;
     uint32_t sslnd  = 0;
     uint32_t spnd   = 0;
-    uint32_t spcmd  = 0;
+    uint32_t spcmd0 = 0;
     uint32_t spdcr  = 0;
     uint32_t spdcr2 = 0;
     uint32_t mrckd  = 0;
     uint32_t spdrcr = 0;
 
-    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_ctrl->p_cfg->p_extend);
+    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_instance_ctrl->p_cfg->p_extend);
 
     /* Enable Receive Buffer Full interrupt. */
     spcr |= R_SPI0_SPCR_SPRIE_Msk;
@@ -618,24 +571,27 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
     spcr |= R_SPI0_SPCR_CENDIE_Msk;
 
     /* Configure Master Mode setting. */
-    spcr |= (uint32_t) (SPI_MODE_MASTER == p_ctrl->p_cfg->operating_mode) << R_SPI0_SPCR_MSTR_Pos;
+    spcr |= (uint32_t) (SPI_MODE_MASTER == p_instance_ctrl->p_cfg->operating_mode) << R_SPI0_SPCR_MSTR_Pos;
 
     /* Enable SCK Auto Stop setting in order to prevent RX Overflow in Master Mode */
-    spcr |= (uint32_t) (SPI_MODE_MASTER == p_ctrl->p_cfg->operating_mode) << R_SPI0_SPCR_SCKASE_Pos;
+    spcr |= (uint32_t) (SPI_MODE_MASTER == p_instance_ctrl->p_cfg->operating_mode) << R_SPI0_SPCR_SCKASE_Pos;
 
-    /* Configure Synchronization Circuit Bypass. */
-    spcr |= (uint32_t) p_extend->sync_bypass << R_SPI0_SPCR_BPEN_Pos;
+    if (SPI_CLOCK_SOURCE_PCLKM == p_extend->clock_source)
+    {
+        /* Configure Synchronization Circuit Bypass. */
+        spcr |= R_SPI0_SPCR_BPEN_Msk;
+    }
 
     /* Configure CPHA setting. */
-    spcmd |= (uint32_t) p_ctrl->p_cfg->clk_phase << R_SPI0_SPCMD_CPHA_Pos;
+    spcmd0 |= (uint32_t) p_instance_ctrl->p_cfg->clk_phase << R_SPI0_SPCMD_CPHA_Pos;
 
     /* Configure CPOL setting. */
-    spcmd |= (uint32_t) p_ctrl->p_cfg->clk_polarity << R_SPI0_SPCMD_CPOL_Pos;
+    spcmd0 |= (uint32_t) p_instance_ctrl->p_cfg->clk_polarity << R_SPI0_SPCMD_CPOL_Pos;
 
     /* Configure Bit Order (MSB,LSB) */
-    spcmd |= (uint32_t) p_ctrl->p_cfg->bit_order << R_SPI0_SPCMD_LSBF_Pos;
+    spcmd0 |= (uint32_t) p_instance_ctrl->p_cfg->bit_order << R_SPI0_SPCMD_LSBF_Pos;
 
-    if (p_ctrl->p_cfg->p_transfer_tx)
+    if (p_instance_ctrl->p_cfg->p_transfer_tx)
     {
         /* Transmit Buffer Empty IRQ must be enabled for DMAC even if TRANSMIT_FROM_RXI is enabled. */
         spcr |= R_SPI0_SPCR_SPTIE_Msk;
@@ -646,7 +602,7 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
 #if BSP_FEATURE_SPI_HAS_SSL_LEVEL_KEEP == 1
 
         /* Configure SSL Level Keep Setting. */
-        spcmd |= R_SPI0_SPCMD_SSLKP_Msk;
+        spcmd0 |= R_SPI0_SPCMD_SSLKP_Msk;
 #endif
 
         /* Configure 4-Wire Mode Setting. */
@@ -669,8 +625,8 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
     sslp |= (uint32_t) p_extend->ssl_polarity << p_extend->ssl_select;
 
     /* Configure SSLn setting. (SSL0, SSL1, SSL2, SSL3)*/
-    spcmd &= ~R_SPI0_SPCMD_SSLA_Msk;
-    spcmd |= (uint32_t) p_extend->ssl_select << R_SPI0_SPCMD_SSLA_Pos;
+    spcmd0 &= ~R_SPI0_SPCMD_SSLA_Msk;
+    spcmd0 |= (uint32_t) p_extend->ssl_select << R_SPI0_SPCMD_SSLA_Pos;
 
     if (SPI_MOSI_IDLE_VALUE_FIXING_DISABLE != p_extend->mosi_idle)
     {
@@ -699,13 +655,13 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
     spdcr |= p_extend->byte_swap;
 
     /* Configure the Bit Rate Division Setting */
-    spcmd |= (uint32_t) p_extend->spck_div.brdv << R_SPI0_SPCMD_BRDV_Pos;
+    spcmd0 |= (uint32_t) p_extend->spck_div.brdv << R_SPI0_SPCMD_BRDV_Pos;
 
     /* Enable all delay settings. */
-    if (SPI_MODE_MASTER == p_ctrl->p_cfg->operating_mode)
+    if (SPI_MODE_MASTER == p_instance_ctrl->p_cfg->operating_mode)
     {
         /* Note that disabling delay settings is same as setting delay to 1. */
-        spcmd |= (uint32_t) R_SPI0_SPCMD_SPNDEN_Msk | R_SPI0_SPCMD_SLNDEN_Msk | R_SPI0_SPCMD_SCKDEN_Msk;
+        spcmd0 |= (uint32_t) R_SPI0_SPCMD_SPNDEN_Msk | R_SPI0_SPCMD_SLNDEN_Msk | R_SPI0_SPCMD_SCKDEN_Msk;
 
         spckd = p_extend->spck_delay;
         sslnd = p_extend->ssl_negation_delay;
@@ -722,41 +678,41 @@ static void r_spi_hw_config (spi_instance_ctrl_t * p_ctrl)
 
     /* Power up the SPI module. */
     R_BSP_RegisterProtectDisable(BSP_REG_PROTECT_LPC_RESET);
-    R_BSP_MODULE_START(FSP_IP_SPI, p_ctrl->p_cfg->channel);
+    R_BSP_MODULE_START(FSP_IP_SPI, p_instance_ctrl->p_cfg->channel);
     R_BSP_RegisterProtectEnable(BSP_REG_PROTECT_LPC_RESET);
 
     /* Write registers */
-    p_ctrl->p_regs->SPCR     = spcr;
-    p_ctrl->p_regs->SSLP     = (uint8_t) sslp;
-    p_ctrl->p_regs->SPPCR    = (uint8_t) sppcr;
-    p_ctrl->p_regs->SPBR     = p_extend->spck_div.spbr;
-    p_ctrl->p_regs->SPCKD    = (uint8_t) spckd;
-    p_ctrl->p_regs->SSLND    = (uint8_t) sslnd;
-    p_ctrl->p_regs->SPND     = (uint8_t) spnd;
-    p_ctrl->p_regs->SPCR2    = (uint8_t) spcr2;
-    p_ctrl->p_regs->SPCMD[0] = spcmd;
-    p_ctrl->p_regs->SPDCR    = (uint16_t) spdcr;
-    p_ctrl->p_regs->SPDCR2   = (uint16_t) spdcr2;
-    p_ctrl->p_regs->MRCKD    = (uint8_t) mrckd;
-    p_ctrl->p_regs->SPDRCR   = (uint8_t) spdrcr;
+    p_instance_ctrl->p_regs->SPCR     = spcr;
+    p_instance_ctrl->p_regs->SSLP     = (uint8_t) sslp;
+    p_instance_ctrl->p_regs->SPPCR    = (uint8_t) sppcr;
+    p_instance_ctrl->p_regs->SPBR     = p_extend->spck_div.spbr;
+    p_instance_ctrl->p_regs->SPCKD    = (uint8_t) spckd;
+    p_instance_ctrl->p_regs->SSLND    = (uint8_t) sslnd;
+    p_instance_ctrl->p_regs->SPND     = (uint8_t) spnd;
+    p_instance_ctrl->p_regs->SPCR2    = (uint8_t) spcr2;
+    p_instance_ctrl->p_regs->SPCMD[0] = spcmd0;
+    p_instance_ctrl->p_regs->SPDCR    = (uint16_t) spdcr;
+    p_instance_ctrl->p_regs->SPDCR2   = (uint16_t) spdcr2;
+    p_instance_ctrl->p_regs->MRCKD    = (uint8_t) mrckd;
+    p_instance_ctrl->p_regs->SPDRCR   = (uint8_t) spdrcr;
 
 #if BSP_FEATURE_SPI_HAS_SPCR3 == 1
-    p_ctrl->p_regs->SPCR3 = R_SPI0_SPCR3_CENDIE_Msk;
+    p_instance_ctrl->p_regs->SPCR3 = R_SPI0_SPCR3_CENDIE_Msk;
 #endif
 }
 
 /*******************************************************************************************************************//**
  * Enable Receive Buffer Full, Transmit Buffer Empty, and Error Interrupts in the GIC.
  *
- * @param[in]  p_ctrl          pointer to control structure.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  **********************************************************************************************************************/
-static void r_spi_gic_config (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_gic_config (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    R_BSP_IrqCfgEnable(p_ctrl->p_cfg->txi_irq, p_ctrl->p_cfg->txi_ipl, p_ctrl);
-    R_BSP_IrqCfgEnable(p_ctrl->p_cfg->rxi_irq, p_ctrl->p_cfg->rxi_ipl, p_ctrl);
-    R_BSP_IrqCfgEnable(p_ctrl->p_cfg->eri_irq, p_ctrl->p_cfg->eri_ipl, p_ctrl);
+    R_BSP_IrqCfgEnable(p_instance_ctrl->p_cfg->txi_irq, p_instance_ctrl->p_cfg->txi_ipl, p_instance_ctrl);
+    R_BSP_IrqCfgEnable(p_instance_ctrl->p_cfg->rxi_irq, p_instance_ctrl->p_cfg->rxi_ipl, p_instance_ctrl);
+    R_BSP_IrqCfgEnable(p_instance_ctrl->p_cfg->eri_irq, p_instance_ctrl->p_cfg->eri_ipl, p_instance_ctrl);
 
-    R_BSP_IrqCfg(p_ctrl->p_cfg->tei_irq, p_ctrl->p_cfg->tei_ipl, p_ctrl);
+    R_BSP_IrqCfg(p_instance_ctrl->p_cfg->tei_irq, p_instance_ctrl->p_cfg->tei_ipl, p_instance_ctrl);
 
     /* Note tei_irq is not enabled until the last data frame is transfered. */
 }
@@ -764,52 +720,33 @@ static void r_spi_gic_config (spi_instance_ctrl_t * p_ctrl)
 /*******************************************************************************************************************//**
  * Setup the bit width configuration for a transfer.
  *
- * @param[in]  p_ctrl          pointer to control structure.
- *
- * Note: For 8-Bit wide data frames, the devices require the SPBYT bit to enable byte level access to the
- * data register. Although this register is not documented in some MCU hardware manuals, it does seem to be available
- * on all of them.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  **********************************************************************************************************************/
-static void r_spi_bit_width_config (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_bit_width_config (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    uint32_t spcmd = p_ctrl->p_regs->SPCMD[0];
+    uint32_t spcmd0 = p_instance_ctrl->p_regs->SPCMD[0];
 
-    if (SPI_BIT_WIDTH_8_BITS == p_ctrl->bit_width)
-    {
-        /* Configure 8-Bit Mode.  */
-        spcmd &= ~R_SPI0_SPCMD_SPB_Msk;
-        spcmd |= SPI_SPCMD_BIT_LENGTH_8 << R_SPI0_SPCMD_SPB_Pos;
-    }
-    else if (SPI_BIT_WIDTH_16_BITS == p_ctrl->bit_width)
-    {
-        /* Configure 16-Bit Mode. */
-        spcmd &= ~R_SPI0_SPCMD_SPB_Msk;
-        spcmd |= SPI_SPCMD_BIT_LENGTH_16 << R_SPI0_SPCMD_SPB_Pos;
-    }
-    else                               /* SPI_BIT_WIDTH_32_BITS */
-    {
-        /* Configure 32-Bit Mode. */
-        spcmd &= ~R_SPI0_SPCMD_SPB_Msk;
-        spcmd |= SPI_SPCMD_BIT_LENGTH_32 << R_SPI0_SPCMD_SPB_Pos;
-    }
+    /* Configure data length based on the selected bit width . */
+    spcmd0 &= ~R_SPI0_SPCMD_SPB_Msk;
+    spcmd0 |= (uint32_t) (p_instance_ctrl->bit_width) << R_SPI0_SPCMD_SPB_Pos;
 
-    p_ctrl->p_regs->SPCMD[0] = spcmd;
+    p_instance_ctrl->p_regs->SPCMD[0] = spcmd0;
 }
 
 /*******************************************************************************************************************//**
  * Initiates a SPI transfer by setting the SPE bit in SPCR.
  *
- * @param[in]  p_ctrl          pointer to control structure.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  *
  * Note: When not using the DMAC to transmit, this function pre-loads the SPI shift-register and shift-register-buffer
  * instead of waiting for the transmit buffer empty interrupt. This is required when transmitting from the
  * Receive Buffer Full interrupt, but it does not interfere with transmitting when using the transmit buffer empty
  * interrupt.
  **********************************************************************************************************************/
-static void r_spi_start_transfer (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_start_transfer (spi_instance_ctrl_t * p_instance_ctrl)
 {
 #if SPI_TRANSMIT_FROM_RXI_ISR == 1
-    if (!p_ctrl->p_cfg->p_transfer_tx)
+    if (!p_instance_ctrl->p_cfg->p_transfer_tx)
     {
         /* Handle the first two transmit empty events here because transmit interrupt may not be enabled. */
 
@@ -818,66 +755,68 @@ static void r_spi_start_transfer (spi_instance_ctrl_t * p_ctrl)
         FSP_CRITICAL_SECTION_ENTER;
 
         /* Clear the status register. */
-        p_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
-                                (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
+        p_instance_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) |
+                                         (R_SPI0_SPSRC_MODFC_Msk) |
+                                         (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
 
         /* Clear the FIFO status */
-        p_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
+        p_instance_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
 
         /* Disable the transmit end interrupt */
-        p_ctrl->p_regs->SPCR_b.CENDIE = 0;
+        p_instance_ctrl->p_regs->SPCR_b.CENDIE = 0;
 
         /* Enable the SPI Transfer. */
-        p_ctrl->p_regs->SPCR_b.SPE = 1;
+        p_instance_ctrl->p_regs->SPCR_b.SPE = 1;
 
         /* Must call transmit to kick off transfer when transmitting from rxi ISR. */
-        r_spi_transmit(p_ctrl);        ///< First data immediately copied into the SPI shift register.
+        r_spi_transmit(p_instance_ctrl); ///< First data immediately copied into the SPI shift register.
 
         /* Second transmit significantly improves slave mode performance. */
-        r_spi_transmit(p_ctrl);        ///< Second data copied into the SPI transmit buffer.
+        r_spi_transmit(p_instance_ctrl); ///< Second data copied into the SPI transmit buffer.
 
         /* Must clear the txi IRQ status (The interrupt was handled here). */
-        R_BSP_IrqEnable(p_ctrl->p_cfg->txi_irq);
+        R_BSP_IrqEnable(p_instance_ctrl->p_cfg->txi_irq);
 
         FSP_CRITICAL_SECTION_EXIT;
     }
     else
     {
         /* Clear the status register. */
-        p_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
-                                (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
+        p_instance_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) |
+                                         (R_SPI0_SPSRC_MODFC_Msk) |
+                                         (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
 
         /* Clear the FIFO status */
-        p_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
+        p_instance_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
 
         /* Disable the transmit end interrupt */
-        p_ctrl->p_regs->SPCR_b.CENDIE = 0;
+        p_instance_ctrl->p_regs->SPCR_b.CENDIE = 0;
 
         /* Enable the SPI Transfer. */
-        p_ctrl->p_regs->SPCR_b.SPE = 1;
+        p_instance_ctrl->p_regs->SPCR_b.SPE = 1;
     }
 
 #else
 
     /* Clear the status register. */
-    p_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
-                            (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
+    p_instance_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_SPDRFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) |
+                                     (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_UDRFC_Msk);
 
     /* Clear the FIFO status */
-    p_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
+    p_instance_ctrl->p_regs->SPFCR = R_SPI0_SPFCR_SPFRST_Msk;
 
     /* Disable the transmit end interrupt */
-    p_ctrl->p_regs->SPCR_b.CENDIE = 0;
+    p_instance_ctrl->p_regs->SPCR_b.CENDIE = 0;
 
     /* Enable the SPI Transfer. */
-    p_ctrl->p_regs->SPCR_b.SPE = 1;
+    p_instance_ctrl->p_regs->SPCR_b.SPE = 1;
 #endif
 }
 
 /*******************************************************************************************************************//**
  * Configures the driver state and initiates a SPI transfer for all modes of operation.
  *
- * @param[in]  p_api_ctrl        pointer to control structure.
+ * @param[in]  p_ctrl            pointer to control structure.
  * @param      p_src             Buffer to transmit data from.
  * @param      p_dest            Buffer to store received data in.
  * @param[in]  length            Number of transfers
@@ -890,120 +829,110 @@ static void r_spi_start_transfer (spi_instance_ctrl_t * p_ctrl)
  * @return                       See @ref RENESAS_ERROR_CODES for other possible return codes. This function internally
  *                               calls @ref transfer_api_t::reconfigure.
  **********************************************************************************************************************/
-static fsp_err_t r_spi_write_read_common (spi_ctrl_t * const    p_api_ctrl,
+static fsp_err_t r_spi_write_read_common (spi_ctrl_t * const    p_ctrl,
                                           void const          * p_src,
                                           void                * p_dest,
                                           uint32_t const        length,
                                           spi_bit_width_t const bit_width)
 {
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) p_api_ctrl;
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) p_ctrl;
 
 #if SPI_CFG_PARAM_CHECKING_ENABLE
-    FSP_ASSERT(NULL != p_ctrl);
-    FSP_ERROR_RETURN(SPI_OPEN == p_ctrl->open, FSP_ERR_NOT_OPEN);
+    FSP_ASSERT(NULL != p_instance_ctrl);
+    FSP_ERROR_RETURN(SPI_OPEN == p_instance_ctrl->open, FSP_ERR_NOT_OPEN);
     FSP_ASSERT(p_src || p_dest);
     FSP_ASSERT(0 != length);
 #endif
 
-    FSP_ERROR_RETURN(0 == (p_ctrl->p_regs->SPCR & R_SPI0_SPCR_SPE_Msk), FSP_ERR_IN_USE);
+    FSP_ERROR_RETURN(0 == (p_instance_ctrl->p_regs->SPCR & R_SPI0_SPCR_SPE_Msk), FSP_ERR_IN_USE);
 
-    p_ctrl->p_tx_data = p_src;
-    p_ctrl->p_rx_data = p_dest;
-    p_ctrl->tx_count  = 0;
-    p_ctrl->rx_count  = 0;
-    p_ctrl->count     = length;
-    p_ctrl->bit_width = bit_width;
+    p_instance_ctrl->p_tx_data = p_src;
+    p_instance_ctrl->p_rx_data = p_dest;
+    p_instance_ctrl->tx_count  = 0;
+    p_instance_ctrl->rx_count  = 0;
+    p_instance_ctrl->count     = length;
+    p_instance_ctrl->bit_width = bit_width;
 
 #if SPI_DMAC_SUPPORT_ENABLE == 1
-    if (p_ctrl->p_cfg->p_transfer_rx)
+
+    /* Determine DMAC transfer size */
+    transfer_size_t size;
+    uint32_t        byte_width;
+    if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_16_BITS) /* Bit Widths of 17-32 bits */
+    {
+        size       = TRANSFER_SIZE_4_BYTE;
+        byte_width = 4U;
+    }
+    else if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_8_BITS) /* Bit Widths of 9-16 bits*/
+    {
+        size       = TRANSFER_SIZE_2_BYTE;
+        byte_width = 2U;
+    }
+    else                               /* Bit Widths of 4-8 bits */
+    {
+        size       = TRANSFER_SIZE_1_BYTE;
+        byte_width = 1U;
+    }
+
+    if (p_instance_ctrl->p_cfg->p_transfer_rx)
     {
         /* When the rxi interrupt is called, all transfers will be finished. */
-        p_ctrl->rx_count = length;
+        p_instance_ctrl->rx_count = length;
 
         /* Configure the receive DMA instance. */
-        dmac_extended_info_t * p_extend_rx =
-            (dmac_extended_info_t *) p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->p_extend;
-        if (SPI_BIT_WIDTH_32_BITS == p_ctrl->bit_width)
-        {
-            p_extend_rx->src_size  = DMAC_TRANSFER_SIZE_4_BYTE;
-            p_extend_rx->dest_size = DMAC_TRANSFER_SIZE_4_BYTE;
-        }
-        else if (SPI_BIT_WIDTH_16_BITS == p_ctrl->bit_width)
-        {
-            p_extend_rx->src_size  = DMAC_TRANSFER_SIZE_2_BYTE;
-            p_extend_rx->dest_size = DMAC_TRANSFER_SIZE_2_BYTE;
-        }
-        else
-        {
-            p_extend_rx->src_size  = DMAC_TRANSFER_SIZE_1_BYTE;
-            p_extend_rx->dest_size = DMAC_TRANSFER_SIZE_1_BYTE;
-        }
-
-        p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED;
-        p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->length         = length * bit_width;
-        p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->p_dest         = p_dest;
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->src_size       = size;
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->dest_size      = size;
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED;
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->length         = length * byte_width;
+        p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->p_dest         = p_dest;
 
         if (NULL == p_dest)
         {
             static uint32_t dummy_rx;
-            p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_FIXED;
-            p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->p_dest         = &dummy_rx;
+            p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->dest_addr_mode = TRANSFER_ADDR_MODE_FIXED;
+            p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info->p_dest         = &dummy_rx;
         }
 
         /* Disable the corresponding IRQ when transferring using DMAC. */
-        R_BSP_IrqDisable(p_ctrl->p_cfg->rxi_irq);
+        R_BSP_IrqDisable(p_instance_ctrl->p_cfg->rxi_irq);
 
-        fsp_err_t err = p_ctrl->p_cfg->p_transfer_rx->p_api->reconfigure(p_ctrl->p_cfg->p_transfer_rx->p_ctrl,
-                                                                         p_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info);
+        fsp_err_t err = p_instance_ctrl->p_cfg->p_transfer_rx->p_api->reconfigure(
+            p_instance_ctrl->p_cfg->p_transfer_rx->p_ctrl,
+            p_instance_ctrl->p_cfg->p_transfer_rx->p_cfg->p_info);
         FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
     }
 
-    if (p_ctrl->p_cfg->p_transfer_tx)
+    if (p_instance_ctrl->p_cfg->p_transfer_tx)
     {
         /* When the txi interrupt is called, all transfers will be finished. */
-        p_ctrl->tx_count = length;
+        p_instance_ctrl->tx_count = length;
 
         /* Configure the transmit DMA instance. */
-        dmac_extended_info_t * p_extend_tx =
-            (dmac_extended_info_t *) p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->p_extend;
-        if (SPI_BIT_WIDTH_32_BITS == p_ctrl->bit_width)
-        {
-            p_extend_tx->src_size  = DMAC_TRANSFER_SIZE_4_BYTE;
-            p_extend_tx->dest_size = DMAC_TRANSFER_SIZE_4_BYTE;
-        }
-        else if (SPI_BIT_WIDTH_16_BITS == p_ctrl->bit_width)
-        {
-            p_extend_tx->src_size  = DMAC_TRANSFER_SIZE_2_BYTE;
-            p_extend_tx->dest_size = DMAC_TRANSFER_SIZE_2_BYTE;
-        }
-        else
-        {
-            p_extend_tx->src_size  = DMAC_TRANSFER_SIZE_1_BYTE;
-            p_extend_tx->dest_size = DMAC_TRANSFER_SIZE_1_BYTE;
-        }
-
-        p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->src_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED;
-        p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->length        = length * bit_width;
-        p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->p_src         = p_src;
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->src_size      = size;
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->dest_size     = size;
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->src_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED;
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->length        = length * byte_width;
+        p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->p_src         = p_src;
 
         if (NULL == p_src)
         {
             static uint32_t dummy_tx = 0;
-            p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->src_addr_mode = TRANSFER_ADDR_MODE_FIXED;
-            p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->p_src         = &dummy_tx;
+            p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->src_addr_mode = TRANSFER_ADDR_MODE_FIXED;
+            p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info->p_src         = &dummy_tx;
         }
 
         /* Disable the corresponding IRQ when transferring using DMAC. */
-        R_BSP_IrqDisable(p_ctrl->p_cfg->txi_irq);
+        R_BSP_IrqDisable(p_instance_ctrl->p_cfg->txi_irq);
 
-        fsp_err_t err = p_ctrl->p_cfg->p_transfer_tx->p_api->reconfigure(p_ctrl->p_cfg->p_transfer_tx->p_ctrl,
-                                                                         p_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info);
+        fsp_err_t err = p_instance_ctrl->p_cfg->p_transfer_tx->p_api->reconfigure(
+            p_instance_ctrl->p_cfg->p_transfer_tx->p_ctrl,
+            p_instance_ctrl->p_cfg->p_transfer_tx->p_cfg->p_info);
         FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
     }
 #endif
 
-    r_spi_bit_width_config(p_ctrl);
-    r_spi_start_transfer(p_ctrl);
+    r_spi_bit_width_config(p_instance_ctrl);
+    r_spi_start_transfer(p_instance_ctrl);
 
     return FSP_SUCCESS;
 }
@@ -1013,41 +942,41 @@ static fsp_err_t r_spi_write_read_common (spi_ctrl_t * const    p_api_ctrl,
  * If the receive buffer is NULL, just read the SPI data register.
  * If the total transfer length has already been received than do nothing.
  *
- * @param[in]  p_ctrl          pointer to control structure.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  **********************************************************************************************************************/
-static void r_spi_receive (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_receive (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    uint32_t rx_count = p_ctrl->rx_count;
-    if (rx_count == p_ctrl->count)
+    uint32_t rx_count = p_instance_ctrl->rx_count;
+    if (rx_count == p_instance_ctrl->count)
     {
         return;
     }
 
-    while (p_ctrl->p_regs->SPRFSR != 0 && rx_count != p_ctrl->count)
+    while (p_instance_ctrl->p_regs->SPRFSR != 0 && rx_count != p_instance_ctrl->count)
     {
-        if (0 == p_ctrl->p_rx_data)
+        if (0 == p_instance_ctrl->p_rx_data)
         {
             /* Read the received data but do nothing with it. */
-            p_ctrl->p_regs->SPDR;
+            p_instance_ctrl->p_regs->SPDR;
         }
         else
         {
-            if (SPI_BIT_WIDTH_8_BITS == p_ctrl->bit_width)
+            if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_16_BITS)     /* Bit Widths of 17-32 bits */
             {
-                ((uint8_t *) (p_ctrl->p_rx_data))[rx_count] = p_ctrl->p_regs->SPDR & SPI_SPDR_BYTE_VALUE_MASK;
+                ((uint32_t *) (p_instance_ctrl->p_rx_data))[rx_count] = p_instance_ctrl->p_regs->SPDR;
             }
-            else if (SPI_BIT_WIDTH_16_BITS == p_ctrl->bit_width)
+            else if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_8_BITS) /* Bit Widths of 9-16 bits*/
             {
-                ((uint16_t *) (p_ctrl->p_rx_data))[rx_count] = p_ctrl->p_regs->SPDR & SPI_SPDR_HALFWARD_VALUE_MASK;
+                ((uint16_t *) (p_instance_ctrl->p_rx_data))[rx_count] = (uint16_t) p_instance_ctrl->p_regs->SPDR;
             }
-            else                       /* SPI_BIT_WIDTH_32_BITS */
+            else                                                        /* Bit Widths of 4-8 bits */
             {
-                ((uint32_t *) (p_ctrl->p_rx_data))[rx_count] = p_ctrl->p_regs->SPDR;
+                ((uint8_t *) (p_instance_ctrl->p_rx_data))[rx_count] = (uint8_t) p_instance_ctrl->p_regs->SPDR;
             }
         }
 
         rx_count++;
-        p_ctrl->rx_count = rx_count;
+        p_instance_ctrl->rx_count = rx_count;
     }
 }
 
@@ -1056,63 +985,64 @@ static void r_spi_receive (spi_instance_ctrl_t * p_ctrl)
  * If the transmit buffer is NULL, than write zero to the SPI data register.
  * If the total transfer length has already been transmitted than do nothing.
  *
- * @param[in]  p_ctrl          pointer to control structure.
+ * @param[in]  p_instance_ctrl          pointer to control structure.
  **********************************************************************************************************************/
-static void r_spi_transmit (spi_instance_ctrl_t * p_ctrl)
+static void r_spi_transmit (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    uint32_t             tx_count = p_ctrl->tx_count;
-    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_ctrl->p_cfg->p_extend);
-    if (tx_count == p_ctrl->count)
+    uint32_t             tx_count = p_instance_ctrl->tx_count;
+    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_instance_ctrl->p_cfg->p_extend);
+    if (tx_count == p_instance_ctrl->count)
     {
         return;
     }
 
-    while (p_ctrl->p_regs->SPTFSR != 0 && tx_count < p_ctrl->count)
+    while (p_instance_ctrl->p_regs->SPTFSR != 0 && tx_count < p_instance_ctrl->count)
     {
-        if (p_extend && (SPI_COMMUNICATION_TRANSMIT_ONLY == p_extend->spi_comm) && (tx_count == p_ctrl->count - 1) &&
-            (0 == p_ctrl->p_regs->SPCR_b.CENDIE))
+        if (p_extend && (SPI_COMMUNICATION_TRANSMIT_ONLY == p_extend->spi_comm) &&
+            (tx_count == p_instance_ctrl->count - 1) &&
+            (0 == p_instance_ctrl->p_regs->SPCR_b.CENDIE))
         {
             return;
         }
 
-        if (0 == p_ctrl->p_tx_data)
+        if (0 == p_instance_ctrl->p_tx_data)
         {
             /* Transmit zero if no tx buffer present. */
-            p_ctrl->p_regs->SPDR = 0;
+            p_instance_ctrl->p_regs->SPDR = 0;
         }
         else
         {
-            if (SPI_BIT_WIDTH_8_BITS == p_ctrl->bit_width)
+            if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_16_BITS)     /* Bit Widths of 17-32 bits */
             {
-                p_ctrl->p_regs->SPDR = ((uint8_t *) p_ctrl->p_tx_data)[tx_count];;
+                p_instance_ctrl->p_regs->SPDR = ((uint32_t *) p_instance_ctrl->p_tx_data)[tx_count];
             }
-            else if (SPI_BIT_WIDTH_16_BITS == p_ctrl->bit_width)
+            else if (p_instance_ctrl->bit_width > SPI_BIT_WIDTH_8_BITS) /* Bit Widths of 9-16 bits*/
             {
-                p_ctrl->p_regs->SPDR = ((uint16_t *) p_ctrl->p_tx_data)[tx_count];;
+                p_instance_ctrl->p_regs->SPDR = ((uint16_t *) p_instance_ctrl->p_tx_data)[tx_count];
             }
-            else                       /* SPI_BIT_WIDTH_32_BITS */
+            else                                                        /* Bit Widths of 4-8 bits */
             {
-                p_ctrl->p_regs->SPDR = ((uint32_t *) p_ctrl->p_tx_data)[tx_count];;
+                p_instance_ctrl->p_regs->SPDR = ((uint8_t *) p_instance_ctrl->p_tx_data)[tx_count];
             }
         }
 
         tx_count++;
-        p_ctrl->tx_count = tx_count;
+        p_instance_ctrl->tx_count = tx_count;
     }
 }
 
 /*******************************************************************************************************************//**
  * Calls user callback.
  *
- * @param[in]     p_ctrl     Pointer to SPI instance control block
- * @param[in]     event      Event code
+ * @param[in]     p_instance_ctrl     Pointer to SPI instance control block
+ * @param[in]     event               Event code
  **********************************************************************************************************************/
-static void r_spi_call_callback (spi_instance_ctrl_t * p_ctrl, spi_event_t event)
+static void r_spi_call_callback (spi_instance_ctrl_t * p_instance_ctrl, spi_event_t event)
 {
     spi_callback_args_t args;
 
     /* Store callback arguments in memory provided by user if available. */
-    spi_callback_args_t * p_args = p_ctrl->p_callback_memory;
+    spi_callback_args_t * p_args = p_instance_ctrl->p_callback_memory;
     if (NULL == p_args)
     {
         /* Store on stack */
@@ -1124,52 +1054,52 @@ static void r_spi_call_callback (spi_instance_ctrl_t * p_ctrl, spi_event_t event
         args = *p_args;
     }
 
-    p_args->channel   = p_ctrl->p_cfg->channel;
+    p_args->channel   = p_instance_ctrl->p_cfg->channel;
     p_args->event     = event;
-    p_args->p_context = p_ctrl->p_context;
+    p_args->p_context = p_instance_ctrl->p_context;
 
-    p_ctrl->p_callback(p_args);
+    p_instance_ctrl->p_callback(p_args);
 
-    if (NULL != p_ctrl->p_callback_memory)
+    if (NULL != p_instance_ctrl->p_callback_memory)
     {
         /* Restore callback memory in case this is a nested interrupt. */
-        *p_ctrl->p_callback_memory = args;
+        *p_instance_ctrl->p_callback_memory = args;
     }
 }
 
 /*******************************************************************************************************************//**
  * Common processing for RXI interrupt and DMA transfer completion interrupt in SPI read operation.
  **********************************************************************************************************************/
-static void spi_rxi_common (spi_instance_ctrl_t * p_ctrl)
+static void spi_rxi_common (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    r_spi_receive(p_ctrl);
+    r_spi_receive(p_instance_ctrl);
 
 #if SPI_TRANSMIT_FROM_RXI_ISR == 1
 
     /* It is a little faster to handle the transmit buffer empty event in the receive buffer full ISR.
      * Note that this is only possible when the instance is not using a transfer instance to receive data. */
-    r_spi_transmit(p_ctrl);
+    r_spi_transmit(p_instance_ctrl);
 #endif
 
-    if (p_ctrl->rx_count == p_ctrl->count)
+    if (p_instance_ctrl->rx_count == p_instance_ctrl->count)
     {
         /* If the transmit and receive ISRs are too slow to keep up at high bitrates,
          * the hardware will generate an interrupt before all of the transfers are completed.
          * By enabling the transfer end ISR here, all of the transfers are guaranteed to be completed. */
-        R_BSP_IrqEnableNoClear(p_ctrl->p_cfg->tei_irq);
+        R_BSP_IrqEnableNoClear(p_instance_ctrl->p_cfg->tei_irq);
 
         /* Enable Transmit end interrupt */
-        p_ctrl->p_regs->SPCR_b.CENDIE = 1;
+        p_instance_ctrl->p_regs->SPCR_b.CENDIE = 1;
     }
 
     /* Clear the SPI Receive Data Ready Flag */
-    if (1 == p_ctrl->p_regs->SPSR_b.SPDRF)
+    if (1 == p_instance_ctrl->p_regs->SPSR_b.SPDRF)
     {
-        p_ctrl->p_regs->SPSRC_b.SPDRFC = 1;
+        p_instance_ctrl->p_regs->SPSRC_b.SPDRFC = 1;
     }
 
     /* Clear the receive buffer full flag */
-    p_ctrl->p_regs->SPSRC = R_SPI0_SPSRC_SPRFC_Msk;
+    p_instance_ctrl->p_regs->SPSRC = R_SPI0_SPSRC_SPRFC_Msk;
 }
 
 /*******************************************************************************************************************//**
@@ -1177,65 +1107,69 @@ static void spi_rxi_common (spi_instance_ctrl_t * p_ctrl)
  **********************************************************************************************************************/
 void spi_rxi_isr (void)
 {
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
     IRQn_Type irq = R_FSP_CurrentIrqGet();
 
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
-    spi_rxi_common(p_ctrl);
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    spi_rxi_common(p_instance_ctrl);
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
-}
 
-#if SPI_DMAC_SUPPORT_ENABLE == 1
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
+}
 
 /*******************************************************************************************************************//**
- * Processing called when the DMA transfer is completed for SPI read operation. This function calls spi_rxi_common().
+ * Callback that must be called after a RX DMAC transfer completes.
+ *
+ * @param[in]     p_instance_ctrl     Pointer to SPI instance control block
  **********************************************************************************************************************/
-void spi_rxi_dmac_isr (IRQn_Type irq)
+void spi_rx_dmac_callback (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
 
     /* Now that the transfer using DMAC is finished, enable the corresponding IRQ. */
-    R_BSP_IrqEnable(p_ctrl->p_cfg->rxi_irq);
+    R_BSP_IrqEnable(p_instance_ctrl->p_cfg->rxi_irq);
 
-    spi_rxi_common(p_ctrl);
+    spi_rxi_common(p_instance_ctrl);
+
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
-
-#endif
 
 #if SPI_TRANSMIT_FROM_RXI_ISR == 0
 
 /*******************************************************************************************************************//**
  * Common processing for TXI interrupt and DMA transfer completion interrupt in SPI write operation.
  **********************************************************************************************************************/
-static void spi_txi_common (spi_instance_ctrl_t * p_ctrl)
+static void spi_txi_common (spi_instance_ctrl_t * p_instance_ctrl)
 {
-    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_ctrl->p_cfg->p_extend);
+    spi_extended_cfg_t * p_extend = ((spi_extended_cfg_t *) p_instance_ctrl->p_cfg->p_extend);
     if (p_extend && (SPI_COMMUNICATION_TRANSMIT_ONLY == p_extend->spi_comm))
     {
         /* Only enable the transfer end ISR if there are no receive buffer full interrupts expected to be handled
          * after this interrupt. */
-        if (p_ctrl->tx_count == p_ctrl->count - 1)
+        if (p_instance_ctrl->tx_count == p_instance_ctrl->count - 1)
         {
             /* If the transmit and receive ISRs are too slow to keep up at high bitrates,
              * the hardware will generate an interrupt before all of the transfers are completed.
              * By enabling the transfer end ISR here, all of the transfers are guaranteed to be completed. */
-            R_BSP_IrqEnable(p_ctrl->p_cfg->tei_irq);
+            R_BSP_IrqEnable(p_instance_ctrl->p_cfg->tei_irq);
 
             /* Enable Transmit end interrupt */
-            p_ctrl->p_regs->SPCR_b.CENDIE = 1;
+            p_instance_ctrl->p_regs->SPCR_b.CENDIE = 1;
         }
-        else if (p_ctrl->p_cfg->p_transfer_tx)
+        else if (p_instance_ctrl->p_cfg->p_transfer_tx)
         {
             /* If DMA is used to transmit data, enable the interrupt after all the data has been transfered, but do not
              * clear the IRQ Pending Bit. */
-            R_BSP_IrqEnableNoClear(p_ctrl->p_cfg->tei_irq);
+            R_BSP_IrqEnableNoClear(p_instance_ctrl->p_cfg->tei_irq);
 
             /* Enable Transmit end interrupt */
-            p_ctrl->p_regs->SPCR_b.CENDIE = 1;
+            p_instance_ctrl->p_regs->SPCR_b.CENDIE = 1;
         }
         else
         {
@@ -1244,12 +1178,12 @@ static void spi_txi_common (spi_instance_ctrl_t * p_ctrl)
 
     /* Transmit happens after checking if the last transfer has been written to the transmit buffer in order
      * to ensure that the end interrupt is not enabled while there is data still in the transmit buffer. */
-    r_spi_transmit(p_ctrl);
+    r_spi_transmit(p_instance_ctrl);
 
     /* Clear transmit buffer empty flag */
-    if (p_ctrl->tx_count != p_ctrl->count)
+    if (p_instance_ctrl->tx_count != p_instance_ctrl->count)
     {
-        p_ctrl->p_regs->SPSRC = R_SPI0_SPSRC_SPTEFC_Msk;
+        p_instance_ctrl->p_regs->SPSRC = R_SPI0_SPSRC_SPTEFC_Msk;
     }
 }
 
@@ -1261,78 +1195,94 @@ static void spi_txi_common (spi_instance_ctrl_t * p_ctrl)
  **********************************************************************************************************************/
 void spi_txi_isr (void)
 {
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
     IRQn_Type irq = R_FSP_CurrentIrqGet();
 
 #if SPI_TRANSMIT_FROM_RXI_ISR == 0
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
-    spi_txi_common(p_ctrl);
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    spi_txi_common(p_instance_ctrl);
 #else
     FSP_PARAMETER_NOT_USED(irq);
 #endif
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
-}
 
-#if SPI_DMAC_SUPPORT_ENABLE == 1
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
+}
 
 /*******************************************************************************************************************//**
- * Processing called when the DMA transfer is completed for SPI write operation. This function calls spi_txi_common().
+ * Callback that must be called after a TX DMAC transfer completes.
+ *
+ * @param[in]     p_instance_ctrl     Pointer to SPI instance control block
  **********************************************************************************************************************/
-void spi_txi_dmac_isr (IRQn_Type irq)
+void spi_tx_dmac_callback (spi_instance_ctrl_t * p_instance_ctrl)
 {
- #if SPI_TRANSMIT_FROM_RXI_ISR == 0
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
+#if SPI_TRANSMIT_FROM_RXI_ISR == 0
 
     /* Now that the transfer using DMAC is finished, enable the corresponding IRQ. */
-    R_BSP_IrqEnable(p_ctrl->p_cfg->txi_irq);
+    R_BSP_IrqEnable(p_instance_ctrl->p_cfg->txi_irq);
 
-    spi_txi_common(p_ctrl);
- #else
-    FSP_PARAMETER_NOT_USED(irq);
- #endif
-}
-
+    spi_txi_common(p_instance_ctrl);
+#else
+    FSP_PARAMETER_NOT_USED(p_instance_ctrl);
 #endif
+
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
+}
 
 /*******************************************************************************************************************//**
  * ISR called when the SPI peripheral transitions from the transferring state to the IDLE state.
  **********************************************************************************************************************/
 void spi_tei_isr (void)
 {
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
     IRQn_Type irq = R_FSP_CurrentIrqGet();
 
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
 
     /* Since the FIFO threshold is set to 0, there is no need to perform final data read. */
 
-    if ((0 == p_ctrl->p_regs->SPSR_b.IDLNF) || (SPI_MODE_SLAVE == p_ctrl->p_cfg->operating_mode))
+    if ((0 == p_instance_ctrl->p_regs->SPSR_b.IDLNF) || (SPI_MODE_SLAVE == p_instance_ctrl->p_cfg->operating_mode))
     {
         R_BSP_IrqDisable(irq);
 
+        /* Writing 0 to SPE generates a TXI IRQ. Disable the TXI IRQ.
+         * (See Section "Initialization by Clearing the SPE Bit" in the RZ microprocessor manual). */
+        R_BSP_IrqDisable(p_instance_ctrl->p_cfg->txi_irq);
+
         /* Disable the SPI Transfer. */
-        p_ctrl->p_regs->SPCR_b.SPE = 0;
+        p_instance_ctrl->p_regs->SPCR_b.SPE = 0;
 
         /* Disable the transmit end interrupt */
-        p_ctrl->p_regs->SPCR_b.CENDIE = 0;
+        p_instance_ctrl->p_regs->SPCR_b.CENDIE = 0;
 
         /* Check SPCR.SPE = 0 */
         uint32_t timeout_count = SPI_PERIPHERAL_REG_MAX_WAIT;
 
-        SPI_HARDWARE_REGISTER_WAIT(p_ctrl->p_regs->SPPSR_b.SPEPS, 0, timeout_count);
+        SPI_HARDWARE_REGISTER_WAIT(p_instance_ctrl->p_regs->SPPSR_b.SPEPS, 0, timeout_count);
+
+        /* Re-enable the TXI IRQ and clear the pending IRQ. */
+        R_BSP_IrqEnable(p_instance_ctrl->p_cfg->txi_irq);
 
         /* Signal that a transfer has completed. */
-        r_spi_call_callback(p_ctrl, SPI_EVENT_TRANSFER_COMPLETE);
+        r_spi_call_callback(p_instance_ctrl, SPI_EVENT_TRANSFER_COMPLETE);
     }
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
+
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 /*******************************************************************************************************************//**
@@ -1340,41 +1290,50 @@ void spi_tei_isr (void)
  **********************************************************************************************************************/
 void spi_eri_isr (void)
 {
+    SPI_CFG_MULTIPLEX_INTERRUPT_ENABLE;
+
     /* Save context if RTOS is used */
     FSP_CONTEXT_SAVE;
 
-    IRQn_Type             irq    = R_FSP_CurrentIrqGet();
-    spi_instance_ctrl_t * p_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+    IRQn_Type             irq             = R_FSP_CurrentIrqGet();
+    spi_instance_ctrl_t * p_instance_ctrl = (spi_instance_ctrl_t *) R_FSP_IsrContextGet(irq);
+
+    /* Writing 0 to SPE generates a TXI IRQ. Disable the TXI IRQ.
+     * (See Section "Initialization by Clearing the SPE Bit" in the RZ microprocessor manual). */
+    R_BSP_IrqDisable(p_instance_ctrl->p_cfg->txi_irq);
 
     /* Disable the SPI Transfer. */
-    p_ctrl->p_regs->SPCR_b.SPE = 0;
+    p_instance_ctrl->p_regs->SPCR_b.SPE = 0;
 
     /* Read the status register. */
-    uint16_t status = p_ctrl->p_regs->SPSR;
+    uint16_t status = p_instance_ctrl->p_regs->SPSR;
 
     /* Check SPCR.SPE = 0 */
     uint32_t timeout_count = SPI_PERIPHERAL_REG_MAX_WAIT;
 
-    SPI_HARDWARE_REGISTER_WAIT(p_ctrl->p_regs->SPPSR_b.SPEPS, 0, timeout_count);
+    SPI_HARDWARE_REGISTER_WAIT(p_instance_ctrl->p_regs->SPPSR_b.SPEPS, 0, timeout_count);
+
+    /* Re-enable the TXI IRQ and clear the pending IRQ. */
+    R_BSP_IrqEnable(p_instance_ctrl->p_cfg->txi_irq);
 
     /* Clear the flag */
-    p_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) |
-                            (R_SPI0_SPSRC_UDRFC_Msk);
+    p_instance_ctrl->p_regs->SPSRC = (R_SPI0_SPSRC_PERFC_Msk) | (R_SPI0_SPSRC_MODFC_Msk) | (R_SPI0_SPSRC_OVRFC_Msk) |
+                                     (R_SPI0_SPSRC_UDRFC_Msk);
 
     /* Dummy read to ensure that interrupt flags are cleared. */
-    uint16_t dummy = p_ctrl->p_regs->SPSRC;
+    uint16_t dummy = p_instance_ctrl->p_regs->SPSRC;
     FSP_PARAMETER_NOT_USED(dummy);
 
     /* Check if the error is a Parity Error. */
     if (R_SPI0_SPSR_PERF_Msk & status)
     {
-        r_spi_call_callback(p_ctrl, SPI_EVENT_ERR_PARITY);
+        r_spi_call_callback(p_instance_ctrl, SPI_EVENT_ERR_PARITY);
     }
 
     /* Check if the error is a Receive Buffer Overflow Error. */
     if (R_SPI0_SPSR_OVRF_Msk & status)
     {
-        r_spi_call_callback(p_ctrl, SPI_EVENT_ERR_READ_OVERFLOW);
+        r_spi_call_callback(p_instance_ctrl, SPI_EVENT_ERR_READ_OVERFLOW);
     }
 
     /* Check if the error is a Mode Fault Error. */
@@ -1383,12 +1342,14 @@ void spi_eri_isr (void)
         /* Check if the error is a Transmit Buffer Underflow Error. */
         if (R_SPI0_SPSR_UDRF_Msk & status)
         {
-            r_spi_call_callback(p_ctrl, SPI_EVENT_ERR_MODE_UNDERRUN);
+            r_spi_call_callback(p_instance_ctrl, SPI_EVENT_ERR_MODE_UNDERRUN);
         }
     }
 
     /* Restore context if RTOS is used */
     FSP_CONTEXT_RESTORE;
+
+    SPI_CFG_MULTIPLEX_INTERRUPT_DISABLE;
 }
 
 /* End of file R_SPI. */

@@ -8,14 +8,12 @@
 #include "r_adc_api.h"
 #include "r_dsmif.h"
 #include "r_adc_api.h"
-#include "r_mtu3.h"
-#include "r_timer_api.h"
-#include "r_mtu3_phase_count.h"
-            #include "r_mtu3_phase_count_api.h"
 #include "r_adc.h"
 #include "r_adc_api.h"
 #include "r_poe3.h"
 #include "r_poe3_api.h"
+#include "r_mtu3.h"
+#include "r_timer_api.h"
 #include "r_mtu3_three_phase.h"
             #include "r_three_phase_api.h"
 #include "r_gpt.h"
@@ -41,58 +39,6 @@ extern const adc_cfg_t g_tsu0_cfg;
             #ifndef NULL
             void NULL(adc_callback_args_t * p_args);
             #endif
-/** Timer on MTU3 Instance. */
-extern const timer_instance_t g_timer10;
-
-/** Access the MTU3 instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_instance_ctrl_t g_timer10_ctrl;
-extern const timer_cfg_t g_timer10_cfg;
-
-#ifndef NULL
-void NULL(timer_callback_args_t * p_args);
-#endif
-/** Timer on MTU3 Instance. */
-extern const timer_instance_t g_timer9;
-
-/** Access the MTU3 instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_instance_ctrl_t g_timer9_ctrl;
-extern const timer_cfg_t g_timer9_cfg;
-
-#ifndef NULL
-void NULL(timer_callback_args_t * p_args);
-#endif
-/** MTU3 Phase-Count Instance. */
-extern const mtu3_phase_count_instance_t g_mtu_phase_count_ch2;
-
-/** Access the GPT Phase-Count instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_phase_count_instance_ctrl_t g_mtu_phase_count_ch2_ctrl;
-extern const mtu3_phase_count_cfg_t g_mtu_phase_count_ch2_cfg;
-/** Timer on MTU3 Instance. */
-extern const timer_instance_t g_timer8;
-
-/** Access the MTU3 instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_instance_ctrl_t g_timer8_ctrl;
-extern const timer_cfg_t g_timer8_cfg;
-
-#ifndef NULL
-void NULL(timer_callback_args_t * p_args);
-#endif
-/** Timer on MTU3 Instance. */
-extern const timer_instance_t g_timer7;
-
-/** Access the MTU3 instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_instance_ctrl_t g_timer7_ctrl;
-extern const timer_cfg_t g_timer7_cfg;
-
-#ifndef NULL
-void NULL(timer_callback_args_t * p_args);
-#endif
-/** MTU3 Phase-Count Instance. */
-extern const mtu3_phase_count_instance_t g_mtu_phase_count_ch1;
-
-/** Access the GPT Phase-Count instance using these structures when calling API functions directly (::p_api is not used). */
-extern mtu3_phase_count_instance_ctrl_t g_mtu_phase_count_ch1_ctrl;
-extern const mtu3_phase_count_cfg_t g_mtu_phase_count_ch1_cfg;
 /** ADC on ADC Instance. */
 extern const adc_instance_t g_adc1;
 
@@ -121,6 +67,10 @@ extern const poe3_instance_t g_mtu3_three_phase_poe;
 /** Access the POE3 instance using these structures when calling API functions directly (::p_api is not used). */
 extern poe3_instance_ctrl_t g_mtu3_three_phase_poe_ctrl;
 extern const poe3_cfg_t g_mtu3_three_phase_poe_cfg;
+
+#ifndef NULL
+void NULL(poe3_callback_args_t * p_args);
+#endif
 /** Timer on MTU3 Instance. */
 extern const timer_instance_t g_timer6;
 
