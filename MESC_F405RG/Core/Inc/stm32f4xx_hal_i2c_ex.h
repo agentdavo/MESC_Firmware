@@ -17,7 +17,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#pragma once
+#ifndef __STM32F4xx_HAL_I2C_EX_H
+#define __STM32F4xx_HAL_I2C_EX_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,5 +110,6 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_
 }
 #endif
 
+#endif /* __STM32F4xx_HAL_I2C_EX_H */
 
 

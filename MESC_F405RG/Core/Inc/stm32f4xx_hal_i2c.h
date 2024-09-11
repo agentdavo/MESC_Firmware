@@ -17,7 +17,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#pragma once
+#ifndef __STM32F4xx_HAL_I2C_H
+#define __STM32F4xx_HAL_I2C_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -735,4 +736,6 @@ uint32_t HAL_I2C_GetError(I2C_HandleTypeDef *hi2c);
 }
 #endif
 
+
+#endif /* __STM32F4xx_HAL_I2C_H */
 

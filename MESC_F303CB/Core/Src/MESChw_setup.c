@@ -138,7 +138,7 @@ void getRawADC(MESC_motor_typedef *_motor)
 
 	  GET_THROTTLE_INPUT; //Define a similar macro in the header file for your board that maps the throttle
 
-	  _motor->Raw.MOSu_T = hadc4.Instance->JDR1; //Temperature on PB1
+	  _motor->Raw.MOSu_T = 0.99f*_motor->Raw.MOSu_T +0.01f*hadc4.Instance->JDR1; //Temperature on PB1
   }
 
 
@@ -257,6 +257,8 @@ void mesc_init_3( MESC_motor_typedef *_motor ){
 
     // Using the ADC AWD to detect overcurrent events.
     __HAL_ADC_ENABLE_IT(&hadc1, ADC_IT_AWD1);
+    __HAL_ADC_ENABLE_IT(&hadc1, ADC_IT_JEOS);
+
     //__HAL_ADC_ENABLE_IT(&hadc1, ADC_IT_AWD2); //No ADC watchdog 2 for now
     __HAL_ADC_ENABLE_IT(&hadc2, ADC_IT_AWD1);
     __HAL_ADC_ENABLE_IT(&hadc3, ADC_IT_AWD1);

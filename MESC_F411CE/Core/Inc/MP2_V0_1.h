@@ -61,12 +61,11 @@
 #define ENCODER_E_OFFSET 25000
 #define POLE_ANGLE (65536/POLE_PAIRS)
 
-#ifdef ENCODER_DIR_REVERSED
-#define POLE_PAIRS_VALUE (-POLE_PAIRS)
-#else
-#define POLE_PAIRS_VALUE (POLE_PAIRS)
-#endif
-
 //#define USE_SALIENT_OBSERVER //If not defined, it assumes that Ld and Lq are equal, which is fine usually.
+
+//LEDs
+#define SLOWLED GPIOC
+#define SLOWLEDIO GPIO_PIN_13
+#define SLOWLEDIONO 13
 
 #endif /* INC_MP2_V0_1_H_ */

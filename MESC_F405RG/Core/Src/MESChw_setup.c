@@ -71,21 +71,19 @@ void hw_init(MESC_motor_typedef *_motor) {
 void getRawADC(MESC_motor_typedef *_motor) {
 	//Get the injected critical conversions
 
-//  _motor->Raw.Iu = hadc1.Instance->JDR1;  // U Current
-//  _motor->Raw.Iv = hadc2.Instance->JDR1;  // V Current
-//  _motor->Raw.Iw = hadc3.Instance->JDR1;  // W Current
-//  _motor->Raw.Vbus = hadc3.Instance->JDR3;  // DC Link Voltage
-if(_motor != &mtr[0]){
-  _motor->Raw.Iu = ADC2_buffer[1];  // U Current
-  _motor->Raw.Iv = ADC2_buffer[0];	// V Current
-  _motor->Raw.Iw = 2048;			//Dummy W current, only 2 phase
-  _motor->Raw.Vbus = ADC2_buffer[2];
-}else{
   _motor->Raw.Iu = hadc1.Instance->JDR1;  // U Current
-  _motor->Raw.Iv = hadc1.Instance->JDR2;	// V Current
-  _motor->Raw.Iw = 2048;			//Dummy W current, only 2 phase
-  _motor->Raw.Vbus = hadc1.Instance->JDR3;
-}
+  _motor->Raw.Iv = hadc2.Instance->JDR1;  // V Current
+  _motor->Raw.Iw = hadc3.Instance->JDR1;  // W Current
+  _motor->Raw.Vbus = hadc3.Instance->JDR3;  // DC Link Voltage
+#ifdef MISSING_UCURRSENSOR //Avoid errors due to useless readings of unconnected channel
+  _motor->Raw.Iu = 2048;  // U Current
+#endif
+#ifdef MISSING_VCURRSENSOR
+  _motor->Raw.Iv = 2048;  // V Current
+#endif
+#ifdef MISSING_WCURRSENSOR
+  _motor->Raw.Iw = 2048;  // W Current
+#endif
 
   GET_THROTTLE_INPUT; //Define a similar macro in the header file for your board that maps the throttle
 #ifdef GET_THROTTLE_INPUT2
@@ -107,7 +105,9 @@ if(_motor != &mtr[0]){
 
 void getRawADCVph(MESC_motor_typedef *_motor){
 	//Voltage sense
-//There is no voltage sense for stepper motor
+	  _motor->Raw.Vu = hadc1.Instance->JDR2; //PhaseU Voltage
+	  _motor->Raw.Vv = hadc2.Instance->JDR2; //PhaseV Voltage
+	  _motor->Raw.Vw = hadc3.Instance->JDR2; //PhaseW Voltage
 }
 
 static uint32_t const flash_sector_map[] = {
@@ -225,6 +225,10 @@ void mesc_init_3( MESC_motor_typedef *_motor )
     HAL_ADCEx_InjectedStart( &hadc1 );
     HAL_ADCEx_InjectedStart( &hadc2 );
     HAL_ADCEx_InjectedStart( &hadc3 );
+//For inverting the ADC trigger polarity, intended for BLDC, not sure it works...
+//    hadc1.Instance->CR2|=ADC_CR2_JEXTEN;
+//    hadc2.Instance->CR2|=ADC_CR2_JEXTEN;
+//    hadc3.Instance->CR2|=ADC_CR2_JEXTEN;
 
 
     HAL_TIM_PWM_Start(_motor->mtimer, TIM_CHANNEL_4 );
@@ -240,10 +244,27 @@ void mesc_init_3( MESC_motor_typedef *_motor )
     HAL_TIMEx_PWMN_Start( _motor->mtimer, TIM_CHANNEL_3 );
     generateBreak(_motor);//We have started the timers, but we really do not want them PWMing yet
 
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_8);//PWMH
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_9);
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_10);
+
+    HAL_GPIO_LockPin(GPIOB, GPIO_PIN_12);//TBC, this is BRK, might not be applicable to all//
+    HAL_GPIO_LockPin(GPIOB, GPIO_PIN_13);//PWML
+    HAL_GPIO_LockPin(GPIOB, GPIO_PIN_14);
+    HAL_GPIO_LockPin(GPIOB, GPIO_PIN_15);
+
+    HAL_GPIO_LockPin(GPIOC, GPIO_PIN_0);//ADC Current
+    HAL_GPIO_LockPin(GPIOC, GPIO_PIN_1);
+    HAL_GPIO_LockPin(GPIOC, GPIO_PIN_2);
+    HAL_GPIO_LockPin(GPIOC, GPIO_PIN_3);//ADC Vbus
+
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_0);//ADC VPhase
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_1);
+    HAL_GPIO_LockPin(GPIOA, GPIO_PIN_2);
+
+
     HAL_Delay(50); //Need to let the ADC start before we enable the fastloop interrupt, otherwise it returns 0 and errors.
 
     __HAL_TIM_ENABLE_IT(_motor->mtimer, TIM_IT_UPDATE);
-    __HAL_ADC_ENABLE_IT(&hadc1,ADC_IT_JEOC);
-    __HAL_ADC_ENABLE_IT(&hadc2,ADC_IT_EOC);
-
+    __HAL_ADC_ENABLE_IT(&hadc1, ADC_IT_JEOC);
 }

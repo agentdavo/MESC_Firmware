@@ -5,7 +5,8 @@
  *      Author: HPEnvy
  */
 
-#pragma once
+#ifndef INC_MX_FOC_GAN_H_
+#define INC_MX_FOC_GAN_H_
 
 #define MCMASTER_70KV_8080
 
@@ -60,16 +61,10 @@
 //#define USE_HALL_START
 #define HALL_VOLTAGE_THRESHOLD 1.5f
 
-//#define USE_ENCODER //Only supports TLE5012B in SSC mode using onewire SPI on SPI3 F405...
+//#define USE_SPI_ENCODER //Only supports TLE5012B in SSC mode using onewire SPI on SPI3 F405...
 #define POLE_PAIRS 10
 #define ENCODER_E_OFFSET 25000
 #define POLE_ANGLE (65536/POLE_PAIRS)
-
-#ifdef ENCODER_DIR_REVERSED
-#define POLE_PAIRS_VALUE (-POLE_PAIRS)
-#else
-#define POLE_PAIRS_VALUE (POLE_PAIRS)
-#endif
 
 //#define USE_SALIENT_OBSERVER //If not defined, it assumes that Ld and Lq are equal, which is fine usually.
 
@@ -80,3 +75,4 @@
 #define SLOWLEDIO GPIO_PIN_7
 #define SLOWLEDIONO 7
 
+#endif /* INC_MX_FOC_GAN_H_ */

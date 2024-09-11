@@ -12,16 +12,16 @@
 #define PWM_FREQUENCY 20000
 #define CUSTOM_DEADTIME 800 //ns, MAX 1500ns! implementation in MESCInit().
 
-#define SHUNT_POLARITY -1.0f
+#define SHUNT_POLARITY 1.0f
 
 #define ABS_MAX_PHASE_CURRENT 400.0f //We set this as the board abs max, and the firmware sets the value actually used depending on the input setpoints with this as a maximum.
-#define ABS_MAX_BUS_VOLTAGE 90.0f
-#define ABS_MIN_BUS_VOLTAGE 38.0f
-#define R_SHUNT 0.00033f
-#define OPGAIN 10.5f
+#define ABS_MAX_BUS_VOLTAGE 110.0f
+#define ABS_MIN_BUS_VOLTAGE 18.0f
+#define R_SHUNT 1.0f
+#define OPGAIN 0.0018f //~750A @1.35V
 
-#define R_VBUS_BOTTOM 3300.0f //Phase and Vbus voltage sensors
-#define R_VBUS_TOP 150000.0f //150V range for MP2 DFN
+#define R_VBUS_BOTTOM 2700.0f //Phase and Vbus voltage sensors
+#define R_VBUS_TOP 100000.0f
 
 #define MAX_ID_REQUEST 2.0f
 #define MAX_IQ_REQUEST 10.0f
@@ -73,9 +73,9 @@
 
 //#define USE_SALIENT_OBSERVER //If not defined, it assumes that Ld and Lq are equal, which is fine usually.
 
-#define FASTLED GPIOC
-#define FASTLEDIO GPIO_PIN_12
-#define FASTLEDIONO 12
+#define FASTLED GPIOB
+#define FASTLEDIO GPIO_PIN_2
+#define FASTLEDIONO 2
 #define SLOWLED GPIOC
 #define SLOWLEDIO GPIO_PIN_9
 #define SLOWLEDIONO 9
