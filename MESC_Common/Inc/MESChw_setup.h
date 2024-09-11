@@ -1,7 +1,7 @@
 /*
  **
  ******************************************************************************
- * @file           : MESChw_setup.c
+ * @file           : MESChw_setup.h
  * @brief          : Initialisation code for the PCB
  ******************************************************************************
  * @attention
@@ -21,6 +21,9 @@
  *  Created on: 25 Jul 2020
  *      Author: David Molony
  */
+
+#if !defined(MESChw_setup_H)
+#define MESChw_setup_H
 
 #include "stm32fxxx_hal.h"
 #include "MESCfoc.h"
@@ -87,10 +90,7 @@ typedef struct {
   float measure_voltage;
 } motor_s;
 
-extern motor_s motor; // TODO PROFILE
-// _OR_
-// void motor_init( struct motor_s *motor);	//Rob created prototype init,
-// unused for now
+extern motor_s motor;
 
 /*
 Hardware-specific implementation
@@ -137,9 +137,19 @@ void mesc_init_3( MESC_motor_typedef *_motor ); // Perform HW specific initialis
 Profile defaults
 
 Temperature parameters
-#define MESC_PROFILE_TEMP_R_F
-#define MESC_PROFILE_TEMP_SCHEMA
-#define MESC_PROFILE_TEMP_SH_BETA
-#define MESC_PROFILE_TEMP_SH_R
-#define MESC_PROFILE_TEMP_SH_R0
+MESC_TEMP_MOS_R_F
+MESC_TEMP_MOS_METHOD
+MESC_TEMP_MOS_SCHEMA
+MESC_TEMP_MOS_SH_BETA
+MESC_TEMP_MOS_SH_R
+MESC_TEMP_MOS_SH_R0
+
+MESC_TEMP_MOTOR_R_F
+MESC_TEMP_MOTOR_METHOD
+MESC_TEMP_MOTOR_SCHEMA
+MESC_TEMP_MOTOR_SH_BETA
+MESC_TEMP_MOTOR_SH_R
+MESC_TEMP_MOTOR_SH_R0
 */
+
+#endif

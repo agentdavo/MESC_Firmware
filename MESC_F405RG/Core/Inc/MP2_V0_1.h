@@ -8,20 +8,20 @@
 #ifndef INC_MP2_V0_1_H_
 #define INC_MP2_V0_1_H_
 //Pick a motor for default
-#define MCMASTER_70KV_8080//QS165//CA120//
+#define QS165//MCMASTER_70KV_8080//QS165//CA120//
 #define PWM_FREQUENCY 20000
 #define CUSTOM_DEADTIME 800 //ns, MAX 1500ns! implementation in MESCInit().
 
 #define SHUNT_POLARITY -1.0f
 
 #define ABS_MAX_PHASE_CURRENT 400.0f //We set this as the board abs max, and the firmware sets the value actually used depending on the input setpoints with this as a maximum.
-#define ABS_MAX_BUS_VOLTAGE 50.0f
+#define ABS_MAX_BUS_VOLTAGE 90.0f
 #define ABS_MIN_BUS_VOLTAGE 38.0f
 #define R_SHUNT 0.00033f
 #define OPGAIN 10.5f
 
 #define R_VBUS_BOTTOM 3300.0f //Phase and Vbus voltage sensors
-#define R_VBUS_TOP 100000.0f
+#define R_VBUS_TOP 150000.0f //150V range for MP2 DFN
 
 #define MAX_ID_REQUEST 2.0f
 #define MAX_IQ_REQUEST 10.0f
@@ -66,7 +66,7 @@
 #define USE_HALL_START
 #define HALL_VOLTAGE_THRESHOLD 2.0f
 
-//#define USE_ENCODER //Only supports TLE5012B in SSC mode using onewire SPI on SPI3 F405...
+//#define USE_SPI_ENCODER //Only supports TLE5012B in SSC mode using onewire SPI on SPI3 F405...
 #define POLE_PAIRS 10
 #define ENCODER_E_OFFSET 25000
 #define POLE_ANGLE (65536/POLE_PAIRS)

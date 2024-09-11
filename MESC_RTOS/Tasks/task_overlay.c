@@ -35,8 +35,10 @@
 
 #include "task_overlay.h"
 #include "task_cli.h"
+#include "task_can.h"
 #include "cmsis_os.h"
 #include <stdio.h>
+
 
 
 /* RTOS includes. */
@@ -53,8 +55,10 @@
  */
 /* `#START USER_INCLUDE SECTION` */
 #include "TTerm/Core/include/TTerm.h"
+#ifndef DASH
 #include "MESCfoc.h"
 #include "MESCmotor_state.h"
+#endif
 
 /* `#END` */
 /* ------------------------------------------------------------------------ */
@@ -73,7 +77,7 @@
 
 
 void show_overlay(TERMINAL_HANDLE * handle){
-
+#ifndef DASH
 	MESC_motor_typedef * motor_curr = &mtr[0];
 
 	TERM_sendVT100Code(handle, _VT100_CURSOR_SAVE_POSITION,0);
@@ -83,16 +87,16 @@ void show_overlay(TERMINAL_HANDLE * handle){
 	uint8_t col_pos = 90;
 	TERM_Box(handle, row_pos, col_pos, row_pos + 6, col_pos + 31);
 	TERM_setCursorPos(handle, row_pos + 1, col_pos + 1);
-	ttprintf("Bus Voltage:       %10.1fV", motor_curr->Conv.Vbus);
+	ttprintf("Bus Voltage:       %10.1fV", (double)motor_curr->Conv.Vbus);
 
 	TERM_setCursorPos(handle, row_pos + 2, col_pos + 1);
-	ttprintf("Bus Current:      %10.2f A", motor_curr->FOC.Ibus);
+	ttprintf("Bus Current:      %10.2f A", (double)motor_curr->FOC.Ibus);
 
 	TERM_setCursorPos(handle, row_pos + 3, col_pos + 1);
-	ttprintf("Speed:         %10.2f ERPM", motor_curr->FOC.eHz*60.0);
+	ttprintf("Speed:         %10.2f ERPM", (double)(motor_curr->FOC.eHz*60.0f));
 
 	TERM_setCursorPos(handle, row_pos + 4, col_pos + 1);
-	ttprintf("Power:            %10.2f W", motor_curr->FOC.currentPower.q);
+	ttprintf("Power:            %10.2f W", (double)motor_curr->FOC.currentPower.q);
 
 	TERM_setCursorPos(handle, row_pos + 5, col_pos + 1);
 	ttprintf("MESC status: ");
@@ -140,11 +144,15 @@ void show_overlay(TERMINAL_HANDLE * handle){
 	case MOTOR_STATE_SLAMBRAKE:
 		ttprintf("        SLAMBRAKE");
 		break;
+	case MOTOR_STATE_RUN_BLDC:
+		ttprintf("         RUN BLDC");
+		break;
 	}
 
 
 	TERM_sendVT100Code(handle, _VT100_CURSOR_RESTORE_POSITION,0);
 	TERM_sendVT100Code(handle, _VT100_CURSOR_ENABLE,0);
+#endif
 
 }
 
@@ -210,6 +218,8 @@ void show_overlay_json(TERMINAL_HANDLE * handle){
     ttprintf(NULL, buffer, sizeof(buffer)-bytes_left);
 
 }
+
+
 
 /* `#END` */
 /* ------------------------------------------------------------------------ */
@@ -361,10 +371,10 @@ void print_array(TERMINAL_HANDLE * handle, char * name, void * array, uint32_t c
 	for(uint32_t i=0;i<count;i++){
 
 		switch(type){
-		case TERM_VARIABLE_FLOAT_ARRAY:
+			case TERM_VARIABLE_FLOAT_ARRAY:
 				written = snprintf(ptr, bytes_left, "%.2f,", (double)((float*)array)[currPos]);
-			break;
-		case TERM_VARIABLE_UINT_ARRAY:
+				break;
+			case TERM_VARIABLE_UINT_ARRAY:
 				switch(type_size){
 					case 1:
 						u_var = ((uint8_t*)array)[currPos];
@@ -377,8 +387,8 @@ void print_array(TERMINAL_HANDLE * handle, char * name, void * array, uint32_t c
 						break;
 				}
 
-				written = snprintf(ptr, bytes_left, "%u,", u_var);
-			break;
+				written = snprintf(ptr, bytes_left, "%lu,", u_var);
+				break;
 			case TERM_VARIABLE_INT_ARRAY:
 					switch(type_size){
 						case 1:
@@ -392,9 +402,10 @@ void print_array(TERMINAL_HANDLE * handle, char * name, void * array, uint32_t c
 							break;
 					}
 
-					written = snprintf(ptr, bytes_left, "%i,", i_var);
+					written = snprintf(ptr, bytes_left, "%li,", i_var);
 				break;
-
+			default:
+				break;
 		}
 
 		currPos++;
@@ -434,7 +445,7 @@ void print_index(TERMINAL_HANDLE * handle, char * name, uint32_t count, float in
 
 	for(uint32_t i=0;i<count;i++){
 
-		written = snprintf(ptr, bytes_left, "%f,", index);
+		written = snprintf(ptr, bytes_left, "%f,", (double)index);
 		index += increment;
 
 		ptr += written;
@@ -455,7 +466,7 @@ void print_index(TERMINAL_HANDLE * handle, char * name, uint32_t count, float in
 }
 
 void log_fastloop(TERMINAL_HANDLE * handle){
-
+#ifndef DASH
 	lognow = 1;
 	vTaskDelay(100);
 
@@ -467,28 +478,27 @@ void log_fastloop(TERMINAL_HANDLE * handle){
 	int current_sample_pos = sampled_vars.current_sample;
 
 	ttprintf("\r\n{");
-	print_index(handle, "index", LOGLENGTH, mtr[0].FOC.pwm_period);
+	print_index(handle, "time", LOGLENGTH, mtr[0].FOC.pwm_period);
 	ttprintf(",");
-	print_array(handle, "Vbus", sampled_vars.Vbus, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Vbus.V.y1", sampled_vars.Vbus, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "Iu", sampled_vars.Iu, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Iu.I_phase.y1", sampled_vars.Iu, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "Iv", sampled_vars.Iv, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Iv.I_phase.y1", sampled_vars.Iv, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "Iw", sampled_vars.Iw, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Iw.I_phase.y1", sampled_vars.Iw, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "Vd", sampled_vars.Vd, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Vd.V_dq.y1", sampled_vars.Vd, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "Vq", sampled_vars.Vq, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
+	print_array(handle, "Vq.V_dq.y1", sampled_vars.Vq, LOGLENGTH, current_sample_pos, sizeof(float), TERM_VARIABLE_FLOAT_ARRAY);
 	ttprintf(",");
-	print_array(handle, "angle", sampled_vars.angle, LOGLENGTH, current_sample_pos, sizeof(uint16_t), TERM_VARIABLE_UINT_ARRAY);
+	print_array(handle, "angle.misc.y1", sampled_vars.angle, LOGLENGTH, current_sample_pos, sizeof(uint16_t), TERM_VARIABLE_UINT_ARRAY);
 	ttprintf("}\r\n");
 
 
 	lognow = 1;
-
+#endif
 }
-
 
 
 /*****************************************************************************
