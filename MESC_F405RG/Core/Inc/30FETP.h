@@ -30,7 +30,6 @@
 #define ADC1OOR 4094
 
 
-#define SEVEN_SECTOR		//Normal SVPWM implemented as midpoint clamp. If not defined, you will get 5 sector, bottom clamp
 #define DEADTIME_COMP		//This injects extra PWM duty onto the timer which effectively removes the dead time.
 #define DEADTIME_COMP_V 10
 //#define MAX_MODULATION 1.05f //Use this with 5 sector modulation if you want extra speed
@@ -53,17 +52,16 @@
 //#define DEFAULT_SENSOR_MODE MOTOR_SENSOR_MODE_ENCODER
 //#define DEFAULT_SENSOR_MODE MOTOR_SENSOR_MODE_HFI
 
-#define USE_HFI
-#define HFI_VOLTAGE 4.0f
+#define DEFAULT_STARTUP_SENSOR STARTUP_SENSOR_HFI //	STARTUP_SENSOR_OPENLOOP,STARTUP_SENSOR_HALL,STARTUP_SENSOR_PWM_ENCODER,
+#define HFI_VOLTAGE 1.0f
 #define HFI_TEST_CURRENT 0.0f
-#define HFI_THRESHOLD 0.0f
-#define HFI45
-#define DEFAULT_HFI_TYPE HFI_TYPE_NONE
-//#define DEFAULT_HFI_TYPE HFI_TYPE_45
+#define HFI_THRESHOLD 0.0f //Defaults to 0.05Vbus if set to 0
+//#define DEFAULT_HFI_TYPE HFI_TYPE_NONE
+#define DEFAULT_HFI_TYPE HFI_TYPE_45
 //#define DEFAULT_HFI_TYPE HFI_TYPE_D
 //#define DEFAULT_HFI_TYPE HFI_TYPE_SPECIAL
 
-#define USE_HALL_START
+//#define USE_HALL_START
 #define HALL_VOLTAGE_THRESHOLD 2.0f
 
 //#define USE_SPI_ENCODER //Only supports TLE5012B in SSC mode using onewire SPI on SPI3 F405...

@@ -94,7 +94,6 @@ typedef enum {
   MOTOR_SENSOR_MODE_OPENLOOP,
   MOTOR_SENSOR_MODE_ABSOLUTE_ENCODER,
   MOTOR_SENSOR_MODE_INCREMENTAL_ENCODER,
-  MOTOR_SENSOR_MODE_HFI,
   } motor_sensor_mode_e;
 
   typedef enum {
@@ -166,6 +165,8 @@ typedef enum {
 #define UNINITIALISED_KEY 1
 #define KILLSWITCH_KEY 2
 #define SAFESTART_KEY 4
+#define APP_KEY 8
+
 
 /* Function prototypes -----------------------------------------------*/
 

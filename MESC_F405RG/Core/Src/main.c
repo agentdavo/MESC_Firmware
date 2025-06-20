@@ -24,19 +24,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "MESCbat.h"
-#include "MESCflash.h"
-#include "MESCprofile.h"
 #include "MESCmotor.h"
-#include "MESCspeed.h"
 #include "MESCtemp.h"
-#include "MESCuart.h"
-#include "MESCui.h"
 
 #include "MESCmotor_state.h"
-#include "MESC_Comms.h"
 #include "MPU6050.h"
-#include "Simple_coms.h"
 
 #include "Tasks/init.h"
 
@@ -90,7 +82,9 @@ I2C_HandleTypeDef hi2c2;
 uint16_t MPU_present, MPU_present2;
 MPU6050_data_t MPU_instance_1, MPU_instance_2;
 #define MPU6050_ADDR 0xD0
-COMS_data_t com1;
+#define DAC_MEMORY_ADDRESS 0x40007400
+#define DAC_VALUE_ADDRESS 0x40007408
+
 
 
 /* USER CODE END PV */
@@ -129,6 +123,7 @@ static void MX_I2C2_Init(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -166,6 +161,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //MX_I2C2_Init();
 
+//
+#ifdef DAC_REF
+  RCC->APB1ENR |= (0x01<<29);
+  volatile uint32_t* dacaddr = (volatile  uint32_t*)DAC_MEMORY_ADDRESS;
+ *dacaddr = 1;
+ volatile uint32_t* dacvaladdr = (volatile  uint32_t*)DAC_VALUE_ADDRESS;
+ *dacvaladdr = 2048;
+#endif
+
 #ifdef IC_TIMER
   MESC_IC_Init(IC_TIMER);
 #endif
@@ -182,11 +186,6 @@ HAL_TIM_IC_Start(&htim3, TIM_CHANNEL_3);
   Starting System Initialisation
   */
 
-  // Initialise components
-  bat_init( PROFILE_DEFAULT );
-  speed_init( PROFILE_DEFAULT );
-  // Initialise user Interface
-  //ui_init( PROFILE_DEFAULT );
 
   /*
   Finished System Initialisation
@@ -198,8 +197,14 @@ HAL_Delay(1);
 
   mtr[0].enctimer = &htim3;
   //mtr[0].encspi = &hspi3;
-  motor_init( PROFILE_DEFAULT );
-  MESCInit(&mtr[0]);
+  motor_init(&mtr[0]);
+  MESCfoc_Init(&mtr[0]);
+
+#ifdef PULLUP_HALL
+ GPIO_
+#endif
+ GPIOC->PUPDR |= 0b010101000000000000; //Set hall sensor pullups
+// GPIOB->PUPDR |= 0b0101000000000000000000; //Set tx rx with pullups
 
   /* USER CODE END 2 */
 
@@ -240,6 +245,7 @@ HAL_Delay(1);
   osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
@@ -582,7 +588,6 @@ static void MX_ADC2_Init(void)
   */
   sConfigInjected.InjectedChannel = ADC_CHANNEL_15;
   sConfigInjected.InjectedRank = 4;
-  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADCEx_InjectedConfigChannel(&hadc2, &sConfigInjected) != HAL_OK)
   {
     Error_Handler();
@@ -648,7 +653,7 @@ static void MX_ADC3_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_12;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -692,7 +697,6 @@ static void MX_ADC3_Init(void)
   */
   sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
   sConfigInjected.InjectedRank = 4;
-  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADCEx_InjectedConfigChannel(&hadc3, &sConfigInjected) != HAL_OK)
   {
     Error_Handler();
@@ -841,7 +845,7 @@ static void MX_TIM1_Init(void)
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
   sBreakDeadTimeConfig.DeadTime = 80;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_ENABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_LOW;
   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
@@ -954,7 +958,7 @@ static void MX_TIM3_Init(void)
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-  sConfigIC.ICFilter = 0;
+  sConfigIC.ICFilter = 3;
   if (HAL_TIM_IC_ConfigChannel(&htim3, &sConfigIC, TIM_CHANNEL_3) != HAL_OK)
   {
     Error_Handler();
@@ -1121,6 +1125,8 @@ static void MX_DMA_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
@@ -1130,30 +1136,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5|GPIO_PIN_7, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : LED_RED_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_RED_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LED_GREEN_Pin */
-  GPIO_InitStruct.Pin = LED_GREEN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GREEN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PD2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -1169,6 +1155,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -1227,7 +1215,7 @@ void StartDefaultTask(void *argument)
   {
 
 
-	  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+//	  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 
 	  osDelay(200);
   }
